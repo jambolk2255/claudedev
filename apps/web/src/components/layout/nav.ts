@@ -1,17 +1,23 @@
 import type { ModuleKey, Permission } from "@stockflow/schemas";
 import {
+  ArrowDownToLine,
+  ArrowLeftRight,
+  ArrowUpFromLine,
   BarChart3,
   Building2,
   ClipboardCheck,
+  FileText,
   KeyRound,
   Landmark,
   LayoutDashboard,
   MapPinned,
   Package,
+  PackageCheck,
   ScrollText,
   ShieldCheck,
   ShoppingCart,
   Truck,
+  UserPlus,
   Users,
   type LucideIcon,
 } from "lucide-react";
@@ -50,24 +56,64 @@ export const NAV: NavGroup[] = [
       { key: "maps", href: "/maps", icon: MapPinned, module: "maps", phase: 5 },
     ],
   },
-  {
-    key: "settings",
-    items: [
-      { key: "company", href: "/settings/company", icon: Building2, permission: "organization.view" },
-      { key: "users", href: "/settings/users", icon: Users, permission: "users.view" },
-      { key: "roles", href: "/settings/roles", icon: KeyRound, permission: "roles.view" },
-      { key: "security", href: "/settings/security", icon: ShieldCheck },
-      { key: "audit", href: "/settings/audit", icon: ScrollText, permission: "audit.view" },
-    ],
-  },
+];
+
+/** Secondary navigation inside the Settings area. */
+export const SETTINGS_NAV: NavItem[] = [
+  { key: "company", href: "/settings/company", icon: Building2, permission: "organization.view" },
+  { key: "users", href: "/settings/users", icon: Users, permission: "users.view" },
+  { key: "roles", href: "/settings/roles", icon: KeyRound, permission: "roles.view" },
+  { key: "security", href: "/settings/security", icon: ShieldCheck },
+  { key: "audit", href: "/settings/audit", icon: ScrollText, permission: "audit.view" },
+];
+
+export interface CreateAction {
+  key: string;
+  icon: LucideIcon;
+  group: "inventory" | "purchasing" | "sales" | "people";
+  href?: string;
+  module?: ModuleKey;
+  permission?: Permission;
+  phase?: number;
+}
+
+/** Everything a user can create, in one place (topbar "Create" menu and dashboard quick actions). */
+export const CREATE_ACTIONS: CreateAction[] = [
+  { key: "stockIn", icon: ArrowDownToLine, group: "inventory", module: "inventory", permission: "inventory.stock_in", phase: 1 },
+  { key: "stockOut", icon: ArrowUpFromLine, group: "inventory", module: "inventory", permission: "inventory.stock_out", phase: 1 },
+  { key: "transfer", icon: ArrowLeftRight, group: "inventory", module: "inventory", permission: "inventory.transfer", phase: 1 },
+  { key: "purchaseOrder", icon: FileText, group: "purchasing", module: "purchasing", permission: "purchasing.manage", phase: 2 },
+  { key: "grn", icon: PackageCheck, group: "purchasing", module: "purchasing", permission: "purchasing.receive", phase: 2 },
+  { key: "salesOrder", icon: ShoppingCart, group: "sales", module: "sales", permission: "sales.manage", phase: 3 },
+  { key: "invoice", icon: FileText, group: "sales", module: "sales", permission: "sales.manage", phase: 3 },
+  { key: "inviteUser", icon: UserPlus, group: "people", href: "/settings/users?invite=1", permission: "users.invite" },
 ];
 
 /** Module pages that exist as placeholders until their phase ships. */
 export const PLANNED_MODULES = NAV.flatMap((g) => g.items).filter((i) => i.phase);
 
+const allowed = (item: { module?: ModuleKey; permission?: Permission }, modules: string[], permissions: string[]) =>
+  (!item.module || modules.includes(item.module)) && (!item.permission || permissions.includes(item.permission));
+
 export function visibleNav(modules: string[], permissions: string[]): NavGroup[] {
-  return NAV.map((g) => ({
-    ...g,
-    items: g.items.filter((i) => (!i.module || modules.includes(i.module)) && (!i.permission || permissions.includes(i.permission))),
-  })).filter((g) => g.items.length > 0);
+  return NAV.map((g) => ({ ...g, items: g.items.filter((i) => allowed(i, modules, permissions)) })).filter((g) => g.items.length > 0);
+}
+
+export function visibleSettings(permissions: string[]): NavItem[] {
+  return SETTINGS_NAV.filter((i) => allowed(i, [], permissions));
+}
+
+export function visibleCreateActions(modules: string[], permissions: string[]): CreateAction[] {
+  return CREATE_ACTIONS.filter((a) => allowed(a, modules, permissions));
+}
+
+/** Resolves the current page for breadcrumbs. */
+export function findPage(pathname: string): { section?: string; item?: NavItem } {
+  const settings = SETTINGS_NAV.find((i) => pathname.startsWith(i.href));
+  if (settings) return { section: "settings", item: settings };
+  for (const g of NAV) {
+    const item = g.items.find((i) => pathname === i.href || pathname.startsWith(`${i.href}/`));
+    if (item) return { section: g.key === "overview" ? undefined : g.key, item };
+  }
+  return {};
 }

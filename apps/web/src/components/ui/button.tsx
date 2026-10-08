@@ -11,19 +11,19 @@ export const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground shadow-primary/25 hover:shadow-primary/30 shadow-sm hover:shadow-md hover:brightness-110",
-        brand: "bg-brand shadow-primary/30 hover:shadow-primary/35 text-white shadow-lg hover:shadow-xl hover:brightness-110",
+        default: "bg-primary text-primary-foreground shadow-xs hover:bg-primary/90",
+        brand: "bg-primary text-primary-foreground shadow-primary/20 hover:bg-primary/90 shadow-sm",
         secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/70",
-        outline: "bg-card hover:bg-accent hover:text-accent-foreground border",
+        outline: "bg-card shadow-xs hover:bg-accent border",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         destructive: "bg-destructive text-destructive-foreground hover:brightness-110",
         link: "text-primary underline-offset-4 hover:underline",
       },
       size: {
-        sm: "h-8 px-3 text-xs",
-        default: "h-10 px-4",
-        lg: "h-11 px-6 text-base",
-        icon: "size-9",
+        sm: "h-8 px-3 text-[13px]",
+        default: "h-9 px-3.5",
+        lg: "h-10 px-5",
+        icon: "size-8",
       },
     },
     defaultVariants: { variant: "default", size: "default" },

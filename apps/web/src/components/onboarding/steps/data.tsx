@@ -47,7 +47,9 @@ export function DataStep({ initial, onSubmit }: StepProps<"data">) {
               active ? "border-primary ring-primary ring-2" : "hover:border-primary/40",
             )}
           >
-            <span className={cn("grid size-11 place-content-center rounded-xl", active ? "bg-brand text-white" : "bg-muted text-muted-foreground")}>
+            <span
+              className={cn("grid size-11 place-content-center rounded-xl", active ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground")}
+            >
               <Icon className="size-5" />
             </span>
             <span className="grid gap-1">

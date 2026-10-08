@@ -2,21 +2,7 @@
 
 import { ONBOARDING_STEPS, type OnboardingData, type OnboardingState, type OnboardingStep } from "@stockflow/schemas";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import {
-  ArrowLeft,
-  ArrowRight,
-  Building2,
-  Check,
-  ClipboardList,
-  Database,
-  Hash,
-  Landmark,
-  LayoutGrid,
-  Shapes,
-  Users,
-  Warehouse,
-  type LucideIcon,
-} from "lucide-react";
+import { ArrowLeft, ArrowRight, Check } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
@@ -45,18 +31,6 @@ import { STEP_FORM_ID } from "./types";
 
 type WizardStep = OnboardingStep | "review";
 const ALL: WizardStep[] = [...ONBOARDING_STEPS, "review"];
-
-const ICONS: Record<WizardStep, LucideIcon> = {
-  company: Building2,
-  industry: Shapes,
-  modules: LayoutGrid,
-  finance: Landmark,
-  warehouses: Warehouse,
-  numbering: Hash,
-  team: Users,
-  data: Database,
-  review: ClipboardList,
-};
 
 export function OnboardingWizard() {
   const t = useTranslations("onboarding");
@@ -158,71 +132,56 @@ export function OnboardingWizard() {
 
   return (
     <div className="relative min-h-dvh overflow-clip">
-      <div className="bg-grid pointer-events-none absolute inset-0 opacity-60 [mask-image:radial-gradient(ellipse_at_top,black,transparent_70%)]" />
-      <div className="bg-primary/20 pointer-events-none absolute -top-40 left-1/2 h-80 w-[60rem] -translate-x-1/2 rounded-full blur-[120px]" />
-
-      <header className="relative flex items-center justify-between px-4 py-4 sm:px-8">
-        <Logo />
-        <div className="flex items-center gap-1">
-          <LocaleSwitcher persist />
-          <ThemeToggle />
+      <header className="bg-background/80 sticky top-0 z-20 border-b backdrop-blur-xl">
+        <div className="mx-auto flex h-14 max-w-6xl items-center gap-4 px-4 sm:px-8">
+          <Logo />
+          <span className="text-muted-foreground hidden text-sm sm:inline">{t("metaTitle")}</span>
+          <div className="ml-auto flex items-center gap-1">
+            <LocaleSwitcher persist />
+            <ThemeToggle />
+          </div>
+        </div>
+        <div className="bg-muted h-0.5">
+          <motion.div className="bg-primary h-full" animate={{ width: `${progress}%` }} transition={{ type: "spring", stiffness: 120, damping: 20 }} />
         </div>
       </header>
 
-      {/* Mobile progress bar */}
-      <div className="bg-muted relative mx-4 h-1.5 overflow-hidden rounded-full lg:hidden">
-        <motion.div className="bg-brand h-full" animate={{ width: `${progress}%` }} transition={{ type: "spring", stiffness: 120, damping: 20 }} />
-      </div>
-
-      <div className="relative mx-auto grid max-w-6xl gap-8 px-4 py-6 sm:px-8 lg:grid-cols-[260px_1fr] lg:py-10">
+      <div className="relative mx-auto grid max-w-6xl gap-8 px-4 py-6 sm:px-8 lg:grid-cols-[220px_1fr] lg:py-10">
         <nav aria-label={t("progressLabel")} className="hidden lg:block">
-          <ol className="sticky top-8 grid gap-1">
+          <ol className="sticky top-24 grid">
             {ALL.map((s, i) => {
-              const Icon = ICONS[s];
               const active = s === step;
               const done = s !== "review" && completed.has(s);
+              const last = i === ALL.length - 1;
               return (
-                <li key={s}>
+                <li key={s} className="relative">
+                  {!last && <span aria-hidden className={cn("absolute bottom-0 left-[15px] top-8 w-px", done ? "bg-primary/40" : "bg-border")} />}
                   <button
                     type="button"
                     disabled={!canVisit(s) || !!finished}
                     onClick={() => go(s)}
                     aria-current={active ? "step" : undefined}
-                    className="group relative flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm transition-colors disabled:cursor-not-allowed disabled:opacity-50"
+                    className="group relative flex w-full items-center gap-3 pb-4 text-left text-sm disabled:cursor-not-allowed"
                   >
-                    {active && (
-                      <motion.span
-                        layoutId="wizard-active"
-                        className="bg-card absolute inset-0 rounded-xl border shadow-sm"
-                        transition={{ type: "spring", stiffness: 400, damping: 34 }}
-                      />
-                    )}
                     <span
                       className={cn(
-                        "relative grid size-8 shrink-0 place-content-center rounded-lg border transition-colors",
-                        done
-                          ? "border-success/30 bg-success/15 text-success"
-                          : active
-                            ? "border-primary bg-primary text-primary-foreground"
-                            : "bg-card text-muted-foreground",
+                        "bg-background relative grid size-[31px] shrink-0 place-content-center rounded-full border text-xs font-semibold tabular-nums transition-colors",
+                        active
+                          ? "border-primary bg-primary text-primary-foreground ring-primary/15 ring-4"
+                          : done
+                            ? "border-primary/40 text-primary"
+                            : "text-muted-foreground",
                       )}
                     >
-                      <AnimatePresence mode="wait" initial={false}>
-                        <motion.span
-                          key={done ? "done" : "icon"}
-                          initial={{ scale: 0.4, opacity: 0 }}
-                          animate={{ scale: 1, opacity: 1 }}
-                          exit={{ scale: 0.4, opacity: 0 }}
-                        >
-                          {done && !active ? <Check className="size-4" strokeWidth={3} /> : <Icon className="size-4" />}
-                        </motion.span>
-                      </AnimatePresence>
+                      {done && !active ? <Check className="size-3.5" strokeWidth={3} /> : i + 1}
                     </span>
-                    <span className="relative grid">
-                      <span className="text-muted-foreground text-[11px] uppercase tracking-wide">{t("stepOf", { n: i + 1, total: ALL.length })}</span>
-                      <span className={cn("font-medium", active ? "text-foreground" : "text-muted-foreground group-enabled:group-hover:text-foreground")}>
-                        {t(`steps.${s}`)}
-                      </span>
+                    <span
+                      className={cn(
+                        "transition-colors",
+                        active ? "text-foreground font-medium" : done ? "text-foreground/80 group-hover:text-foreground" : "text-muted-foreground",
+                      )}
+                    >
+                      {t(`steps.${s}`)}
                     </span>
                   </button>
                 </li>
@@ -232,7 +191,7 @@ export function OnboardingWizard() {
         </nav>
 
         <main className="min-w-0">
-          <div className="bg-card/80 shadow-primary/5 rounded-2xl border shadow-xl backdrop-blur-sm">
+          <div className="bg-card shadow-card rounded-xl border">
             {!step || state.isPending ? (
               <div className="grid gap-4 p-6 sm:p-8">
                 <Skeleton className="h-8 w-1/2" />
@@ -263,7 +222,7 @@ export function OnboardingWizard() {
                     </motion.div>
                   </AnimatePresence>
                 </div>
-                <div className="bg-muted/30 flex items-center justify-between gap-3 rounded-b-2xl border-t px-6 py-4 sm:px-8">
+                <div className="bg-muted/30 flex items-center justify-between gap-3 rounded-b-xl border-t px-6 py-4 sm:px-8">
                   <Button type="button" variant="ghost" disabled={index === 0 || saving} onClick={() => go(ALL[index - 1]!)}>
                     <ArrowLeft /> {tc("back")}
                   </Button>

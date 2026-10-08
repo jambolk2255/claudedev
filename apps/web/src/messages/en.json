@@ -1,5 +1,7 @@
 {
-  "meta": { "description": "Inventory, order, purchasing and finance management for businesses of every size." },
+  "meta": {
+    "description": "Inventory, order, purchasing and finance management for businesses of every size."
+  },
   "common": {
     "language": "Language",
     "toggleTheme": "Toggle theme",
@@ -33,13 +35,32 @@
     "footer": "© StockFlow · Secured with encryption, 2FA and audit trails",
     "hidePassword": "Hide password",
     "showPassword": "Show password",
-    "strength": { "weak": "Weak password", "fair": "Fair password", "good": "Good password", "strong": "Strong password" },
+    "strength": {
+      "weak": "Weak password",
+      "fair": "Fair password",
+      "good": "Good password",
+      "strong": "Strong password"
+    },
     "showcase": {
-      "grn": { "title": "GRN-2026-00042 received", "detail": "120 items · Main Store" },
-      "lowStock": { "title": "Low stock alert", "detail": "Panadol 500mg · 18 left" },
-      "dispatch": { "title": "Order dispatched", "detail": "SO-2026-00118 · Kandy" },
-      "warehouse": { "title": "3 warehouses live", "detail": "Colombo · Kandy · Galle" },
-      "chart": { "title": "Stock turnover" },
+      "grn": {
+        "title": "GRN-2026-00042 received",
+        "detail": "120 items · Main Store"
+      },
+      "lowStock": {
+        "title": "Low stock alert",
+        "detail": "Panadol 500mg · 18 left"
+      },
+      "dispatch": {
+        "title": "Order dispatched",
+        "detail": "SO-2026-00118 · Kandy"
+      },
+      "warehouse": {
+        "title": "3 warehouses live",
+        "detail": "Colombo · Kandy · Galle"
+      },
+      "chart": {
+        "title": "Stock turnover"
+      },
       "headline": "Every item, order and rupee — under control.",
       "subline": "Stock in and out, GRNs, returns, credit and debit notes, order tracking and finance in one fast, secure system."
     },
@@ -152,12 +173,22 @@
       "title": "Choose your experience",
       "subtitle": "Start simple and switch on more power when you need it.",
       "modeLabel": "Experience mode",
-      "simple": { "title": "Simple", "description": "Clean screens for small teams. Just the essentials." },
-      "advanced": { "title": "Advanced", "description": "Multi-warehouse, batches, serials and approval workflows." },
-      "core": "Core",
+      "simple": {
+        "title": "Simple",
+        "description": "Clean screens for small teams. Just the essentials."
+      },
+      "advanced": {
+        "title": "Advanced",
+        "description": "Multi-warehouse, batches, serials and approval workflows."
+      },
       "recommended": "Recommended",
-      "advancedOnly": "Advanced",
-      "changeLater": "You can switch modules on or off any time from Settings."
+      "changeLater": "You can switch modules on or off any time from Settings.",
+      "sections": {
+        "core": "Core operations",
+        "addons": "Advanced add-ons"
+      },
+      "unlock": "Switch to Advanced to enable",
+      "alwaysOn": "Always on"
     },
     "finance": {
       "title": "Currency, tax and stock valuation",
@@ -174,8 +205,14 @@
       "ssclRate": "SSCL rate",
       "valuation": "Stock valuation method",
       "methods": {
-        "fifo": { "title": "FIFO", "description": "First in, first out. Best for perishables and items with expiry." },
-        "weighted_average": { "title": "Weighted average", "description": "Average cost of all units. Simple and stable for most businesses." }
+        "fifo": {
+          "title": "FIFO",
+          "description": "First in, first out. Best for perishables and items with expiry."
+        },
+        "weighted_average": {
+          "title": "Weighted average",
+          "description": "Average cost of all units. Simple and stable for most businesses."
+        }
       },
       "negativeStock": "Allow negative stock",
       "negativeStockHint": "Let users sell items before their GRN is recorded. Not recommended."
@@ -218,9 +255,18 @@
       "title": "How would you like to start?",
       "subtitle": "You can import your products, customers and suppliers at any time.",
       "soon": "Soon",
-      "empty": { "title": "Start fresh", "description": "A clean workspace ready for your own products and stock." },
-      "demo": { "title": "Explore with sample data", "description": "Sample products and stock will be added when the inventory module goes live." },
-      "import": { "title": "Import from Excel", "description": "Bring products, customers, suppliers and opening stock from a spreadsheet." }
+      "empty": {
+        "title": "Start fresh",
+        "description": "A clean workspace ready for your own products and stock."
+      },
+      "demo": {
+        "title": "Explore with sample data",
+        "description": "Sample products and stock will be added when the inventory module goes live."
+      },
+      "import": {
+        "title": "Import from Excel",
+        "description": "Bring products, customers, suppliers and opening stock from a spreadsheet."
+      }
     },
     "review": {
       "title": "Review and finish",
@@ -238,28 +284,88 @@
     }
   },
   "modules": {
-    "inventory": { "name": "Inventory", "description": "Products, stock in/out, adjustments and stock ledger" },
-    "purchasing": { "name": "Purchasing", "description": "Purchase orders, GRN, supplier bills, returns outward" },
-    "sales": { "name": "Sales", "description": "Quotations, sales orders, invoices, returns inward" },
-    "orders": { "name": "Order tracking", "description": "Timeline and status of every customer and supplier order" },
-    "finance": { "name": "Finance", "description": "Receipts, payments, credit/debit notes, AR/AP and ledgers" },
-    "reports": { "name": "Reports", "description": "Dashboards, valuation, margins and exports" },
-    "maps": { "name": "Maps", "description": "Warehouses, customers and deliveries on Google Maps" },
-    "barcodes": { "name": "Barcodes", "description": "Print labels and scan with a scanner or phone camera" },
-    "pos": { "name": "Quick sale", "description": "Fast counter sales for shops" },
-    "multiWarehouse": { "name": "Multi-warehouse", "description": "Transfers between locations with in-transit tracking" },
-    "batches": { "name": "Batches & expiry", "description": "Track lots and expiry dates, FEFO picking" },
-    "serials": { "name": "Serial numbers", "description": "Track individual units for warranty and service" },
-    "approvals": { "name": "Approvals", "description": "Approval workflows for orders, adjustments and payments" }
+    "inventory": {
+      "name": "Inventory",
+      "description": "Products, stock in/out, adjustments and stock ledger"
+    },
+    "purchasing": {
+      "name": "Purchasing",
+      "description": "Purchase orders, GRN, supplier bills, returns outward"
+    },
+    "sales": {
+      "name": "Sales",
+      "description": "Quotations, sales orders, invoices, returns inward"
+    },
+    "orders": {
+      "name": "Order tracking",
+      "description": "Timeline and status of every customer and supplier order"
+    },
+    "finance": {
+      "name": "Finance",
+      "description": "Receipts, payments, credit/debit notes, AR/AP and ledgers"
+    },
+    "reports": {
+      "name": "Reports",
+      "description": "Dashboards, valuation, margins and exports"
+    },
+    "maps": {
+      "name": "Maps",
+      "description": "Warehouses, customers and deliveries on Google Maps"
+    },
+    "barcodes": {
+      "name": "Barcodes",
+      "description": "Print labels and scan with a scanner or phone camera"
+    },
+    "pos": {
+      "name": "Quick sale",
+      "description": "Fast counter sales for shops"
+    },
+    "multiWarehouse": {
+      "name": "Multi-warehouse",
+      "description": "Transfers between locations with in-transit tracking"
+    },
+    "batches": {
+      "name": "Batches & expiry",
+      "description": "Track lots and expiry dates, FEFO picking"
+    },
+    "serials": {
+      "name": "Serial numbers",
+      "description": "Track individual units for warranty and service"
+    },
+    "approvals": {
+      "name": "Approvals",
+      "description": "Approval workflows for orders, adjustments and payments"
+    }
   },
   "roles": {
-    "owner": { "name": "Owner", "description": "Full access to everything" },
-    "admin": { "name": "Administrator", "description": "Manages users, settings and all modules" },
-    "manager": { "name": "Manager", "description": "Runs daily operations and approves documents" },
-    "storekeeper": { "name": "Storekeeper", "description": "Receives, issues and counts stock" },
-    "sales": { "name": "Sales", "description": "Creates quotations, orders and invoices" },
-    "accountant": { "name": "Accountant", "description": "Manages receipts, payments and financial reports" },
-    "viewer": { "name": "Viewer", "description": "Read-only access" }
+    "owner": {
+      "name": "Owner",
+      "description": "Full access to everything"
+    },
+    "admin": {
+      "name": "Administrator",
+      "description": "Manages users, settings and all modules"
+    },
+    "manager": {
+      "name": "Manager",
+      "description": "Runs daily operations and approves documents"
+    },
+    "storekeeper": {
+      "name": "Storekeeper",
+      "description": "Receives, issues and counts stock"
+    },
+    "sales": {
+      "name": "Sales",
+      "description": "Creates quotations, orders and invoices"
+    },
+    "accountant": {
+      "name": "Accountant",
+      "description": "Manages receipts, payments and financial reports"
+    },
+    "viewer": {
+      "name": "Viewer",
+      "description": "Read-only access"
+    }
   },
   "documents": {
     "purchaseOrder": "Purchase order",
@@ -283,7 +389,12 @@
     "expand": "Expand sidebar",
     "collapse": "Collapse",
     "close": "Close menu",
-    "groups": { "overview": "Overview", "operations": "Operations", "insights": "Money & insights", "settings": "Settings" },
+    "groups": {
+      "overview": "Overview",
+      "operations": "Operations",
+      "insights": "Money & insights",
+      "settings": "Settings"
+    },
     "items": {
       "dashboard": "Dashboard",
       "inventory": "Inventory",
@@ -297,8 +408,10 @@
       "users": "Users",
       "roles": "Roles & permissions",
       "security": "Security",
-      "audit": "Audit log"
-    }
+      "audit": "Audit log",
+      "settings": "Settings"
+    },
+    "breadcrumb": "Breadcrumb"
   },
   "command": {
     "title": "Command menu",
@@ -312,20 +425,36 @@
     "menu": "Open menu",
     "search": "Search or jump to…",
     "notifications": "Notifications",
-    "noNotifications": "You're all caught up",
-    "account": "Account menu",
-    "security": "Security",
-    "profile": "Profile",
-    "logout": "Sign out"
+    "noNotifications": "You're all caught up"
   },
-  "errors": { "notFound": "This page doesn't exist.", "home": "Back to dashboard" },
+  "errors": {
+    "notFound": "This page doesn't exist.",
+    "home": "Back to dashboard"
+  },
   "dashboard": {
-    "greeting": { "morning": "Good morning, {name}", "afternoon": "Good afternoon, {name}", "evening": "Good evening, {name}" },
-    "mode": { "simple": "Simple mode", "advanced": "Advanced mode" },
-    "stats": { "warehouses": "Warehouses", "team": "Team members", "modules": "Active modules", "roles": "Roles" },
+    "greeting": {
+      "morning": "Good morning, {name}",
+      "afternoon": "Good afternoon, {name}",
+      "evening": "Good evening, {name}"
+    },
+    "mode": {
+      "simple": "Simple mode",
+      "advanced": "Advanced mode"
+    },
+    "stats": {
+      "warehouses": "Warehouses",
+      "team": "Team members",
+      "modules": "Active modules",
+      "defaultIs": "Default: {name}",
+      "roles": "{count, plural, one {# role} other {# roles}} configured",
+      "security": "Account security",
+      "twoFactorOn": "2FA on",
+      "twoFactorOff": "2FA off",
+      "protected": "Your account is protected",
+      "enable2fa": "Turn on two-factor authentication"
+    },
     "checklist": {
-      "title": "Getting started",
-      "subtitle": "Finish these to get the most out of StockFlow.",
+      "title": "Finish setting up StockFlow",
       "items": {
         "company": "Set up your company",
         "warehouse": "Add a warehouse",
@@ -333,22 +462,48 @@
         "twoFactor": "Turn on two-factor authentication",
         "products": "Add your products",
         "grn": "Record your first GRN"
+      },
+      "progress": "{done} of {total} done",
+      "dismiss": "Hide setup guide"
+    },
+    "warehouses": {
+      "title": "Warehouses",
+      "default": "Default",
+      "openMap": "Open in Google Maps"
+    },
+    "inviteTeam": "Invite team",
+    "quickActions": {
+      "title": "Quick actions"
+    },
+    "activity": {
+      "title": "Recent activity",
+      "viewAll": "View all",
+      "system": "System",
+      "actions": {
+        "organization_created": "created the company",
+        "organization_updated": "updated company settings",
+        "onboarding_completed": "completed the setup",
+        "auth_login": "signed in",
+        "auth_logout": "signed out",
+        "auth_login_failed": "failed to sign in",
+        "auth_locked": "was locked out after failed sign-ins",
+        "auth_session_revoked": "signed out a device",
+        "auth_logout_others": "signed out other devices",
+        "auth_password_changed": "changed their password",
+        "auth_2fa_enabled": "turned on 2FA",
+        "auth_2fa_disabled": "turned off 2FA",
+        "user_invited": "invited a user",
+        "user_joined": "joined the team",
+        "user_updated": "updated a user",
+        "user_invite_revoked": "revoked an invitation",
+        "role_created": "created a role",
+        "role_updated": "changed role permissions",
+        "role_deleted": "deleted a role"
       }
     },
-    "soon": "Coming soon",
-    "warehouses": { "title": "Warehouses", "subtitle": "Where your stock lives", "default": "Default", "openMap": "Open in Google Maps" },
-    "roadmap": {
-      "title": "What's coming",
-      "subtitle": "Modules are delivered in phases",
-      "phase": "Phase {n}",
-      "items": {
-        "inventory": { "title": "Inventory", "detail": "Products, stock in/out, transfers, stock count, alerts" },
-        "purchasing": { "title": "Purchasing", "detail": "PO → GRN → bills, return outward, debit notes" },
-        "sales": { "title": "Sales & orders", "detail": "Quotes → orders → invoices, return inward, credit notes, tracking" },
-        "finance": { "title": "Finance", "detail": "Receipts, payments, AR/AP, statements, aging, P&L" }
-      }
-    },
-    "secure": { "title": "Protect your account", "body": "Add two-factor authentication so a stolen password is not enough to sign in.", "cta": "Enable 2FA" }
+    "tax": {
+      "title": "Tax rates"
+    }
   },
   "planned": {
     "phase": "Phase {n}",
@@ -478,7 +633,12 @@
       "role": "Role",
       "send": "Create invitation",
       "updated": "User updated",
-      "columns": { "user": "User", "role": "Role", "lastLogin": "Last sign-in", "active": "Active" },
+      "columns": {
+        "user": "User",
+        "role": "Role",
+        "lastLogin": "Last sign-in",
+        "active": "Active"
+      },
       "you": "You",
       "never": "Never",
       "pending": "Pending invitations",
@@ -497,7 +657,12 @@
     "audit": {
       "title": "Audit log",
       "subtitle": "Every important action, who did it and when.",
-      "columns": { "when": "When", "user": "User", "action": "Action", "ip": "IP address" },
+      "columns": {
+        "when": "When",
+        "user": "User",
+        "action": "Action",
+        "ip": "IP address"
+      },
       "empty": "No activity yet",
       "system": "System",
       "pageOf": "Page {page} of {pages}",
@@ -507,7 +672,12 @@
     "security": {
       "title": "Security",
       "subtitle": "Your profile, password, two-factor authentication and devices.",
-      "profile": { "title": "Profile", "name": "Full name", "language": "Language", "saved": "Profile saved" },
+      "profile": {
+        "title": "Profile",
+        "name": "Full name",
+        "language": "Language",
+        "saved": "Profile saved"
+      },
       "password": {
         "title": "Password",
         "subtitle": "Changing your password signs you out on all other devices.",
@@ -539,6 +709,38 @@
         "current": "This device",
         "revoke": "Sign out"
       }
+    },
+    "title": "Settings",
+    "subtitle": "Manage your company, people and security."
+  },
+  "userMenu": {
+    "open": "Account menu",
+    "security": "Profile & security",
+    "theme": "Appearance",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System",
+    "language": "Language",
+    "logout": "Sign out"
+  },
+  "create": {
+    "button": "Create",
+    "phase": "Phase {n}",
+    "groups": {
+      "inventory": "Inventory",
+      "purchasing": "Purchasing",
+      "sales": "Sales",
+      "people": "People"
+    },
+    "actions": {
+      "stockIn": "Stock in",
+      "stockOut": "Stock out",
+      "transfer": "Stock transfer",
+      "purchaseOrder": "Purchase order",
+      "grn": "Goods received (GRN)",
+      "salesOrder": "Sales order",
+      "invoice": "Invoice",
+      "inviteUser": "Invite user"
     }
   }
 }

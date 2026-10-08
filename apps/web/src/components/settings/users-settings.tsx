@@ -5,7 +5,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Copy, MailPlus, ShieldCheck, Trash2, UserPlus } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useFormatter, useTranslations } from "next-intl";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { PageHeader } from "@/components/layout/page-header";
 import { Avatar } from "@/components/ui/avatar";
@@ -127,6 +127,9 @@ export function UsersSettings() {
   const qc = useQueryClient();
   const { data: me } = useMe();
   const [inviteOpen, setInviteOpen] = useState(false);
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get("invite") === "1") setInviteOpen(true);
+  }, []);
   const users = useQuery({ queryKey: ["users"], queryFn: () => api<Paginated<UserRow>>("/users?pageSize=100") });
   const roles = useQuery({ queryKey: ["roles"], queryFn: () => api<RoleRow[]>("/roles"), enabled: can("roles.view") });
   const invites = useQuery({ queryKey: ["invitations"], queryFn: () => api<InviteRow[]>("/users/invitations") });
@@ -150,6 +153,7 @@ export function UsersSettings() {
   return (
     <>
       <PageHeader
+        level="section"
         title={t("title")}
         description={t("subtitle")}
         actions={

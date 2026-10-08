@@ -6,13 +6,12 @@ import { X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useState } from "react";
-import { Logo } from "@/components/brand";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useMe } from "@/hooks/use-auth";
 import { useRouter } from "@/i18n/navigation";
 import { ApiError, api, setSessionExpiredHandler } from "@/lib/api";
 import { CommandPalette } from "./command-palette";
-import { Sidebar, SidebarNav } from "./sidebar";
+import { Sidebar, SidebarFooter, SidebarNav, WorkspaceHeader } from "./sidebar";
 import { Topbar } from "./topbar";
 
 const COLLAPSE_KEY = "sf.sidebar.collapsed";
@@ -20,7 +19,7 @@ const COLLAPSE_KEY = "sf.sidebar.collapsed";
 function ShellSkeleton() {
   return (
     <div className="flex min-h-dvh">
-      <div className="bg-sidebar hidden w-64 border-r p-4 lg:block">
+      <div className="bg-sidebar hidden w-60 border-r p-4 lg:block">
         <Skeleton className="mb-8 h-8 w-36" />
         {Array.from({ length: 8 }, (_, i) => (
           <Skeleton key={i} className="mb-2 h-8 w-full" />
@@ -100,7 +99,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex min-h-dvh">
-      <Sidebar user={user} collapsed={collapsed} onToggle={toggleCollapsed} />
+      <Sidebar user={user} collapsed={collapsed} onToggle={toggleCollapsed} onLogout={logout} />
 
       <DialogPrimitive.Root open={mobileOpen} onOpenChange={setMobileOpen}>
         <AnimatePresence>
@@ -123,14 +122,19 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                   transition={{ type: "spring", stiffness: 380, damping: 36 }}
                 >
                   <DialogPrimitive.Title className="sr-only">{t("label")}</DialogPrimitive.Title>
-                  <div className="flex h-16 items-center justify-between px-4">
-                    <Logo />
+                  <div className="flex h-14 items-center gap-2 border-b px-2.5">
+                    <div className="min-w-0 flex-1">
+                      <WorkspaceHeader user={user} />
+                    </div>
                     <DialogPrimitive.Close className="text-muted-foreground hover:bg-accent rounded-md p-2" aria-label={t("close")}>
                       <X className="size-4" />
                     </DialogPrimitive.Close>
                   </div>
-                  <div className="flex-1 overflow-y-auto px-3 pb-6">
+                  <div className="flex-1 overflow-y-auto px-2.5 py-3">
                     <SidebarNav user={user} onNavigate={() => setMobileOpen(false)} />
+                  </div>
+                  <div className="border-t p-2.5">
+                    <SidebarFooter user={user} onLogout={logout} onNavigate={() => setMobileOpen(false)} />
                   </div>
                 </motion.div>
               </DialogPrimitive.Content>
@@ -140,8 +144,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       </DialogPrimitive.Root>
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <Topbar user={user} onMenu={() => setMobileOpen(true)} onSearch={() => setPaletteOpen(true)} onLogout={logout} />
-        <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-6 sm:px-6 lg:py-8">{children}</main>
+        <Topbar user={user} onMenu={() => setMobileOpen(true)} onSearch={() => setPaletteOpen(true)} />
+        <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">{children}</main>
       </div>
       <CommandPalette user={user} open={paletteOpen} onOpenChange={setPaletteOpen} onLogout={logout} />
     </div>

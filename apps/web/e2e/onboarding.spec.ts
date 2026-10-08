@@ -80,7 +80,7 @@ test("owner registers, completes the onboarding wizard and reaches the dashboard
 
   // Dashboard
   await expect(page.getByRole("heading", { name: /Nimal/ })).toBeVisible();
-  await expect(page.getByText("Main Store")).toBeVisible();
+  await expect(page.getByText("Main Store").first()).toBeVisible();
   await expect(page.getByText("Kandy Branch")).toBeVisible();
   await page.waitForTimeout(1500);
   if (SHOTS) await page.screenshot(shot("07-dashboard"));
@@ -97,7 +97,7 @@ test("owner registers, completes the onboarding wizard and reaches the dashboard
   // Roles & permissions matrix
   await page.goto("/settings/roles");
   await expect(page.getByRole("heading", { name: "Roles & permissions" })).toBeVisible();
-  await page.getByRole("button", { name: /Storekeeper/ }).click();
+  await page.getByRole("tab", { name: /Storekeeper/ }).click();
   await page.waitForTimeout(500);
   if (SHOTS) await page.screenshot(shot("09-roles"));
 

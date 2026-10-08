@@ -2,15 +2,14 @@
 
 import { PERMISSION_GROUPS, type Permission, type PermissionGroup } from "@stockflow/schemas";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { KeyRound, Lock, Plus, Save, Trash2 } from "lucide-react";
-import { motion } from "motion/react";
+import { Lock, Plus, Save, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { PageHeader } from "@/components/layout/page-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Field } from "@/components/ui/field";
@@ -96,6 +95,7 @@ export function RolesSettings() {
   return (
     <>
       <PageHeader
+        level="section"
         title={t("title")}
         description={t("subtitle")}
         actions={
@@ -109,29 +109,24 @@ export function RolesSettings() {
       {!roles.data ? (
         <Skeleton className="h-96" />
       ) : (
-        <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
-          <div className="grid content-start gap-1.5">
+        <div className="grid gap-4">
+          <div role="tablist" aria-label={t("title")} className="flex flex-wrap gap-1.5">
             {roles.data.map((r) => {
               const active = r.id === selected?.id;
               return (
                 <button
                   key={r.id}
                   type="button"
+                  role="tab"
+                  aria-selected={active}
                   onClick={() => setSelectedId(r.id)}
-                  className="relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm"
-                >
-                  {active && (
-                    <motion.span
-                      layoutId="role-active"
-                      className="bg-card absolute inset-0 rounded-xl border shadow-sm"
-                      transition={{ type: "spring", stiffness: 400, damping: 34 }}
-                    />
+                  className={cn(
+                    "flex h-8 items-center gap-2 rounded-full border px-3 text-sm transition-colors",
+                    active ? "border-primary bg-primary/10 text-primary font-medium" : "bg-card text-muted-foreground hover:text-foreground",
                   )}
-                  <KeyRound className={cn("relative size-4", active ? "text-primary" : "text-muted-foreground")} />
-                  <span className="relative flex-1 font-medium">{roleName(r)}</span>
-                  <Badge variant="outline" className="relative">
-                    {r._count.users}
-                  </Badge>
+                >
+                  {roleName(r)}
+                  <span className={cn("text-xs tabular-nums", active ? "text-primary/70" : "text-muted-foreground/70")}>{r._count.users}</span>
                 </button>
               );
             })}
@@ -139,7 +134,7 @@ export function RolesSettings() {
 
           {selected && (
             <Card>
-              <CardHeader className="flex-row items-start justify-between gap-4">
+              <CardHeader className="flex-row items-start justify-between gap-4 border-b pb-4">
                 <div className="grid gap-1">
                   <CardTitle className="flex items-center gap-2">
                     {roleName(selected)}
@@ -159,42 +154,54 @@ export function RolesSettings() {
                     </Button>
                   )}
                   {editable && (
-                    <Button onClick={() => save.mutate()} disabled={!dirty} loading={save.isPending}>
+                    <Button size="sm" onClick={() => save.mutate()} disabled={!dirty} loading={save.isPending}>
                       {!save.isPending && <Save />} {tc("save")}
                     </Button>
                   )}
                 </div>
               </CardHeader>
-              <CardContent className="grid gap-3">
+              <div className="divide-y">
                 {(Object.keys(PERMISSION_GROUPS) as PermissionGroup[]).map((group) => {
                   const perms = PERMISSION_GROUPS[group] as readonly Permission[];
                   const count = perms.filter((p) => draft.has(p)).length;
                   const all = count === perms.length;
                   return (
-                    <div key={group} className="rounded-xl border p-3">
-                      <label className="mb-2 flex items-center gap-2 text-sm font-semibold">
+                    <div key={group} className="grid gap-2 px-5 py-3 sm:grid-cols-[180px_1fr] sm:items-center">
+                      <label className="flex items-center gap-2.5 text-sm font-medium">
                         <Checkbox
                           checked={all ? true : count > 0 ? "indeterminate" : false}
                           disabled={!editable}
                           onCheckedChange={() => perms.forEach((p) => toggle(p, !all))}
                         />
                         {tp(`groups.${group}`)}
-                        <span className="text-muted-foreground text-xs font-normal">
+                        <span className="text-muted-foreground text-xs font-normal tabular-nums">
                           {count}/{perms.length}
                         </span>
                       </label>
-                      <div className="flex flex-wrap gap-x-5 gap-y-2 pl-7">
-                        {perms.map((p) => (
-                          <label key={p} className="text-muted-foreground flex items-center gap-2 text-sm">
-                            <Checkbox checked={draft.has(p)} disabled={!editable} onCheckedChange={(v) => toggle(p, v === true)} />
-                            {tp(`actions.${p.split(".")[1]}`)}
-                          </label>
-                        ))}
+                      <div className="flex flex-wrap gap-1.5 pl-7 sm:pl-0">
+                        {perms.map((p) => {
+                          const on = draft.has(p);
+                          return (
+                            <button
+                              key={p}
+                              type="button"
+                              disabled={!editable}
+                              aria-pressed={on}
+                              onClick={() => toggle(p, !on)}
+                              className={cn(
+                                "h-7 rounded-md border px-2.5 text-xs font-medium transition-colors disabled:cursor-not-allowed",
+                                on ? "border-primary/40 bg-primary/10 text-primary" : "text-muted-foreground hover:text-foreground bg-card",
+                              )}
+                            >
+                              {tp(`actions.${p.split(".")[1]}`)}
+                            </button>
+                          );
+                        })}
                       </div>
                     </div>
                   );
                 })}
-              </CardContent>
+              </div>
             </Card>
           )}
         </div>

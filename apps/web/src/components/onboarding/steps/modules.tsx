@@ -22,7 +22,6 @@ import {
 import { motion } from "motion/react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
-import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 import { STEP_FORM_ID, type StepProps } from "../types";
@@ -99,7 +98,12 @@ export function ModulesStep({ initial, data, onSubmit }: StepProps<"modules">) {
                   transition={{ type: "spring", stiffness: 400, damping: 32 }}
                 />
               )}
-              <span className={cn("grid size-10 shrink-0 place-content-center rounded-xl", active ? "bg-brand text-white" : "bg-muted text-muted-foreground")}>
+              <span
+                className={cn(
+                  "grid size-10 shrink-0 place-content-center rounded-xl",
+                  active ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground",
+                )}
+              >
                 <Icon className="size-5" />
               </span>
               <span className="grid gap-0.5">
@@ -111,56 +115,66 @@ export function ModulesStep({ initial, data, onSubmit }: StepProps<"modules">) {
         })}
       </div>
 
-      <div className="grid gap-2 sm:grid-cols-2">
-        {MODULES.map((mod, i) => {
-          const Icon = MODULE_ICONS[mod.key];
-          const locked = mod.advancedOnly && mode === "simple";
-          const on = mod.core || (!locked && enabled.has(mod.key));
-          return (
-            <motion.label
-              key={mod.key}
-              htmlFor={`module-${mod.key}`}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: locked ? 0.55 : 1, y: 0 }}
-              transition={{ delay: i * 0.025 }}
-              className={cn(
-                "bg-card flex items-center gap-3 rounded-xl border p-3 transition-colors",
-                on && "border-primary/40 bg-primary/[0.03]",
-                !locked && !mod.core && "cursor-pointer",
+      {(["core", "addons"] as const).map((section) => {
+        const list = MODULES.filter((m) => (section === "addons") === m.advancedOnly);
+        const locked = section === "addons" && mode === "simple";
+        return (
+          <section key={section} className="grid gap-2">
+            <div className="flex items-baseline justify-between gap-3">
+              <h3 className="text-sm font-semibold">{t(`sections.${section}`)}</h3>
+              {locked && (
+                <button
+                  type="button"
+                  onClick={() => changeMode("advanced")}
+                  className="text-primary flex items-center gap-1 text-xs font-medium hover:underline"
+                >
+                  <Lock className="size-3" /> {t("unlock")}
+                </button>
               )}
-            >
-              <span
-                className={cn(
-                  "grid size-9 shrink-0 place-content-center rounded-lg transition-colors",
-                  on ? "bg-primary/12 text-primary" : "bg-muted text-muted-foreground",
-                )}
-              >
-                <Icon className="size-4" />
-              </span>
-              <span className="grid flex-1 gap-0.5">
-                <span className="flex flex-wrap items-center gap-1.5 text-sm font-medium">
-                  {tm(`${mod.key}.name`)}
-                  {mod.core && <Badge variant="secondary">{t("core")}</Badge>}
-                  {suggested.has(mod.key) && !mod.core && <Badge variant="success">{t("recommended")}</Badge>}
-                  {locked && (
-                    <Badge variant="outline">
-                      <Lock /> {t("advancedOnly")}
-                    </Badge>
-                  )}
-                </span>
-                <span className="text-muted-foreground text-xs">{tm(`${mod.key}.description`)}</span>
-              </span>
-              <Switch
-                id={`module-${mod.key}`}
-                checked={on}
-                disabled={mod.core || locked}
-                onCheckedChange={(v) => toggle(mod.key, v)}
-                aria-label={tm(`${mod.key}.name`)}
-              />
-            </motion.label>
-          );
-        })}
-      </div>
+            </div>
+            <div className={cn("divide-y overflow-hidden rounded-lg border", locked && "opacity-60")}>
+              {list.map((mod) => {
+                const Icon = MODULE_ICONS[mod.key];
+                const on = mod.core || (!locked && enabled.has(mod.key));
+                return (
+                  <label
+                    key={mod.key}
+                    htmlFor={`module-${mod.key}`}
+                    className={cn("bg-card flex items-center gap-3 px-3.5 py-3 transition-colors", !locked && !mod.core && "hover:bg-accent/40 cursor-pointer")}
+                  >
+                    <span
+                      className={cn(
+                        "grid size-8 shrink-0 place-content-center rounded-md transition-colors",
+                        on ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground",
+                      )}
+                    >
+                      <Icon className="size-4" />
+                    </span>
+                    <span className="grid min-w-0 flex-1 gap-0.5">
+                      <span className="flex flex-wrap items-center gap-2 text-sm font-medium">
+                        {tm(`${mod.key}.name`)}
+                        {suggested.has(mod.key) && !mod.core && <span className="text-success text-[11px] font-medium">{t("recommended")}</span>}
+                      </span>
+                      <span className="text-muted-foreground text-xs">{tm(`${mod.key}.description`)}</span>
+                    </span>
+                    {mod.core ? (
+                      <span className="text-muted-foreground text-xs">{t("alwaysOn")}</span>
+                    ) : (
+                      <Switch
+                        id={`module-${mod.key}`}
+                        checked={on}
+                        disabled={locked}
+                        onCheckedChange={(v) => toggle(mod.key, v)}
+                        aria-label={tm(`${mod.key}.name`)}
+                      />
+                    )}
+                  </label>
+                );
+              })}
+            </div>
+          </section>
+        );
+      })}
       <p className="text-muted-foreground text-xs">{t("changeLater")}</p>
     </form>
   );

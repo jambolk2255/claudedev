@@ -43,7 +43,7 @@ export function AuditSettings() {
 
   return (
     <>
-      <PageHeader title={t("title")} description={t("subtitle")} />
+      <PageHeader level="section" title={t("title")} description={t("subtitle")} />
       <Card className="overflow-hidden">
         <Table>
           <THead>

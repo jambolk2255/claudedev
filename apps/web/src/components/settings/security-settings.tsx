@@ -308,7 +308,7 @@ export function SecuritySettings() {
   if (!me) return null;
   return (
     <>
-      <PageHeader title={t("title")} description={t("subtitle")} />
+      <PageHeader level="section" title={t("title")} description={t("subtitle")} />
       <div className="grid gap-6">
         <ProfileCard me={me} />
         <TwoFactorCard me={me} />

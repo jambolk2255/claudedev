@@ -5,59 +5,62 @@
 
 /* Design tokens. Components only use these semantic names, never raw colours. */
 :root {
-  --radius: 0.75rem;
-  --background: oklch(0.985 0.004 270);
-  --foreground: oklch(0.2 0.03 270);
+  /* Neutral, low-chroma surfaces with one indigo accent: calm, readable, professional. */
+  --radius: 0.625rem;
+  --background: oklch(0.982 0.002 264);
+  --foreground: oklch(0.21 0.012 264);
   --card: oklch(1 0 0);
   --card-foreground: var(--foreground);
   --popover: oklch(1 0 0);
   --popover-foreground: var(--foreground);
-  --primary: oklch(0.52 0.22 277);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.955 0.012 270);
-  --secondary-foreground: oklch(0.28 0.04 270);
-  --muted: oklch(0.96 0.008 270);
-  --muted-foreground: oklch(0.5 0.03 270);
-  --accent: oklch(0.95 0.03 277);
-  --accent-foreground: oklch(0.35 0.15 277);
-  --success: oklch(0.62 0.15 160);
-  --success-foreground: oklch(0.985 0 0);
-  --warning: oklch(0.75 0.15 75);
-  --warning-foreground: oklch(0.25 0.05 75);
-  --destructive: oklch(0.58 0.22 25);
-  --destructive-foreground: oklch(0.985 0 0);
-  --border: oklch(0.91 0.012 270);
-  --input: oklch(0.89 0.014 270);
-  --ring: oklch(0.52 0.22 277 / 0.45);
-  --sidebar: oklch(0.975 0.006 270);
+  --primary: oklch(0.5 0.19 268);
+  --primary-foreground: oklch(0.99 0 0);
+  --secondary: oklch(0.962 0.004 264);
+  --secondary-foreground: oklch(0.3 0.015 264);
+  --muted: oklch(0.965 0.003 264);
+  --muted-foreground: oklch(0.52 0.014 264);
+  --accent: oklch(0.955 0.004 264);
+  --accent-foreground: oklch(0.21 0.012 264);
+  --success: oklch(0.6 0.13 158);
+  --success-foreground: oklch(0.99 0 0);
+  --warning: oklch(0.74 0.15 70);
+  --warning-foreground: oklch(0.3 0.06 60);
+  --destructive: oklch(0.57 0.21 25);
+  --destructive-foreground: oklch(0.99 0 0);
+  --border: oklch(0.918 0.004 264);
+  --input: oklch(0.89 0.005 264);
+  --ring: oklch(0.5 0.19 268 / 0.35);
+  --sidebar: oklch(0.975 0.002 264);
   --brand-gradient: linear-gradient(135deg, oklch(0.55 0.22 277), oklch(0.6 0.2 310) 50%, oklch(0.7 0.14 200));
+  --elevation-card: 0 1px 2px oklch(0.2 0.02 264 / 0.04), 0 1px 1px oklch(0.2 0.02 264 / 0.03);
 }
 
 .dark {
-  --background: oklch(0.16 0.02 275);
-  --foreground: oklch(0.95 0.01 270);
-  --card: oklch(0.2 0.025 275);
+  --background: oklch(0.155 0.006 264);
+  --foreground: oklch(0.95 0.004 264);
+  --card: oklch(0.19 0.007 264);
   --card-foreground: var(--foreground);
-  --popover: oklch(0.21 0.025 275);
+  --popover: oklch(0.21 0.008 264);
   --popover-foreground: var(--foreground);
-  --primary: oklch(0.68 0.18 277);
-  --primary-foreground: oklch(0.15 0.03 277);
-  --secondary: oklch(0.26 0.03 275);
-  --secondary-foreground: oklch(0.92 0.01 270);
-  --muted: oklch(0.24 0.025 275);
-  --muted-foreground: oklch(0.7 0.03 270);
-  --accent: oklch(0.28 0.06 277);
-  --accent-foreground: oklch(0.9 0.06 277);
-  --success: oklch(0.7 0.15 160);
-  --success-foreground: oklch(0.15 0.03 160);
+  --primary: oklch(0.66 0.17 268);
+  --primary-foreground: oklch(0.15 0.02 268);
+  --secondary: oklch(0.25 0.008 264);
+  --secondary-foreground: oklch(0.92 0.004 264);
+  --muted: oklch(0.23 0.007 264);
+  --muted-foreground: oklch(0.68 0.012 264);
+  --accent: oklch(0.25 0.008 264);
+  --accent-foreground: oklch(0.95 0.004 264);
+  --success: oklch(0.7 0.14 158);
+  --success-foreground: oklch(0.15 0.03 158);
   --warning: oklch(0.8 0.14 75);
   --warning-foreground: oklch(0.2 0.05 75);
   --destructive: oklch(0.65 0.2 25);
-  --destructive-foreground: oklch(0.985 0 0);
-  --border: oklch(0.3 0.03 275);
-  --input: oklch(0.33 0.03 275);
-  --ring: oklch(0.68 0.18 277 / 0.5);
-  --sidebar: oklch(0.18 0.022 275);
+  --destructive-foreground: oklch(0.99 0 0);
+  --border: oklch(0.27 0.007 264);
+  --input: oklch(0.31 0.008 264);
+  --ring: oklch(0.66 0.17 268 / 0.45);
+  --sidebar: oklch(0.17 0.006 264);
+  --elevation-card: 0 1px 2px oklch(0 0 0 / 0.3);
 }
 
 @theme inline {
@@ -90,6 +93,7 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+  --shadow-card: var(--elevation-card);
 }
 
 @layer base {

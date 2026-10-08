@@ -23,16 +23,11 @@ export function ComingSoon({ moduleKey }: { moduleKey: string }) {
         <PageHeader title={tn(moduleKey)} description={t(`${moduleKey}.summary`)} actions={<Badge variant="outline">{t("phase", { n: item.phase! })}</Badge>} />
       </motion.div>
       <motion.div variants={fadeUp}>
-        <Card className="relative overflow-clip p-8">
-          <div className="bg-primary/15 pointer-events-none absolute -right-24 -top-24 size-72 rounded-full blur-3xl" />
+        <Card className="p-6 sm:p-8">
           <div className="relative grid gap-8 lg:grid-cols-[auto_1fr] lg:items-start">
-            <motion.span
-              className="bg-brand shadow-primary/30 grid size-20 place-content-center rounded-3xl text-white shadow-2xl"
-              animate={{ rotate: [0, -4, 4, 0] }}
-              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-            >
-              <Icon className="size-9" />
-            </motion.span>
+            <span className="bg-primary/10 text-primary grid size-14 place-content-center rounded-xl">
+              <Icon className="size-7" />
+            </span>
             <div className="grid gap-4">
               <div className="text-primary flex items-center gap-2 text-sm font-medium">
                 <Hammer className="size-4" /> {t("building")}

@@ -1,5 +1,7 @@
 {
-  "meta": { "description": "සෑම ප්‍රමාණයකම ව්‍යාපාර සඳහා තොග, ඇණවුම්, මිලදී ගැනීම් සහ මූල්‍ය කළමනාකරණය." },
+  "meta": {
+    "description": "සෑම ප්‍රමාණයකම ව්‍යාපාර සඳහා තොග, ඇණවුම්, මිලදී ගැනීම් සහ මූල්‍ය කළමනාකරණය."
+  },
   "common": {
     "language": "භාෂාව",
     "toggleTheme": "තේමාව මාරු කරන්න",
@@ -33,13 +35,32 @@
     "footer": "© StockFlow · encryption, 2FA සහ audit trails මඟින් ආරක්ෂිතයි",
     "hidePassword": "මුරපදය සඟවන්න",
     "showPassword": "මුරපදය පෙන්වන්න",
-    "strength": { "weak": "දුර්වල මුරපදයක්", "fair": "සාමාන්‍ය මුරපදයක්", "good": "හොඳ මුරපදයක්", "strong": "ශක්තිමත් මුරපදයක්" },
+    "strength": {
+      "weak": "දුර්වල මුරපදයක්",
+      "fair": "සාමාන්‍ය මුරපදයක්",
+      "good": "හොඳ මුරපදයක්",
+      "strong": "ශක්තිමත් මුරපදයක්"
+    },
     "showcase": {
-      "grn": { "title": "GRN-2026-00042 ලැබුණා", "detail": "අයිතම 120 · ප්‍රධාන ගබඩාව" },
-      "lowStock": { "title": "අඩු තොග අනතුරු ඇඟවීම", "detail": "Panadol 500mg · 18ක් ඉතිරියි" },
-      "dispatch": { "title": "ඇණවුම යැව්වා", "detail": "SO-2026-00118 · මහනුවර" },
-      "warehouse": { "title": "ගබඩා 3ක් ක්‍රියාත්මකයි", "detail": "කොළඹ · මහනුවර · ගාල්ල" },
-      "chart": { "title": "තොග පිරිවැටුම" },
+      "grn": {
+        "title": "GRN-2026-00042 ලැබුණා",
+        "detail": "අයිතම 120 · ප්‍රධාන ගබඩාව"
+      },
+      "lowStock": {
+        "title": "අඩු තොග අනතුරු ඇඟවීම",
+        "detail": "Panadol 500mg · 18ක් ඉතිරියි"
+      },
+      "dispatch": {
+        "title": "ඇණවුම යැව්වා",
+        "detail": "SO-2026-00118 · මහනුවර"
+      },
+      "warehouse": {
+        "title": "ගබඩා 3ක් ක්‍රියාත්මකයි",
+        "detail": "කොළඹ · මහනුවර · ගාල්ල"
+      },
+      "chart": {
+        "title": "තොග පිරිවැටුම"
+      },
       "headline": "සෑම අයිතමයක්ම, ඇණවුමක්ම, රුපියලක්ම — ඔබේ පාලනය යටතේ.",
       "subline": "Stock in / out, GRN, returns, credit සහ debit notes, ඇණවුම් ලුහුබැඳීම සහ මූල්‍ය කටයුතු — එකම වේගවත්, ආරක්ෂිත පද්ධතියක."
     },
@@ -152,12 +173,22 @@
       "title": "ඔබේ අත්දැකීම තෝරන්න",
       "subtitle": "සරලව පටන් ගෙන, අවශ්‍ය විට තවත් බලය එක් කරන්න.",
       "modeLabel": "අත්දැකීම් මාදිලිය",
-      "simple": { "title": "සරල", "description": "කුඩා කණ්ඩායම් සඳහා පිරිසිදු තිර. අත්‍යවශ්‍ය දේ පමණයි." },
-      "advanced": { "title": "උසස්", "description": "ගබඩා කිහිපයක්, batches, serials සහ අනුමැතිය workflows." },
-      "core": "මූලික",
+      "simple": {
+        "title": "සරල",
+        "description": "කුඩා කණ්ඩායම් සඳහා පිරිසිදු තිර. අත්‍යවශ්‍ය දේ පමණයි."
+      },
+      "advanced": {
+        "title": "උසස්",
+        "description": "ගබඩා කිහිපයක්, batches, serials සහ අනුමැතිය workflows."
+      },
       "recommended": "නිර්දේශිත",
-      "advancedOnly": "උසස්",
-      "changeLater": "Settings වෙතින් ඕනෑම වේලාවක modules on / off කළ හැක."
+      "changeLater": "Settings වෙතින් ඕනෑම වේලාවක modules on / off කළ හැක.",
+      "sections": {
+        "core": "මූලික මෙහෙයුම්",
+        "addons": "උසස් අමතර modules"
+      },
+      "unlock": "සක්‍රිය කිරීමට උසස් මාදිලියට මාරු වන්න",
+      "alwaysOn": "සැමවිටම සක්‍රියයි"
     },
     "finance": {
       "title": "මුදල් ඒකකය, බදු සහ තොග තක්සේරුව",
@@ -174,8 +205,14 @@
       "ssclRate": "SSCL අනුපාතය",
       "valuation": "තොග තක්සේරු ක්‍රමය",
       "methods": {
-        "fifo": { "title": "FIFO", "description": "මුලින් ආපු එක මුලින් යනවා. කල් ඉකුත් වන භාණ්ඩ සඳහා හොඳම." },
-        "weighted_average": { "title": "භාරිත සාමාන්‍යය", "description": "සියලු ඒකකවල සාමාන්‍ය පිරිවැය. බොහෝ ව්‍යාපාර සඳහා සරල සහ ස්ථාවරයි." }
+        "fifo": {
+          "title": "FIFO",
+          "description": "මුලින් ආපු එක මුලින් යනවා. කල් ඉකුත් වන භාණ්ඩ සඳහා හොඳම."
+        },
+        "weighted_average": {
+          "title": "භාරිත සාමාන්‍යය",
+          "description": "සියලු ඒකකවල සාමාන්‍ය පිරිවැය. බොහෝ ව්‍යාපාර සඳහා සරල සහ ස්ථාවරයි."
+        }
       },
       "negativeStock": "සෘණ තොග ඉඩ දෙන්න",
       "negativeStockHint": "GRN සටහන් කිරීමට පෙර අයිතම විකිණීමට ඉඩ දෙයි. නිර්දේශ නොකෙරේ."
@@ -218,9 +255,18 @@
       "title": "කොහොමද පටන් ගන්න කැමති?",
       "subtitle": "ඔබේ භාණ්ඩ, පාරිභෝගිකයින් සහ සැපයුම්කරුවන් ඕනෑම වේලාවක import කළ හැක.",
       "soon": "ළඟදීම",
-      "empty": { "title": "අලුතින් පටන් ගන්න", "description": "ඔබේම භාණ්ඩ සහ තොග සඳහා පිරිසිදු workspace එකක්." },
-      "demo": { "title": "නියැදි දත්ත සමඟ බලන්න", "description": "Inventory module එක ක්‍රියාත්මක වූ විට නියැදි භාණ්ඩ සහ තොග එක් කෙරේ." },
-      "import": { "title": "Excel වෙතින් import කරන්න", "description": "භාණ්ඩ, පාරිභෝගිකයින්, සැපයුම්කරුවන් සහ ආරම්භක තොග spreadsheet එකකින් ගෙනෙන්න." }
+      "empty": {
+        "title": "අලුතින් පටන් ගන්න",
+        "description": "ඔබේම භාණ්ඩ සහ තොග සඳහා පිරිසිදු workspace එකක්."
+      },
+      "demo": {
+        "title": "නියැදි දත්ත සමඟ බලන්න",
+        "description": "Inventory module එක ක්‍රියාත්මක වූ විට නියැදි භාණ්ඩ සහ තොග එක් කෙරේ."
+      },
+      "import": {
+        "title": "Excel වෙතින් import කරන්න",
+        "description": "භාණ්ඩ, පාරිභෝගිකයින්, සැපයුම්කරුවන් සහ ආරම්භක තොග spreadsheet එකකින් ගෙනෙන්න."
+      }
     },
     "review": {
       "title": "සමාලෝචනය කර අවසන් කරන්න",
@@ -238,28 +284,88 @@
     }
   },
   "modules": {
-    "inventory": { "name": "තොග (Inventory)", "description": "භාණ්ඩ, stock in/out, ගැලපීම් සහ තොග ලෙජරය" },
-    "purchasing": { "name": "මිලදී ගැනීම්", "description": "මිලදී ගැනීමේ ඇණවුම්, GRN, සැපයුම්කරු බිල්පත්, return outward" },
-    "sales": { "name": "විකුණුම්", "description": "මිල ගණන්, විකුණුම් ඇණවුම්, ඉන්වොයිස්, return inward" },
-    "orders": { "name": "ඇණවුම් ලුහුබැඳීම", "description": "සෑම පාරිභෝගික සහ සැපයුම්කරු ඇණවුමකම තත්ත්වය සහ කාලරේඛාව" },
-    "finance": { "name": "මූල්‍ය", "description": "රිසිට්පත්, ගෙවීම්, credit/debit notes, AR/AP සහ ලෙජර" },
-    "reports": { "name": "වාර්තා", "description": "Dashboards, තක්සේරුව, ලාභ ආන්තික සහ exports" },
-    "maps": { "name": "සිතියම්", "description": "ගබඩා, පාරිභෝගිකයින් සහ බෙදාහැරීම් Google Maps මත" },
-    "barcodes": { "name": "Barcodes", "description": "ලේබල මුද්‍රණය කර scanner හෝ phone camera එකෙන් scan කරන්න" },
-    "pos": { "name": "ඉක්මන් විකිණීම", "description": "වෙළඳසැල් සඳහා වේගවත් කවුන්ටර විකුණුම්" },
-    "multiWarehouse": { "name": "ගබඩා කිහිපයක්", "description": "ස්ථාන අතර මාරු කිරීම් සහ මාර්ගයේ ඇති තොග ලුහුබැඳීම" },
-    "batches": { "name": "Batches සහ කල් ඉකුත් වීම", "description": "Lots සහ කල් ඉකුත් දින ලුහුබැඳීම, FEFO" },
-    "serials": { "name": "Serial අංක", "description": "වගකීම් සහ සේවා සඳහා තනි ඒකක ලුහුබැඳීම" },
-    "approvals": { "name": "අනුමැතිය", "description": "ඇණවුම්, ගැලපීම් සහ ගෙවීම් සඳහා අනුමැති workflows" }
+    "inventory": {
+      "name": "තොග (Inventory)",
+      "description": "භාණ්ඩ, stock in/out, ගැලපීම් සහ තොග ලෙජරය"
+    },
+    "purchasing": {
+      "name": "මිලදී ගැනීම්",
+      "description": "මිලදී ගැනීමේ ඇණවුම්, GRN, සැපයුම්කරු බිල්පත්, return outward"
+    },
+    "sales": {
+      "name": "විකුණුම්",
+      "description": "මිල ගණන්, විකුණුම් ඇණවුම්, ඉන්වොයිස්, return inward"
+    },
+    "orders": {
+      "name": "ඇණවුම් ලුහුබැඳීම",
+      "description": "සෑම පාරිභෝගික සහ සැපයුම්කරු ඇණවුමකම තත්ත්වය සහ කාලරේඛාව"
+    },
+    "finance": {
+      "name": "මූල්‍ය",
+      "description": "රිසිට්පත්, ගෙවීම්, credit/debit notes, AR/AP සහ ලෙජර"
+    },
+    "reports": {
+      "name": "වාර්තා",
+      "description": "Dashboards, තක්සේරුව, ලාභ ආන්තික සහ exports"
+    },
+    "maps": {
+      "name": "සිතියම්",
+      "description": "ගබඩා, පාරිභෝගිකයින් සහ බෙදාහැරීම් Google Maps මත"
+    },
+    "barcodes": {
+      "name": "Barcodes",
+      "description": "ලේබල මුද්‍රණය කර scanner හෝ phone camera එකෙන් scan කරන්න"
+    },
+    "pos": {
+      "name": "ඉක්මන් විකිණීම",
+      "description": "වෙළඳසැල් සඳහා වේගවත් කවුන්ටර විකුණුම්"
+    },
+    "multiWarehouse": {
+      "name": "ගබඩා කිහිපයක්",
+      "description": "ස්ථාන අතර මාරු කිරීම් සහ මාර්ගයේ ඇති තොග ලුහුබැඳීම"
+    },
+    "batches": {
+      "name": "Batches සහ කල් ඉකුත් වීම",
+      "description": "Lots සහ කල් ඉකුත් දින ලුහුබැඳීම, FEFO"
+    },
+    "serials": {
+      "name": "Serial අංක",
+      "description": "වගකීම් සහ සේවා සඳහා තනි ඒකක ලුහුබැඳීම"
+    },
+    "approvals": {
+      "name": "අනුමැතිය",
+      "description": "ඇණවුම්, ගැලපීම් සහ ගෙවීම් සඳහා අනුමැති workflows"
+    }
   },
   "roles": {
-    "owner": { "name": "හිමිකරු", "description": "සියල්ලටම සම්පූර්ණ ප්‍රවේශය" },
-    "admin": { "name": "පරිපාලක", "description": "පරිශීලකයින්, සැකසුම් සහ සියලු modules කළමනාකරණය" },
-    "manager": { "name": "කළමනාකරු", "description": "දෛනික මෙහෙයුම් සහ ලේඛන අනුමත කිරීම" },
-    "storekeeper": { "name": "ගබඩා භාරකරු", "description": "තොග ලබා ගැනීම, නිකුත් කිරීම සහ ගණන් කිරීම" },
-    "sales": { "name": "විකුණුම්", "description": "මිල ගණන්, ඇණවුම් සහ ඉන්වොයිස් සාදයි" },
-    "accountant": { "name": "ගණකාධිකාරී", "description": "රිසිට්පත්, ගෙවීම් සහ මූල්‍ය වාර්තා" },
-    "viewer": { "name": "නරඹන්නා", "description": "කියවීමට පමණක් ප්‍රවේශය" }
+    "owner": {
+      "name": "හිමිකරු",
+      "description": "සියල්ලටම සම්පූර්ණ ප්‍රවේශය"
+    },
+    "admin": {
+      "name": "පරිපාලක",
+      "description": "පරිශීලකයින්, සැකසුම් සහ සියලු modules කළමනාකරණය"
+    },
+    "manager": {
+      "name": "කළමනාකරු",
+      "description": "දෛනික මෙහෙයුම් සහ ලේඛන අනුමත කිරීම"
+    },
+    "storekeeper": {
+      "name": "ගබඩා භාරකරු",
+      "description": "තොග ලබා ගැනීම, නිකුත් කිරීම සහ ගණන් කිරීම"
+    },
+    "sales": {
+      "name": "විකුණුම්",
+      "description": "මිල ගණන්, ඇණවුම් සහ ඉන්වොයිස් සාදයි"
+    },
+    "accountant": {
+      "name": "ගණකාධිකාරී",
+      "description": "රිසිට්පත්, ගෙවීම් සහ මූල්‍ය වාර්තා"
+    },
+    "viewer": {
+      "name": "නරඹන්නා",
+      "description": "කියවීමට පමණක් ප්‍රවේශය"
+    }
   },
   "documents": {
     "purchaseOrder": "මිලදී ගැනීමේ ඇණවුම",
@@ -283,7 +389,12 @@
     "expand": "Sidebar එක විහිදන්න",
     "collapse": "හකුළන්න",
     "close": "මෙනුව වසන්න",
-    "groups": { "overview": "දළ විශ්ලේෂණය", "operations": "මෙහෙයුම්", "insights": "මුදල් සහ තොරතුරු", "settings": "සැකසුම්" },
+    "groups": {
+      "overview": "දළ විශ්ලේෂණය",
+      "operations": "මෙහෙයුම්",
+      "insights": "මුදල් සහ තොරතුරු",
+      "settings": "සැකසුම්"
+    },
     "items": {
       "dashboard": "Dashboard",
       "inventory": "තොග",
@@ -297,8 +408,10 @@
       "users": "පරිශීලකයින්",
       "roles": "භූමිකා සහ අවසර",
       "security": "ආරක්ෂාව",
-      "audit": "Audit log"
-    }
+      "audit": "Audit log",
+      "settings": "සැකසුම්"
+    },
+    "breadcrumb": "Breadcrumb"
   },
   "command": {
     "title": "විධාන මෙනුව",
@@ -312,20 +425,36 @@
     "menu": "මෙනුව විවෘත කරන්න",
     "search": "සොයන්න හෝ යන්න…",
     "notifications": "දැනුම්දීම්",
-    "noNotifications": "අලුත් දැනුම්දීම් නැත",
-    "account": "ගිණුම් මෙනුව",
-    "security": "ආරක්ෂාව",
-    "profile": "පැතිකඩ",
-    "logout": "පිටවන්න"
+    "noNotifications": "අලුත් දැනුම්දීම් නැත"
   },
-  "errors": { "notFound": "මෙම පිටුව නොපවතී.", "home": "Dashboard වෙත ආපසු" },
+  "errors": {
+    "notFound": "මෙම පිටුව නොපවතී.",
+    "home": "Dashboard වෙත ආපසු"
+  },
   "dashboard": {
-    "greeting": { "morning": "සුබ උදෑසනක්, {name}", "afternoon": "සුබ දහවලක්, {name}", "evening": "සුබ සන්ධ්‍යාවක්, {name}" },
-    "mode": { "simple": "සරල මාදිලිය", "advanced": "උසස් මාදිලිය" },
-    "stats": { "warehouses": "ගබඩා", "team": "කණ්ඩායම් සාමාජිකයින්", "modules": "සක්‍රිය modules", "roles": "භූමිකා" },
+    "greeting": {
+      "morning": "සුබ උදෑසනක්, {name}",
+      "afternoon": "සුබ දහවලක්, {name}",
+      "evening": "සුබ සන්ධ්‍යාවක්, {name}"
+    },
+    "mode": {
+      "simple": "සරල මාදිලිය",
+      "advanced": "උසස් මාදිලිය"
+    },
+    "stats": {
+      "warehouses": "ගබඩා",
+      "team": "කණ්ඩායම් සාමාජිකයින්",
+      "modules": "සක්‍රිය modules",
+      "defaultIs": "ප්‍රධාන: {name}",
+      "roles": "භූමිකා {count}ක් සකසා ඇත",
+      "security": "ගිණුම් ආරක්ෂාව",
+      "twoFactorOn": "2FA සක්‍රියයි",
+      "twoFactorOff": "2FA අක්‍රියයි",
+      "protected": "ඔබේ ගිණුම ආරක්ෂිතයි",
+      "enable2fa": "Two-factor authentication සක්‍රිය කරන්න"
+    },
     "checklist": {
-      "title": "පටන් ගැනීම",
-      "subtitle": "StockFlow උපරිමයෙන් ප්‍රයෝජනයට ගැනීමට මේවා සම්පූර්ණ කරන්න.",
+      "title": "StockFlow සැකසීම අවසන් කරන්න",
       "items": {
         "company": "ඔබේ සමාගම සකසන්න",
         "warehouse": "ගබඩාවක් එක් කරන්න",
@@ -333,25 +462,47 @@
         "twoFactor": "Two-factor authentication සක්‍රිය කරන්න",
         "products": "ඔබේ භාණ්ඩ එක් කරන්න",
         "grn": "පළමු GRN එක සටහන් කරන්න"
+      },
+      "progress": "{total}න් {done}ක් අවසන්",
+      "dismiss": "සැකසීමේ මාර්ගෝපදේශය සඟවන්න"
+    },
+    "warehouses": {
+      "title": "ගබඩා",
+      "default": "ප්‍රධාන",
+      "openMap": "Google Maps හි විවෘත කරන්න"
+    },
+    "inviteTeam": "කණ්ඩායමට ආරාධනා",
+    "quickActions": {
+      "title": "ඉක්මන් ක්‍රියා"
+    },
+    "activity": {
+      "title": "මෑත ක්‍රියාකාරකම්",
+      "viewAll": "සියල්ල බලන්න",
+      "system": "පද්ධතිය",
+      "actions": {
+        "organization_created": "සමාගම සෑදුවා",
+        "organization_updated": "සමාගම් සැකසුම් යාවත්කාලීන කළා",
+        "onboarding_completed": "සැකසීම සම්පූර්ණ කළා",
+        "auth_login": "ඇතුළු වුණා",
+        "auth_logout": "පිටවුණා",
+        "auth_login_failed": "ඇතුළු වීම අසාර්ථක විය",
+        "auth_locked": "අසාර්ථක උත්සාහයන් නිසා අගුළු වැටුණා",
+        "auth_session_revoked": "උපාංගයකින් පිටවුණා",
+        "auth_logout_others": "අනෙක් උපාංගවලින් පිටවුණා",
+        "auth_password_changed": "මුරපදය වෙනස් කළා",
+        "auth_2fa_enabled": "2FA සක්‍රිය කළා",
+        "auth_2fa_disabled": "2FA අක්‍රිය කළා",
+        "user_invited": "පරිශීලකයෙකුට ආරාධනා කළා",
+        "user_joined": "කණ්ඩායමට එක්වුණා",
+        "user_updated": "පරිශීලකයෙකු යාවත්කාලීන කළා",
+        "user_invite_revoked": "ආරාධනාවක් අවලංගු කළා",
+        "role_created": "භූමිකාවක් සෑදුවා",
+        "role_updated": "භූමිකා අවසර වෙනස් කළා",
+        "role_deleted": "භූමිකාවක් මැකුවා"
       }
     },
-    "soon": "ළඟදීම",
-    "warehouses": { "title": "ගබඩා", "subtitle": "ඔබේ තොග ඇති තැන්", "default": "ප්‍රධාන", "openMap": "Google Maps හි විවෘත කරන්න" },
-    "roadmap": {
-      "title": "ළඟදීම එන දේ",
-      "subtitle": "Modules අදියර වශයෙන් ලබා දෙනු ලැබේ",
-      "phase": "අදියර {n}",
-      "items": {
-        "inventory": { "title": "තොග", "detail": "භාණ්ඩ, stock in/out, මාරු කිරීම්, තොග ගණන් කිරීම, අනතුරු ඇඟවීම්" },
-        "purchasing": { "title": "මිලදී ගැනීම්", "detail": "PO → GRN → බිල්පත්, return outward, debit notes" },
-        "sales": { "title": "විකුණුම් සහ ඇණවුම්", "detail": "මිල ගණන් → ඇණවුම් → ඉන්වොයිස්, return inward, credit notes, ලුහුබැඳීම" },
-        "finance": { "title": "මූල්‍ය", "detail": "රිසිට්පත්, ගෙවීම්, AR/AP, ප්‍රකාශන, aging, P&L" }
-      }
-    },
-    "secure": {
-      "title": "ඔබේ ගිණුම ආරක්ෂා කරන්න",
-      "body": "සොරකම් කළ මුරපදයකින් පමණක් ඇතුළු වීමට නොහැකි වන පරිදි two-factor authentication එක් කරන්න.",
-      "cta": "2FA සක්‍රිය කරන්න"
+    "tax": {
+      "title": "බදු අනුපාත"
     }
   },
   "planned": {
@@ -482,7 +633,12 @@
       "role": "භූමිකාව",
       "send": "ආරාධනාව සාදන්න",
       "updated": "පරිශීලකයා යාවත්කාලීන කළා",
-      "columns": { "user": "පරිශීලකයා", "role": "භූමිකාව", "lastLogin": "අවසන් පිවිසුම", "active": "සක්‍රිය" },
+      "columns": {
+        "user": "පරිශීලකයා",
+        "role": "භූමිකාව",
+        "lastLogin": "අවසන් පිවිසුම",
+        "active": "සක්‍රිය"
+      },
       "you": "ඔබ",
       "never": "කවදාවත් නැත",
       "pending": "බලාපොරොත්තු ආරාධනා",
@@ -501,7 +657,12 @@
     "audit": {
       "title": "Audit log",
       "subtitle": "සෑම වැදගත් ක්‍රියාවක්ම, එය කළේ කවුද සහ කවදාද.",
-      "columns": { "when": "කවදා", "user": "පරිශීලකයා", "action": "ක්‍රියාව", "ip": "IP ලිපිනය" },
+      "columns": {
+        "when": "කවදා",
+        "user": "පරිශීලකයා",
+        "action": "ක්‍රියාව",
+        "ip": "IP ලිපිනය"
+      },
       "empty": "තවම ක්‍රියාකාරකම් නැත",
       "system": "පද්ධතිය",
       "pageOf": "පිටුව {page} / {pages}",
@@ -511,7 +672,12 @@
     "security": {
       "title": "ආරක්ෂාව",
       "subtitle": "ඔබේ පැතිකඩ, මුරපදය, two-factor authentication සහ උපාංග.",
-      "profile": { "title": "පැතිකඩ", "name": "සම්පූර්ණ නම", "language": "භාෂාව", "saved": "පැතිකඩ සුරැකිණි" },
+      "profile": {
+        "title": "පැතිකඩ",
+        "name": "සම්පූර්ණ නම",
+        "language": "භාෂාව",
+        "saved": "පැතිකඩ සුරැකිණි"
+      },
       "password": {
         "title": "මුරපදය",
         "subtitle": "මුරපදය වෙනස් කිරීමෙන් අනෙක් සියලු උපාංගවලින් ඔබ පිටවේ.",
@@ -543,6 +709,38 @@
         "current": "මෙම උපාංගය",
         "revoke": "පිටවන්න"
       }
+    },
+    "title": "සැකසුම්",
+    "subtitle": "ඔබේ සමාගම, පුද්ගලයින් සහ ආරක්ෂාව කළමනාකරණය කරන්න."
+  },
+  "userMenu": {
+    "open": "ගිණුම් මෙනුව",
+    "security": "පැතිකඩ සහ ආරක්ෂාව",
+    "theme": "පෙනුම",
+    "light": "ආලෝකමත්",
+    "dark": "අඳුරු",
+    "system": "පද්ධතිය අනුව",
+    "language": "භාෂාව",
+    "logout": "පිටවන්න"
+  },
+  "create": {
+    "button": "සාදන්න",
+    "phase": "අදියර {n}",
+    "groups": {
+      "inventory": "තොග",
+      "purchasing": "මිලදී ගැනීම්",
+      "sales": "විකුණුම්",
+      "people": "පුද්ගලයින්"
+    },
+    "actions": {
+      "stockIn": "Stock in",
+      "stockOut": "Stock out",
+      "transfer": "තොග මාරු කිරීම",
+      "purchaseOrder": "මිලදී ගැනීමේ ඇණවුම",
+      "grn": "භාණ්ඩ ලැබීම (GRN)",
+      "salesOrder": "විකුණුම් ඇණවුම",
+      "invoice": "ඉන්වොයිසිය",
+      "inviteUser": "පරිශීලකයෙකුට ආරාධනා"
     }
   }
 }
