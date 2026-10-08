@@ -8,14 +8,28 @@ import { StockLedgerService } from "./stock-ledger.service";
 import { StockQueryService } from "./stock-query.service";
 
 const documentQuery = paginationSchema.extend({
-  type: z.enum(STOCK_DOCUMENT_TYPES).optional(),
+  type: z.enum([...STOCK_DOCUMENT_TYPES, "grn", "delivery", "return_outward", "return_inward"]).optional(),
   status: z.enum(["posted", "in_transit", "received"]).optional(),
   warehouseId: z.string().uuid().optional(),
 });
 const movementQuery = paginationSchema.extend({
   productId: z.string().uuid().optional(),
   warehouseId: z.string().uuid().optional(),
-  type: z.enum(["opening", "stock_in", "stock_out", "adjustment_in", "adjustment_out", "transfer_out", "transfer_in"]).optional(),
+  type: z
+    .enum([
+      "opening",
+      "stock_in",
+      "stock_out",
+      "adjustment_in",
+      "adjustment_out",
+      "transfer_out",
+      "transfer_in",
+      "purchase_in",
+      "sale_out",
+      "return_out",
+      "return_in",
+    ])
+    .optional(),
 });
 
 @Controller("stock")

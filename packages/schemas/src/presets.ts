@@ -93,6 +93,7 @@ export const DEFAULT_DOCUMENT_PREFIXES = {
   deliveryNote: "DEL",
   invoice: "INV",
   receipt: "RCT",
+  supplierPayment: "PAY",
   returnInward: "RI",
   creditNote: "CN",
   stockIn: "SIN",
@@ -100,6 +101,7 @@ export const DEFAULT_DOCUMENT_PREFIXES = {
   stockAdjustment: "ADJ",
   stockCount: "CNT",
   stockTransfer: "TRF",
+  journal: "JE",
 } as const;
 export type DocumentType = keyof typeof DEFAULT_DOCUMENT_PREFIXES;
 export const DOCUMENT_TYPES = Object.keys(DEFAULT_DOCUMENT_PREFIXES) as DocumentType[];

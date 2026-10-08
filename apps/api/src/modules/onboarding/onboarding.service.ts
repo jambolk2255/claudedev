@@ -16,6 +16,7 @@ import { randomToken, sha256 } from "../../common/crypto";
 import type { RequestContext } from "../../common/request-user";
 import { PrismaService } from "../../prisma/prisma.service";
 import { AuditService } from "../audit/audit.service";
+import { AccountingService } from "../finance/accounting.service";
 import { StockLedgerService } from "../inventory/stock-ledger.service";
 import { demoItemsFor } from "./demo-data";
 
@@ -34,6 +35,7 @@ export class OnboardingService {
     private readonly prisma: PrismaService,
     private readonly audit: AuditService,
     private readonly ledger: StockLedgerService,
+    private readonly accounting: AccountingService,
   ) {}
 
   async getState(orgId: string): Promise<OnboardingState> {
@@ -140,6 +142,7 @@ export class OnboardingService {
         });
       }
 
+      await this.accounting.systemAccounts(tx, orgId);
       await tx.category.createMany({ data: preset.categories.map((name) => ({ organizationId: orgId, name })), skipDuplicates: true });
       await tx.unit.createMany({ data: preset.units.map((code) => ({ organizationId: orgId, code, name: code })), skipDuplicates: true });
 

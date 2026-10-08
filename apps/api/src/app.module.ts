@@ -6,7 +6,10 @@ import { AllExceptionsFilter } from "./common/exception.filter";
 import { JwtAuthGuard, PermissionsGuard } from "./common/guards";
 import { AuditModule } from "./modules/audit/audit.module";
 import { AuthModule } from "./modules/auth/auth.module";
+import { CommerceModule } from "./modules/commerce/commerce.module";
+import { FinanceModule } from "./modules/finance/finance.module";
 import { HealthController } from "./modules/health/health.controller";
+import { ReportsModule } from "./modules/reports/reports.module";
 import { InventoryModule } from "./modules/inventory/inventory.module";
 import { OnboardingModule } from "./modules/onboarding/onboarding.module";
 import { OrganizationsModule } from "./modules/organizations/organizations.module";
@@ -27,6 +30,9 @@ import { PrismaModule } from "./prisma/prisma.module";
     OrganizationsModule,
     OnboardingModule,
     InventoryModule,
+    CommerceModule,
+    FinanceModule,
+    ReportsModule,
   ],
   controllers: [HealthController],
   providers: [

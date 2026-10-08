@@ -64,3 +64,58 @@ describe("inventory schemas", () => {
     expect(stockDocumentInputSchema.safeParse({ type: "stock_in", warehouseId: id, lines: [{ productId: id, quantity: 1.00001 }] }).success).toBe(false);
   });
 });
+
+import { calcLine, journalInputSchema, paymentInputSchema, sumLines } from "./commerce";
+
+describe("commerce maths and schemas", () => {
+  it("applies discount, SSCL and VAT on value + SSCL", () => {
+    // 10 × 100 = 1000, 10% discount → 900, SSCL 2.5% → 22.50, VAT 18% on 922.50 → 166.05
+    expect(calcLine({ quantity: 10, unitPrice: 100, discountPct: 10, taxRate: 18 }, 2.5)).toEqual({
+      subtotal: 900,
+      discount: 100,
+      sscl: 22.5,
+      tax: 166.05,
+      total: 1088.55,
+    });
+    expect(sumLines([calcLine({ quantity: 1, unitPrice: 0.1 }), calcLine({ quantity: 1, unitPrice: 0.2 })]).total).toBe(0.3);
+  });
+
+  it("requires cheque details and allocations within the amount", () => {
+    const id = "11111111-1111-4111-8111-111111111111";
+    const base = { kind: "receipt", partnerId: id, accountId: id, amount: 100 };
+    expect(paymentInputSchema.safeParse({ ...base, method: "cheque" }).success).toBe(false);
+    expect(paymentInputSchema.safeParse({ ...base, method: "cash", allocations: [{ invoiceId: id, amount: 150 }] }).success).toBe(false);
+    expect(paymentInputSchema.safeParse({ ...base, method: "cash", allocations: [{ invoiceId: id, amount: 100 }] }).success).toBe(true);
+  });
+
+  it("only accepts balanced journals with one side per line", () => {
+    const a = "11111111-1111-4111-8111-111111111111";
+    expect(
+      journalInputSchema.safeParse({
+        memo: "Test",
+        lines: [
+          { accountId: a, debit: 10 },
+          { accountId: a, credit: 10 },
+        ],
+      }).success,
+    ).toBe(true);
+    expect(
+      journalInputSchema.safeParse({
+        memo: "Test",
+        lines: [
+          { accountId: a, debit: 10 },
+          { accountId: a, credit: 9 },
+        ],
+      }).success,
+    ).toBe(false);
+    expect(
+      journalInputSchema.safeParse({
+        memo: "Test",
+        lines: [
+          { accountId: a, debit: 10, credit: 10 },
+          { accountId: a, credit: 0 },
+        ],
+      }).success,
+    ).toBe(false);
+  });
+});

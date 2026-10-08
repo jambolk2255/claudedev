@@ -65,6 +65,14 @@ model Organization {
   costLayers     CostLayer[]
   stockDocuments StockDocument[]
   stockMovements StockMovement[]
+  orders         Order[]
+  invoices       Invoice[]
+  notes          Note[]
+  payments       Payment[]
+  allocations    Allocation[]
+  accounts       Account[]
+  journalEntries JournalEntry[]
+  journalLines   JournalLine[]
 }
 
 model User {
@@ -195,6 +203,7 @@ model Warehouse {
   movements     StockMovement[]
   documents     StockDocument[] @relation("DocumentWarehouse")
   incoming      StockDocument[] @relation("DocumentToWarehouse")
+  Order         Order[]
 
   @@unique([organizationId, code])
 }
@@ -295,6 +304,9 @@ model Product {
   movements    StockMovement[]
   costLayers   CostLayer[]
   lines        StockDocumentLine[]
+  orderLines   OrderLine[]
+  invoiceLines InvoiceLine[]
+  noteLines    NoteLine[]
 
   @@unique([organizationId, sku])
   @@index([organizationId, name])
@@ -328,8 +340,13 @@ model Partner {
   createdAt        DateTime    @default(now())
   updatedAt        DateTime    @updatedAt
 
-  organization Organization    @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  documents    StockDocument[]
+  organization     Organization    @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  documents        StockDocument[]
+  orders           Order[]
+  invoices         Invoice[]
+  creditDebitNotes Note[]
+  payments         Payment[]
+  journalLines     JournalLine[]
 
   @@unique([organizationId, type, code])
   @@index([organizationId, type, name])
@@ -410,6 +427,10 @@ enum StockDocumentType {
   adjustment
   count
   transfer
+  grn
+  delivery
+  return_outward
+  return_inward
 }
 
 enum StockDocumentStatus {
@@ -427,6 +448,7 @@ model StockDocument {
   warehouseId    String              @db.Uuid
   toWarehouseId  String?             @db.Uuid
   partnerId      String?             @db.Uuid
+  orderId        String?             @db.Uuid
   reference      String?
   reason         String?
   note           String?
@@ -437,16 +459,19 @@ model StockDocument {
   receivedAt     DateTime?
   createdAt      DateTime            @default(now())
 
-  organization Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  warehouse    Warehouse           @relation("DocumentWarehouse", fields: [warehouseId], references: [id])
-  toWarehouse  Warehouse?          @relation("DocumentToWarehouse", fields: [toWarehouseId], references: [id])
-  partner      Partner?            @relation(fields: [partnerId], references: [id], onDelete: SetNull)
-  createdBy    User?               @relation("DocumentCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
-  lines        StockDocumentLine[]
-  movements    StockMovement[]
+  organization    Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  warehouse       Warehouse           @relation("DocumentWarehouse", fields: [warehouseId], references: [id])
+  toWarehouse     Warehouse?          @relation("DocumentToWarehouse", fields: [toWarehouseId], references: [id])
+  partner         Partner?            @relation(fields: [partnerId], references: [id], onDelete: SetNull)
+  createdBy       User?               @relation("DocumentCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
+  order           Order?              @relation(fields: [orderId], references: [id], onDelete: SetNull)
+  lines           StockDocumentLine[]
+  movements       StockMovement[]
+  creditDebitNote Note?
 
   @@unique([organizationId, number])
   @@index([organizationId, type, createdAt(sort: Desc)])
+  @@index([orderId])
 }
 
 model StockDocumentLine {
@@ -456,6 +481,7 @@ model StockDocumentLine {
   productId      String    @db.Uuid
   /// Quantity moved. For stock counts this is the counted quantity.
   quantity       Decimal   @db.Decimal(18, 4)
+  orderLineId    String?   @db.Uuid
   /// For stock counts: on-hand quantity when the count was posted.
   systemQuantity Decimal?  @db.Decimal(18, 4)
   unitCost       Decimal?  @db.Decimal(18, 4)
@@ -477,6 +503,10 @@ enum StockMovementType {
   adjustment_out
   transfer_out
   transfer_in
+  purchase_in
+  sale_out
+  return_out
+  return_in
 }
 
 /// Immutable stock ledger. Rows are only ever inserted.
@@ -506,4 +536,366 @@ model StockMovement {
 
   @@index([organizationId, productId, createdAt(sort: Desc)])
   @@index([organizationId, warehouseId, createdAt(sort: Desc)])
+}
+
+// ─── Phase 2-4: orders, invoices, notes, payments and the general ledger ───────
+
+enum OrderKind {
+  purchase
+  quotation
+  sales
+}
+
+enum OrderStatus {
+  draft
+  confirmed
+  partial
+  fulfilled
+  closed
+  cancelled
+}
+
+/// Purchase orders, quotations and sales orders share one structure.
+model Order {
+  id              String      @id @default(uuid()) @db.Uuid
+  organizationId  String      @db.Uuid
+  kind            OrderKind
+  number          String
+  partnerId       String      @db.Uuid
+  warehouseId     String      @db.Uuid
+  status          OrderStatus @default(draft)
+  orderDate       DateTime    @db.Date
+  expectedDate    DateTime?   @db.Date
+  reference       String?
+  notes           String?
+  deliveryAddress String?
+  subtotal        Decimal     @default(0) @db.Decimal(18, 2)
+  discountTotal   Decimal     @default(0) @db.Decimal(18, 2)
+  taxTotal        Decimal     @default(0) @db.Decimal(18, 2)
+  ssclTotal       Decimal     @default(0) @db.Decimal(18, 2)
+  total           Decimal     @default(0) @db.Decimal(18, 2)
+  approvedById    String?     @db.Uuid
+  approvedAt      DateTime?
+  convertedFromId String?     @db.Uuid
+  /// Random token for the public order-tracking page (sales orders only).
+  trackingToken   String?     @unique
+  createdById     String?     @db.Uuid
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  organization   Organization    @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  partner        Partner         @relation(fields: [partnerId], references: [id])
+  warehouse      Warehouse       @relation(fields: [warehouseId], references: [id])
+  convertedFrom  Order?          @relation("OrderConversion", fields: [convertedFromId], references: [id], onDelete: SetNull)
+  convertedTo    Order[]         @relation("OrderConversion")
+  lines          OrderLine[]
+  stockDocuments StockDocument[]
+  invoices       Invoice[]
+
+  @@unique([organizationId, number])
+  @@index([organizationId, kind, status])
+  @@index([organizationId, partnerId])
+}
+
+model OrderLine {
+  id           String  @id @default(uuid()) @db.Uuid
+  orderId      String  @db.Uuid
+  lineNo       Int
+  productId    String  @db.Uuid
+  description  String?
+  quantity     Decimal @db.Decimal(18, 4)
+  /// Received (purchase) or delivered (sales) quantity.
+  fulfilledQty Decimal @default(0) @db.Decimal(18, 4)
+  invoicedQty  Decimal @default(0) @db.Decimal(18, 4)
+  unitPrice    Decimal @db.Decimal(18, 4)
+  discountPct  Decimal @default(0) @db.Decimal(5, 2)
+  taxRateId    String? @db.Uuid
+  /// Tax percentage snapshot at the time of the order.
+  taxRate      Decimal @default(0) @db.Decimal(6, 3)
+  subtotal     Decimal @db.Decimal(18, 2)
+  tax          Decimal @db.Decimal(18, 2)
+  total        Decimal @db.Decimal(18, 2)
+
+  order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id])
+
+  @@index([orderId])
+}
+
+enum InvoiceKind {
+  sales
+  purchase
+}
+
+enum InvoiceStatus {
+  open
+  partially_paid
+  paid
+  void
+}
+
+/// Sales invoices and supplier bills.
+model Invoice {
+  id             String        @id @default(uuid()) @db.Uuid
+  organizationId String        @db.Uuid
+  kind           InvoiceKind
+  number         String
+  partnerId      String        @db.Uuid
+  orderId        String?       @db.Uuid
+  invoiceDate    DateTime      @db.Date
+  dueDate        DateTime      @db.Date
+  /// Supplier's own invoice number (bills).
+  supplierRef    String?
+  status         InvoiceStatus @default(open)
+  subtotal       Decimal       @db.Decimal(18, 2)
+  discountTotal  Decimal       @default(0) @db.Decimal(18, 2)
+  taxTotal       Decimal       @db.Decimal(18, 2)
+  ssclTotal      Decimal       @default(0) @db.Decimal(18, 2)
+  total          Decimal       @db.Decimal(18, 2)
+  /// Payments and notes applied so far.
+  amountPaid     Decimal       @default(0) @db.Decimal(18, 2)
+  notes          String?
+  journalEntryId String?       @db.Uuid
+  createdById    String?       @db.Uuid
+  createdAt      DateTime      @default(now())
+
+  organization Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  partner      Partner       @relation(fields: [partnerId], references: [id])
+  order        Order?        @relation(fields: [orderId], references: [id], onDelete: SetNull)
+  lines        InvoiceLine[]
+  allocations  Allocation[]
+  notesIssued  Note[]
+
+  @@unique([organizationId, number])
+  @@index([organizationId, kind, status])
+  @@index([organizationId, partnerId])
+}
+
+model InvoiceLine {
+  id          String   @id @default(uuid()) @db.Uuid
+  invoiceId   String   @db.Uuid
+  lineNo      Int
+  productId   String?  @db.Uuid
+  orderLineId String?  @db.Uuid
+  description String
+  quantity    Decimal  @db.Decimal(18, 4)
+  unitPrice   Decimal  @db.Decimal(18, 4)
+  discountPct Decimal  @default(0) @db.Decimal(5, 2)
+  taxRateId   String?  @db.Uuid
+  taxRate     Decimal  @default(0) @db.Decimal(6, 3)
+  subtotal    Decimal  @db.Decimal(18, 2)
+  tax         Decimal  @db.Decimal(18, 2)
+  total       Decimal  @db.Decimal(18, 2)
+  /// Bills: goods-received value cleared from GRNI for this line.
+  costAmount  Decimal? @db.Decimal(18, 2)
+
+  invoice Invoice  @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  product Product? @relation(fields: [productId], references: [id])
+
+  @@index([invoiceId])
+}
+
+enum NoteKind {
+  credit
+  debit
+}
+
+enum NoteStatus {
+  open
+  applied
+}
+
+/// Credit notes (customer returns) and debit notes (returns to suppliers).
+model Note {
+  id              String     @id @default(uuid()) @db.Uuid
+  organizationId  String     @db.Uuid
+  kind            NoteKind
+  number          String
+  partnerId       String     @db.Uuid
+  invoiceId       String?    @db.Uuid
+  stockDocumentId String?    @unique @db.Uuid
+  noteDate        DateTime   @db.Date
+  reason          String?
+  subtotal        Decimal    @db.Decimal(18, 2)
+  taxTotal        Decimal    @db.Decimal(18, 2)
+  ssclTotal       Decimal    @default(0) @db.Decimal(18, 2)
+  total           Decimal    @db.Decimal(18, 2)
+  amountApplied   Decimal    @default(0) @db.Decimal(18, 2)
+  status          NoteStatus @default(open)
+  journalEntryId  String?    @db.Uuid
+  createdById     String?    @db.Uuid
+  createdAt       DateTime   @default(now())
+
+  organization  Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  partner       Partner        @relation(fields: [partnerId], references: [id])
+  invoice       Invoice?       @relation(fields: [invoiceId], references: [id], onDelete: SetNull)
+  stockDocument StockDocument? @relation(fields: [stockDocumentId], references: [id], onDelete: SetNull)
+  lines         NoteLine[]
+  allocations   Allocation[]
+
+  @@unique([organizationId, number])
+  @@index([organizationId, kind, status])
+}
+
+model NoteLine {
+  id          String  @id @default(uuid()) @db.Uuid
+  noteId      String  @db.Uuid
+  lineNo      Int
+  productId   String  @db.Uuid
+  description String
+  quantity    Decimal @db.Decimal(18, 4)
+  unitPrice   Decimal @db.Decimal(18, 4)
+  taxRate     Decimal @default(0) @db.Decimal(6, 3)
+  subtotal    Decimal @db.Decimal(18, 2)
+  tax         Decimal @db.Decimal(18, 2)
+  total       Decimal @db.Decimal(18, 2)
+
+  note    Note    @relation(fields: [noteId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id])
+
+  @@index([noteId])
+}
+
+enum PaymentKind {
+  receipt
+  payment
+}
+
+enum PaymentMethod {
+  cash
+  bank_transfer
+  cheque
+  card
+}
+
+enum PaymentStatus {
+  posted
+  bounced
+}
+
+enum ChequeStatus {
+  pending
+  cleared
+  bounced
+}
+
+/// Customer receipts and supplier payments.
+model Payment {
+  id              String        @id @default(uuid()) @db.Uuid
+  organizationId  String        @db.Uuid
+  kind            PaymentKind
+  number          String
+  partnerId       String        @db.Uuid
+  paymentDate     DateTime      @db.Date
+  method          PaymentMethod
+  accountId       String        @db.Uuid
+  amount          Decimal       @db.Decimal(18, 2)
+  amountAllocated Decimal       @default(0) @db.Decimal(18, 2)
+  status          PaymentStatus @default(posted)
+  reference       String?
+  chequeNo        String?
+  chequeDate      DateTime?     @db.Date
+  chequeStatus    ChequeStatus?
+  notes           String?
+  journalEntryId  String?       @db.Uuid
+  createdById     String?       @db.Uuid
+  createdAt       DateTime      @default(now())
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  partner      Partner      @relation(fields: [partnerId], references: [id])
+  account      Account      @relation(fields: [accountId], references: [id])
+  allocations  Allocation[]
+
+  @@unique([organizationId, number])
+  @@index([organizationId, kind, paymentDate])
+  @@index([organizationId, partnerId])
+}
+
+/// Applies a payment or a note to an invoice.
+model Allocation {
+  id             String   @id @default(uuid()) @db.Uuid
+  organizationId String   @db.Uuid
+  invoiceId      String   @db.Uuid
+  paymentId      String?  @db.Uuid
+  noteId         String?  @db.Uuid
+  amount         Decimal  @db.Decimal(18, 2)
+  createdAt      DateTime @default(now())
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  invoice      Invoice      @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  payment      Payment?     @relation(fields: [paymentId], references: [id], onDelete: Cascade)
+  note         Note?        @relation(fields: [noteId], references: [id], onDelete: Cascade)
+
+  @@index([invoiceId])
+  @@index([paymentId])
+  @@index([noteId])
+}
+
+enum AccountType {
+  asset
+  liability
+  equity
+  income
+  expense
+}
+
+model Account {
+  id             String      @id @default(uuid()) @db.Uuid
+  organizationId String      @db.Uuid
+  code           String
+  name           String
+  type           AccountType
+  /// Stable key for accounts the system posts to automatically.
+  systemKey      String?
+  /// Cash and bank accounts can receive and make payments.
+  isCash         Boolean     @default(false)
+  active         Boolean     @default(true)
+  createdAt      DateTime    @default(now())
+
+  organization Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  lines        JournalLine[]
+  payments     Payment[]
+
+  @@unique([organizationId, code])
+  @@unique([organizationId, systemKey])
+}
+
+/// Double-entry general ledger. Entries are append-only; corrections are reversing entries.
+model JournalEntry {
+  id             String   @id @default(uuid()) @db.Uuid
+  organizationId String   @db.Uuid
+  number         String
+  entryDate      DateTime @db.Date
+  sourceType     String
+  sourceId       String?  @db.Uuid
+  memo           String?
+  createdById    String?  @db.Uuid
+  createdAt      DateTime @default(now())
+
+  organization Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  lines        JournalLine[]
+
+  @@unique([organizationId, number])
+  @@index([organizationId, entryDate])
+  @@index([organizationId, sourceType, sourceId])
+}
+
+model JournalLine {
+  id             String  @id @default(uuid()) @db.Uuid
+  organizationId String  @db.Uuid
+  entryId        String  @db.Uuid
+  accountId      String  @db.Uuid
+  partnerId      String? @db.Uuid
+  debit          Decimal @default(0) @db.Decimal(18, 2)
+  credit         Decimal @default(0) @db.Decimal(18, 2)
+  memo           String?
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  entry        JournalEntry @relation(fields: [entryId], references: [id], onDelete: Cascade)
+  account      Account      @relation(fields: [accountId], references: [id])
+  partner      Partner?     @relation(fields: [partnerId], references: [id])
+
+  @@index([organizationId, accountId])
+  @@index([organizationId, partnerId])
+  @@index([entryId])
 }
