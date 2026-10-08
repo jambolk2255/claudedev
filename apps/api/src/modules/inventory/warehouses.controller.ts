@@ -6,6 +6,7 @@ import type { RequestContext, RequestUser } from "../../common/request-user";
 import { ZodPipe } from "../../common/zod.pipe";
 import { PrismaService } from "../../prisma/prisma.service";
 import { AuditService } from "../audit/audit.service";
+import { BillingService } from "../billing/billing.service";
 
 type WarehouseInput = z.infer<typeof warehouseUpdateSchema>;
 
@@ -14,6 +15,7 @@ export class WarehousesController {
   constructor(
     private readonly prisma: PrismaService,
     private readonly audit: AuditService,
+    private readonly billing: BillingService,
   ) {}
 
   @Get()
@@ -32,6 +34,7 @@ export class WarehousesController {
   @RequirePermissions("warehouses.manage")
   async create(@Ctx() ctx: RequestContext, @Body(new ZodPipe(warehouseUpdateSchema)) body: WarehouseInput) {
     const orgId = ctx.user.organizationId;
+    if (body.active !== false) await this.billing.assertLimit(orgId, "warehouses");
     return this.prisma.$transaction(async (tx) => {
       const count = await tx.warehouse.count({ where: { organizationId: orgId, active: true } });
       const isDefault = body.isDefault || count === 0;
@@ -61,6 +64,7 @@ export class WarehousesController {
     const db = this.prisma.tenant(orgId);
     const before = await db.warehouse.findUnique({ where: { id } });
     if (!before) throw new NotFoundException();
+    if (body.active && !before.active) await this.billing.assertLimit(orgId, "warehouses");
     if (!body.active) {
       if (before.isDefault || body.isDefault) throw new ConflictException({ code: "DEFAULT_WAREHOUSE", message: "Make another warehouse the default first" });
       const stocked = await db.stockLevel.count({ where: { warehouseId: id, quantity: { not: 0 } } });

@@ -6,6 +6,7 @@ import { PrismaService } from "../../prisma/prisma.service";
 import { AuditService } from "../audit/audit.service";
 import { nextNumber } from "./sequence";
 import { StockQueryService } from "./stock-query.service";
+import { BillingService } from "../billing/billing.service";
 
 export interface ProductListQuery {
   page: number;
@@ -37,6 +38,7 @@ export class ProductsService {
     private readonly prisma: PrismaService,
     private readonly audit: AuditService,
     private readonly stock: StockQueryService,
+    private readonly billing: BillingService,
   ) {}
 
   async list(orgId: string, q: ProductListQuery): Promise<Paginated<ReturnType<typeof withStock>>> {
@@ -134,6 +136,7 @@ export class ProductsService {
 
   async create(ctx: RequestContext, input: ProductInput) {
     const orgId = ctx.user.organizationId;
+    if (input.active !== false) await this.billing.assertLimit(orgId, "products");
     await this.assertRefs(orgId, input);
     const product = await this.prisma.$transaction(async (tx) => {
       const sku = input.sku ?? (await nextNumber(tx, orgId, "product"));

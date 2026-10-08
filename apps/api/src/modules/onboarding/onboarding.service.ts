@@ -19,6 +19,7 @@ import { AuditService } from "../audit/audit.service";
 import { AccountingService } from "../finance/accounting.service";
 import { StockLedgerService } from "../inventory/stock-ledger.service";
 import { demoItemsFor } from "./demo-data";
+import { BillingService } from "../billing/billing.service";
 
 /** Steps that must be saved before onboarding can be completed. The rest have defaults. */
 const REQUIRED_STEPS: OnboardingStep[] = ["company", "industry", "modules", "finance", "warehouses"];
@@ -36,6 +37,7 @@ export class OnboardingService {
     private readonly audit: AuditService,
     private readonly ledger: StockLedgerService,
     private readonly accounting: AccountingService,
+    private readonly billing: BillingService,
   ) {}
 
   async getState(orgId: string): Promise<OnboardingState> {
@@ -85,6 +87,9 @@ export class OnboardingService {
     const { company, industry, modules, finance, warehouses, numbering, team, data } = state.data as Required<OnboardingData>;
     const preset = INDUSTRY_PRESETS[industry.industry];
     const invites: { email: string; inviteUrl: string }[] = [];
+    await this.billing.assertTotal(orgId, "warehouses", warehouses.warehouses.length);
+    await this.billing.assertTotal(orgId, "users", 1 + (team?.invites.length ?? 0));
+    const enabledModules = await this.billing.filterModules(orgId, normalizeModules(modules.mode, modules.modules));
 
     await this.prisma.$transaction(async (tx) => {
       await tx.organization.update({
@@ -93,7 +98,7 @@ export class OnboardingService {
           ...company,
           industry: industry.industry,
           mode: modules.mode,
-          modules: normalizeModules(modules.mode, modules.modules),
+          modules: enabledModules,
           currency: finance.currency,
           fiscalYearStartMonth: finance.fiscalYearStartMonth,
           valuationMethod: finance.valuationMethod,

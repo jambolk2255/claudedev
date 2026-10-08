@@ -14,7 +14,7 @@ import {
 import type { FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
 import { env } from "../../config/env";
-import { Ctx, CurrentUser, Public } from "../../common/decorators";
+import { Ctx, CurrentUser, Public, SkipSubscription } from "../../common/decorators";
 import { requestMeta, type RequestContext, type RequestUser } from "../../common/request-user";
 import { ZodPipe } from "../../common/zod.pipe";
 import { AuthService } from "./auth.service";
@@ -24,6 +24,7 @@ import type { IssuedTokens } from "./token.service";
 const STRICT = { default: { limit: () => env().AUTH_RATE_LIMIT, ttl: 60_000 } };
 
 @Controller("auth")
+@SkipSubscription()
 export class AuthController {
   constructor(private readonly auth: AuthService) {}
 

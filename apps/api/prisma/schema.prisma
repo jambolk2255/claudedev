@@ -48,31 +48,33 @@ model Organization {
   createdAt             DateTime        @default(now())
   updatedAt             DateTime        @updatedAt
 
-  users          User[]
-  roles          Role[]
-  invitations    Invitation[]
-  auditLogs      AuditLog[]
-  warehouses     Warehouse[]
-  taxRates       TaxRate[]
-  sequences      DocumentSequence[]
-  categories     Category[]
-  units          Unit[]
-  products       Product[]
-  partners       Partner[]
-  batches        Batch[]
-  stockLevels    StockLevel[]
-  batchBalances  BatchBalance[]
-  costLayers     CostLayer[]
-  stockDocuments StockDocument[]
-  stockMovements StockMovement[]
-  orders         Order[]
-  invoices       Invoice[]
-  notes          Note[]
-  payments       Payment[]
-  allocations    Allocation[]
-  accounts       Account[]
-  journalEntries JournalEntry[]
-  journalLines   JournalLine[]
+  users            User[]
+  roles            Role[]
+  invitations      Invitation[]
+  auditLogs        AuditLog[]
+  warehouses       Warehouse[]
+  taxRates         TaxRate[]
+  sequences        DocumentSequence[]
+  categories       Category[]
+  units            Unit[]
+  products         Product[]
+  partners         Partner[]
+  batches          Batch[]
+  stockLevels      StockLevel[]
+  batchBalances    BatchBalance[]
+  costLayers       CostLayer[]
+  stockDocuments   StockDocument[]
+  stockMovements   StockMovement[]
+  orders           Order[]
+  invoices         Invoice[]
+  notes            Note[]
+  payments         Payment[]
+  allocations      Allocation[]
+  accounts         Account[]
+  journalEntries   JournalEntry[]
+  journalLines     JournalLine[]
+  subscription     Subscription?
+  platformInvoices PlatformInvoice[]
 }
 
 model User {
@@ -898,4 +900,98 @@ model JournalLine {
   @@index([organizationId, accountId])
   @@index([organizationId, partnerId])
   @@index([entryId])
+}
+
+// ─── SaaS billing ────────────────────────────────────────────────────────────
+
+enum SubscriptionStatus {
+  trialing
+  active
+  past_due
+  suspended
+  cancelled
+}
+
+enum BillingInterval {
+  month
+  year
+}
+
+enum PlatformInvoiceStatus {
+  pending
+  paid
+  cancelled
+  failed
+}
+
+enum PlatformPaymentMethod {
+  payhere
+  bank_transfer
+  manual
+}
+
+/// A subscription plan offered by the platform (not tenant data).
+model Plan {
+  id            String   @id @default(uuid()) @db.Uuid
+  code          String   @unique
+  name          String
+  description   String   @default("")
+  priceMonthly  Decimal  @db.Decimal(14, 2)
+  priceYearly   Decimal  @db.Decimal(14, 2)
+  currency      String   @default("LKR") @db.Char(3)
+  /// null = unlimited
+  maxUsers      Int?
+  maxWarehouses Int?
+  maxProducts   Int?
+  modules       String[]
+  active        Boolean  @default(true)
+  sortOrder     Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  subscriptions Subscription[]
+  invoices      PlatformInvoice[]
+}
+
+model Subscription {
+  id               String             @id @default(uuid()) @db.Uuid
+  organizationId   String             @unique @db.Uuid
+  planId           String             @db.Uuid
+  status           SubscriptionStatus @default(trialing)
+  interval         BillingInterval    @default(month)
+  trialEndsAt      DateTime?
+  currentPeriodEnd DateTime?
+  note             String?
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  plan         Plan         @relation(fields: [planId], references: [id])
+}
+
+/// What a tenant pays the platform (separate from the tenant's own sales invoices).
+model PlatformInvoice {
+  id               String                @id @default(uuid()) @db.Uuid
+  organizationId   String                @db.Uuid
+  number           String                @unique
+  planId           String                @db.Uuid
+  interval         BillingInterval
+  amount           Decimal               @db.Decimal(14, 2)
+  currency         String                @default("LKR") @db.Char(3)
+  status           PlatformInvoiceStatus @default(pending)
+  method           PlatformPaymentMethod
+  /// Customer's bank transfer reference or admin note.
+  reference        String?
+  gatewayPaymentId String?
+  periodStart      DateTime?
+  periodEnd        DateTime?
+  paidAt           DateTime?
+  createdAt        DateTime              @default(now())
+  updatedAt        DateTime              @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  plan         Plan         @relation(fields: [planId], references: [id])
+
+  @@index([organizationId, createdAt])
+  @@index([status])
 }

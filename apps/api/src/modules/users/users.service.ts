@@ -6,6 +6,7 @@ import type { RequestContext } from "../../common/request-user";
 import { PrismaService } from "../../prisma/prisma.service";
 import { AuditService } from "../audit/audit.service";
 import { TokenService } from "../auth/token.service";
+import { BillingService } from "../billing/billing.service";
 
 const INVITE_TTL_DAYS = 7;
 
@@ -27,6 +28,7 @@ export class UsersService {
     private readonly prisma: PrismaService,
     private readonly audit: AuditService,
     private readonly tokens: TokenService,
+    private readonly billing: BillingService,
   ) {}
 
   async list(orgId: string, q: { page: number; pageSize: number; search?: string }): Promise<Paginated<unknown>> {
@@ -95,6 +97,9 @@ export class UsersService {
 
     const existing = await this.prisma.user.findUnique({ where: { email }, select: { id: true } });
     if (existing) throw new ConflictException({ message: "A user with this email already exists", code: "EMAIL_TAKEN" });
+
+    const reinvite = await db.invitation.count({ where: { email, acceptedAt: null, revokedAt: null, expiresAt: { gt: new Date() } } });
+    await this.billing.assertLimit(orgId, "users", reinvite ? 0 : 1);
 
     // Replace any pending invitation for the same email.
     await db.invitation.updateMany({ where: { email, acceptedAt: null, revokedAt: null }, data: { revokedAt: new Date() } });

@@ -64,6 +64,16 @@ export interface AuthUser {
   };
   role: { id: string; key: string | null; name: string };
   permissions: string[];
+  /** Operator of the SaaS platform (PLATFORM_ADMIN_EMAILS). */
+  platformAdmin: boolean;
+  /** Present only in SaaS mode. */
+  subscription: {
+    status: "trialing" | "active" | "past_due" | "suspended" | "cancelled" | "expired";
+    planName: string;
+    readOnly: boolean;
+    blocked: boolean;
+    daysLeft: number | null;
+  } | null;
 }
 
 export interface AuthTokens {

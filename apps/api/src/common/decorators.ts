@@ -23,3 +23,8 @@ export const Ctx = createParamDecorator((_: unknown, ctx: ExecutionContext): Req
   if (!req.user) throw new Error("Ctx used on a public route");
   return { user: req.user, ...requestMeta(req) };
 });
+
+export const SKIP_SUBSCRIPTION = "skipSubscription";
+
+/** Route stays available when the subscription is read-only or suspended (auth, billing). */
+export const SkipSubscription = () => SetMetadata(SKIP_SUBSCRIPTION, true);

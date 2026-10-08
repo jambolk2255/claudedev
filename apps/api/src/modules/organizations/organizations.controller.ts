@@ -6,6 +6,7 @@ import type { RequestContext, RequestUser } from "../../common/request-user";
 import { ZodPipe } from "../../common/zod.pipe";
 import { PrismaService } from "../../prisma/prisma.service";
 import { AuditService } from "../audit/audit.service";
+import { BillingService } from "../billing/billing.service";
 
 const updateOrganizationSchema = companyStepSchema.partial().merge(modulesStepSchema.partial());
 type UpdateOrganization = z.infer<typeof updateOrganizationSchema>;
@@ -15,6 +16,7 @@ export class OrganizationsController {
   constructor(
     private readonly prisma: PrismaService,
     private readonly audit: AuditService,
+    private readonly billing: BillingService,
   ) {}
 
   @Get()
@@ -44,7 +46,9 @@ export class OrganizationsController {
     const mode = body.mode ?? before.mode;
     const data = {
       ...body,
-      ...(body.modules || body.mode ? { modules: normalizeModules(mode, (body.modules ?? before.modules) as never) } : {}),
+      ...(body.modules || body.mode
+        ? { modules: await this.billing.filterModules(before.id, normalizeModules(mode, (body.modules ?? before.modules) as never)) }
+        : {}),
     };
     const org = await this.prisma.organization.update({ where: { id: ctx.user.organizationId }, data });
     await this.audit.record({

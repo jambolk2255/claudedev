@@ -21,6 +21,34 @@ const envSchema = z.object({
     .enum(["true", "false"])
     .default("false")
     .transform((v) => v === "true"),
+  /** SaaS mode: open self sign-up, free trial, plans/limits and subscription billing. */
+  SAAS_MODE: z
+    .enum(["true", "false"])
+    .default("false")
+    .transform((v) => v === "true"),
+  TRIAL_DAYS: z.coerce.number().int().min(0).max(365).default(14),
+  /** Plan given to new sign-ups during the trial. */
+  TRIAL_PLAN: z.string().default("business"),
+  /** Comma-separated emails of platform operators (access to the /admin console). */
+  PLATFORM_ADMIN_EMAILS: z
+    .string()
+    .default("")
+    .transform((v) =>
+      v
+        .split(",")
+        .map((e) => e.trim().toLowerCase())
+        .filter(Boolean),
+    ),
+  PAYHERE_MERCHANT_ID: z.string().optional(),
+  PAYHERE_MERCHANT_SECRET: z.string().optional(),
+  PAYHERE_SANDBOX: z
+    .enum(["true", "false"])
+    .default("true")
+    .transform((v) => v === "true"),
+  /** Public URL PayHere calls back (notify_url). Defaults to WEB_URL, which proxies /api. */
+  API_PUBLIC_URL: z.string().url().optional(),
+  /** Shown to tenants who pay by bank transfer (account name, bank, branch, number). */
+  BANK_TRANSFER_DETAILS: z.string().optional(),
 });
 
 export type Env = z.infer<typeof envSchema>;

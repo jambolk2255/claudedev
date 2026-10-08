@@ -6,6 +6,8 @@ import { AllExceptionsFilter } from "./common/exception.filter";
 import { JwtAuthGuard, PermissionsGuard } from "./common/guards";
 import { AuditModule } from "./modules/audit/audit.module";
 import { AuthModule } from "./modules/auth/auth.module";
+import { BillingModule } from "./modules/billing/billing.module";
+import { SubscriptionGuard } from "./modules/billing/subscription.guard";
 import { CommerceModule } from "./modules/commerce/commerce.module";
 import { FinanceModule } from "./modules/finance/finance.module";
 import { HealthController } from "./modules/health/health.controller";
@@ -24,6 +26,7 @@ import { PrismaModule } from "./prisma/prisma.module";
     ThrottlerModule.forRoot([{ ttl: 60_000, limit: 300 }]),
     PrismaModule,
     AuditModule,
+    BillingModule,
     AuthModule,
     UsersModule,
     RolesModule,
@@ -40,6 +43,7 @@ import { PrismaModule } from "./prisma/prisma.module";
     { provide: APP_GUARD, useClass: ThrottlerGuard },
     { provide: APP_GUARD, useClass: JwtAuthGuard },
     { provide: APP_GUARD, useClass: PermissionsGuard },
+    { provide: APP_GUARD, useClass: SubscriptionGuard },
   ],
 })
 export class AppModule {}

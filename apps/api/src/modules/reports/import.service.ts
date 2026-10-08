@@ -6,6 +6,7 @@ import { PrismaService } from "../../prisma/prisma.service";
 import { AuditService } from "../audit/audit.service";
 import { nextNumber } from "../inventory/sequence";
 import { StockLedgerService } from "../inventory/stock-ledger.service";
+import { BillingService } from "../billing/billing.service";
 
 export interface RowError {
   row: number;
@@ -33,6 +34,7 @@ export class ImportService {
     private readonly prisma: PrismaService,
     private readonly audit: AuditService,
     private readonly ledger: StockLedgerService,
+    private readonly billing: BillingService,
   ) {}
 
   private assertRows(rows: Record<string, unknown>[]) {
@@ -84,6 +86,7 @@ export class ImportService {
     const creates = parsed.filter((p) => !p.data.sku || !existing.some((e) => e.sku === p.data.sku)).length;
     const summary = { rows: rows.length, valid: parsed.length - new Set(errors.map((e) => e.row)).size, creates, updates: parsed.length - creates, errors };
     if (dryRun || errors.length) return { ...summary, imported: false };
+    await this.billing.assertLimit(orgId, "products", creates);
 
     await this.prisma.$transaction(
       async (tx) => {

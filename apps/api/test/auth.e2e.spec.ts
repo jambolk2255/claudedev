@@ -17,7 +17,7 @@ describe("Auth (e2e)", () => {
 
   it("reports that setup is needed on an empty database", async () => {
     const res = await new WebClient(app).send("get", "/auth/setup-status");
-    expect(res.body).toEqual({ needsSetup: true, signupOpen: true });
+    expect(res.body).toEqual({ needsSetup: true, signupOpen: true, saas: false, trialDays: 14 });
   });
 
   it("registers an owner with httpOnly cookies and serves /auth/me", async () => {

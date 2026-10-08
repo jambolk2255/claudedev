@@ -6,6 +6,7 @@ import { sha256 } from "../../common/crypto";
 import type { RequestUser } from "../../common/request-user";
 import { PrismaService } from "../../prisma/prisma.service";
 import { AuditService } from "../audit/audit.service";
+import { BillingService } from "../billing/billing.service";
 import { TokenService } from "./token.service";
 import { TwoFactorService } from "./two-factor.service";
 
@@ -26,6 +27,7 @@ export class AuthService {
     private readonly tokens: TokenService,
     private readonly twoFactor: TwoFactorService,
     private readonly audit: AuditService,
+    private readonly billing: BillingService,
   ) {}
 
   hashPassword(password: string) {
@@ -34,7 +36,12 @@ export class AuthService {
 
   async setupStatus() {
     const count = await this.prisma.organization.count();
-    return { needsSetup: count === 0, signupOpen: count === 0 || env().ALLOW_MULTI_ORG_SIGNUP };
+    return {
+      needsSetup: count === 0,
+      signupOpen: count === 0 || env().ALLOW_MULTI_ORG_SIGNUP || env().SAAS_MODE,
+      saas: env().SAAS_MODE,
+      trialDays: env().TRIAL_DAYS,
+    };
   }
 
   /** Creates the company, its system roles and the owner account. */
@@ -62,6 +69,7 @@ export class AuthService {
       const created = await tx.user.create({
         data: { organizationId: org.id, email: input.email, name: input.name, passwordHash, roleId: owner.id },
       });
+      await this.billing.startTrial(tx, org.id);
       await this.audit.record(
         {
           organizationId: org.id,
@@ -164,7 +172,16 @@ export class AuthService {
       },
       role: { id: user.role.id, key: user.role.key, name: user.role.name },
       permissions: user.role.permissions,
+      platformAdmin: this.billing.isPlatformAdmin(user.email),
+      subscription: await this.subscriptionSummary(user.organizationId, user.email),
     };
+  }
+
+  private async subscriptionSummary(organizationId: string, email: string): Promise<AuthUser["subscription"]> {
+    const current = await this.billing.stateFor(organizationId, email);
+    if (!current) return null;
+    const { state, sub } = current;
+    return { status: state.status, planName: sub.plan.name, readOnly: state.readOnly, blocked: state.blocked, daysLeft: state.daysLeft };
   }
 
   async listSessions(user: RequestUser) {
