@@ -20,12 +20,15 @@ export function ProductPicker({
   warehouseId,
   exclude = [],
   className,
+  includeServices,
 }: {
   value: ProductListItem | null;
   onSelect: (p: ProductListItem) => void;
   warehouseId?: string;
   exclude?: string[];
   className?: string;
+  /** Orders and invoices can also contain non-stock (service) items. */
+  includeServices?: boolean;
 }) {
   const t = useTranslations("inventory.picker");
   const f = useFormat();
@@ -37,7 +40,7 @@ export function ProductPicker({
     queryFn: () => api<Paginated<ProductListItem>>(`/products?pageSize=20&search=${encodeURIComponent(q)}${warehouseId ? `&warehouseId=${warehouseId}` : ""}`),
     enabled: open,
   });
-  const items = (results.data?.items ?? []).filter((p) => p.type === "stock");
+  const items = (results.data?.items ?? []).filter((p) => includeServices || p.type === "stock");
 
   return (
     <Popover open={open} onOpenChange={setOpen}>

@@ -15,6 +15,7 @@ import {
   KeyRound,
   Landmark,
   LayoutDashboard,
+  MonitorSmartphone,
   MapPinned,
   Package,
   PackageCheck,
@@ -49,17 +50,17 @@ export const NAV: NavGroup[] = [
     items: [
       { key: "inventory", href: "/inventory", icon: Package, module: "inventory", permission: "inventory.view" },
       { key: "contacts", href: "/contacts", icon: BookUser },
-      { key: "purchasing", href: "/purchasing", icon: Truck, module: "purchasing", permission: "purchasing.view", phase: 2 },
-      { key: "sales", href: "/sales", icon: ShoppingCart, module: "sales", permission: "sales.view", phase: 3 },
-      { key: "orders", href: "/orders", icon: ClipboardCheck, module: "orders", phase: 3 },
+      { key: "purchasing", href: "/purchasing", icon: Truck, module: "purchasing", permission: "purchasing.view" },
+      { key: "sales", href: "/sales", icon: ShoppingCart, module: "sales", permission: "sales.view" },
+      { key: "orders", href: "/orders", icon: ClipboardCheck, module: "orders" },
     ],
   },
   {
     key: "insights",
     items: [
-      { key: "finance", href: "/finance", icon: Landmark, module: "finance", permission: "finance.view", phase: 4 },
-      { key: "reports", href: "/reports", icon: BarChart3, module: "reports", permission: "reports.view", phase: 5 },
-      { key: "maps", href: "/maps", icon: MapPinned, module: "maps", phase: 5 },
+      { key: "finance", href: "/finance", icon: Landmark, module: "finance", permission: "finance.view" },
+      { key: "reports", href: "/reports", icon: BarChart3, module: "reports", permission: "reports.view" },
+      { key: "maps", href: "/maps", icon: MapPinned, module: "maps" },
     ],
   },
 ];
@@ -119,17 +120,16 @@ export const CREATE_ACTIONS: CreateAction[] = [
     permission: "inventory.transfer",
   },
   { key: "product", icon: PackagePlus, group: "inventory", href: "/inventory/products?new=1", permission: "products.manage" },
-  { key: "purchaseOrder", icon: FileText, group: "purchasing", module: "purchasing", permission: "purchasing.manage", phase: 2 },
-  { key: "grn", icon: PackageCheck, group: "purchasing", module: "purchasing", permission: "purchasing.receive", phase: 2 },
-  { key: "salesOrder", icon: ShoppingCart, group: "sales", module: "sales", permission: "sales.manage", phase: 3 },
-  { key: "invoice", icon: FileText, group: "sales", module: "sales", permission: "sales.manage", phase: 3 },
+  { key: "purchaseOrder", icon: FileText, group: "purchasing", href: "/purchasing/orders/new", module: "purchasing", permission: "purchasing.manage" },
+  { key: "grn", icon: PackageCheck, group: "purchasing", href: "/purchasing", module: "purchasing", permission: "purchasing.receive" },
+  { key: "quotation", icon: ScrollText, group: "sales", href: "/sales/quotations/new", module: "sales", permission: "sales.manage" },
+  { key: "salesOrder", icon: ShoppingCart, group: "sales", href: "/sales/orders/new", module: "sales", permission: "sales.manage" },
+  { key: "invoice", icon: FileText, group: "sales", href: "/sales/invoices/new", module: "sales", permission: "sales.manage" },
+  { key: "quickSale", icon: MonitorSmartphone, group: "sales", href: "/sales/pos", module: "sales", permission: "sales.dispatch" },
   { key: "customer", icon: Contact, group: "people", href: "/contacts/customers?new=1", permission: "sales.manage" },
   { key: "supplier", icon: Truck, group: "people", href: "/contacts/suppliers?new=1", permission: "purchasing.manage" },
   { key: "inviteUser", icon: UserPlus, group: "people", href: "/settings/users?invite=1", permission: "users.invite" },
 ];
-
-/** Module pages that exist as placeholders until their phase ships. */
-export const PLANNED_MODULES = NAV.flatMap((g) => g.items).filter((i) => i.phase);
 
 const allowed = (item: { module?: ModuleKey; permission?: Permission }, modules: string[], permissions: string[]) =>
   (!item.module || modules.includes(item.module)) && (!item.permission || permissions.includes(item.permission));

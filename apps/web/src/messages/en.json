@@ -469,7 +469,12 @@
       "stockValue": "Stock value",
       "productsCount": "{count, plural, one {# product} other {# products}}",
       "alerts": "Stock alerts",
-      "alertsBreakdown": "{low} low · {out} out of stock"
+      "alertsBreakdown": "{low} low · {out} out of stock",
+      "sales30": "Sales · 30 days",
+      "purchases30": "Purchases {amount}",
+      "receivable": "Customers owe",
+      "overdue": "{count, plural, one {# invoice overdue} other {# invoices overdue}}",
+      "payable": "You owe {amount}"
     },
     "checklist": {
       "title": "Finish setting up StockFlow",
@@ -516,7 +521,59 @@
         "user_invite_revoked": "revoked an invitation",
         "role_created": "created a role",
         "role_updated": "changed role permissions",
-        "role_deleted": "deleted a role"
+        "role_deleted": "deleted a role",
+        "account_created": "added an account",
+        "account_updated": "updated an account",
+        "cheque_bounced": "marked a cheque as bounced",
+        "cheque_cleared": "cleared a cheque",
+        "import_products": "imported products",
+        "import_customers": "imported customers",
+        "import_suppliers": "imported suppliers",
+        "journal_manual": "posted a manual journal",
+        "note_applied": "applied a credit/debit note",
+        "payment_allocated": "allocated a payment",
+        "product_created": "added a product",
+        "product_updated": "updated a product",
+        "product_deleted": "deleted a product",
+        "warehouse_created": "added a warehouse",
+        "warehouse_updated": "updated a warehouse",
+        "customer_created": "added a customer",
+        "customer_updated": "updated a customer",
+        "supplier_created": "added a supplier",
+        "supplier_updated": "updated a supplier",
+        "stock_transfer_received": "received a stock transfer",
+        "invoice_sales_created": "created an invoice",
+        "invoice_purchase_created": "recorded a supplier bill",
+        "payment_receipt_created": "recorded a receipt",
+        "payment_payment_created": "paid a supplier",
+        "return_inward": "recorded a customer return",
+        "return_outward": "returned goods to a supplier",
+        "order_quotation_converted": "converted a quotation to an order",
+        "order_purchase_created": "created a purchase order",
+        "order_purchase_updated": "updated a purchase order",
+        "order_purchase_confirmed": "confirmed a purchase order",
+        "order_purchase_cancelled": "cancelled a purchase order",
+        "order_purchase_closed": "closed a purchase order",
+        "order_sales_created": "created a sales order",
+        "order_sales_updated": "updated a sales order",
+        "order_sales_confirmed": "confirmed a sales order",
+        "order_sales_cancelled": "cancelled a sales order",
+        "order_sales_closed": "closed a sales order",
+        "order_quotation_created": "created a quotation",
+        "order_quotation_updated": "updated a quotation",
+        "order_quotation_confirmed": "sent a quotation",
+        "order_quotation_cancelled": "cancelled a quotation",
+        "order_quotation_closed": "closed a quotation",
+        "stock_stock_in": "recorded stock in",
+        "stock_stock_out": "recorded stock out",
+        "stock_adjustment": "adjusted stock",
+        "stock_count": "posted a stock count",
+        "stock_transfer": "transferred stock",
+        "stock_opening": "recorded opening stock",
+        "stock_grn": "received goods (GRN)",
+        "stock_delivery": "delivered goods",
+        "stock_return_outward": "sent a supplier return",
+        "stock_return_inward": "took back a customer return"
       }
     },
     "tax": {
@@ -525,82 +582,13 @@
     "stockAlerts": {
       "title": "Stock alerts",
       "none": "All stock levels look healthy"
-    }
-  },
-  "planned": {
-    "phase": "Phase {n}",
-    "building": "In development — here's what this module will do",
-    "inventory": {
-      "summary": "Know exactly what you have, where, and what it's worth.",
-      "features": [
-        "Products with variants, units and barcodes",
-        "Stock in and stock out with reasons",
-        "Immutable stock ledger for every movement",
-        "Adjustments with approval",
-        "Warehouse transfers with in-transit tracking",
-        "Stock counts and variance reports",
-        "Batch, expiry and serial tracking",
-        "Low stock, overstock and expiry alerts"
-      ]
     },
-    "purchasing": {
-      "summary": "From purchase order to paid supplier bill.",
-      "features": [
-        "Purchase requisitions and orders",
-        "GRN with partial receipts and quality check",
-        "Supplier bills matched to GRNs",
-        "Return outward with automatic debit note",
-        "Supplier payments and statements",
-        "Overdue PO and pending GRN tracking"
-      ]
-    },
-    "sales": {
-      "summary": "Quotes, orders, deliveries and invoices.",
-      "features": [
-        "Quotations and sales orders",
-        "Pick, pack and delivery notes",
-        "Invoices with VAT and SSCL",
-        "Receipts and allocations",
-        "Return inward with automatic credit note",
-        "Quick counter sale"
-      ]
-    },
-    "orders": {
-      "summary": "Track every customer and supplier order end to end.",
-      "features": [
-        "Status timeline for every order",
-        "Kanban board by stage",
-        "Expected vs actual dates",
-        "Overdue highlighting and alerts",
-        "Delivery location on the map",
-        "Shareable tracking links"
-      ]
-    },
-    "finance": {
-      "summary": "Inventory-driven accounting that always balances.",
-      "features": [
-        "Automatic double-entry journals",
-        "Accounts receivable and payable",
-        "Customer and supplier statements",
-        "Aging reports",
-        "Cheque tracking",
-        "Profit & loss and stock valuation"
-      ]
-    },
-    "reports": {
-      "summary": "Insights for every decision.",
-      "features": [
-        "Animated live dashboards",
-        "Stock valuation and movement",
-        "Margins by product and customer",
-        "Sales and purchase summaries",
-        "Tax reports",
-        "Export to Excel, PDF and CSV"
-      ]
-    },
-    "maps": {
-      "summary": "See your business on the map.",
-      "features": ["All warehouses on Google Maps", "Customer and supplier locations", "Delivery address picker", "Route view for deliveries"]
+    "trend": {
+      "title": "Sales · last 30 days",
+      "sales": "Sales",
+      "purchases": "Purchases",
+      "top": "Top products",
+      "more": "Open reports"
     }
   },
   "permissions": {
@@ -767,7 +755,9 @@
       "count": "Stock count",
       "product": "Product",
       "customer": "Customer",
-      "supplier": "Supplier"
+      "supplier": "Supplier",
+      "quotation": "Quotation",
+      "quickSale": "Quick sale"
     }
   },
   "list": {
@@ -783,7 +773,8 @@
       "products": "Products",
       "documents": "Stock documents",
       "movements": "Stock ledger",
-      "warehouses": "Warehouses"
+      "warehouses": "Warehouses",
+      "labels": "Labels"
     },
     "docTypes": {
       "stock_in": "Stock in",
@@ -791,7 +782,11 @@
       "adjustment": "Adjustment",
       "count": "Stock count",
       "transfer": "Transfer",
-      "opening": "Opening stock"
+      "opening": "Opening stock",
+      "grn": "Goods received",
+      "delivery": "Delivery",
+      "return_outward": "Return to supplier",
+      "return_inward": "Customer return"
     },
     "docStatus": {
       "posted": "Posted",
@@ -818,7 +813,11 @@
       "adjustment_in": "Adjustment +",
       "adjustment_out": "Adjustment −",
       "transfer_out": "Transfer out",
-      "transfer_in": "Transfer in"
+      "transfer_in": "Transfer in",
+      "purchase_in": "Purchase",
+      "sale_out": "Sale",
+      "return_out": "Return out",
+      "return_in": "Return in"
     },
     "status": {
       "service": "Service",
@@ -1113,6 +1112,14 @@
       "recent": "Recent documents",
       "viewAll": "View all",
       "noDocuments": "No documents yet."
+    },
+    "labels": {
+      "showPrice": "Show price",
+      "print": "Print {count, plural, one {# label} other {# labels}}",
+      "copies": "Copies",
+      "remove": "Remove",
+      "emptyTitle": "Barcode labels",
+      "emptyBody": "Add products above, choose how many labels you need, then print."
     }
   },
   "contacts": {
@@ -1171,5 +1178,749 @@
       "updated": "Contact updated",
       "created": "Contact created"
     }
+  },
+  "commerce": {
+    "kinds": {
+      "purchase": "Purchase order",
+      "quotation": "Quotation",
+      "sales": "Sales order"
+    },
+    "methods": {
+      "cash": "Cash",
+      "bank_transfer": "Bank transfer",
+      "cheque": "Cheque",
+      "card": "Card"
+    },
+    "partnerPicker": {
+      "placeholder": {
+        "customer": "Choose a customer…",
+        "supplier": "Choose a supplier…"
+      },
+      "search": "Search by name, code or phone",
+      "loading": "Searching…",
+      "empty": "No matches"
+    },
+    "lines": {
+      "product": "Product",
+      "quantity": "Qty",
+      "price": "Price",
+      "discount": "Disc %",
+      "tax": "Tax",
+      "amount": "Amount",
+      "max": "max {qty}",
+      "noTax": "No tax",
+      "remove": "Remove line",
+      "add": "Add line",
+      "discountTotal": "Discount",
+      "subtotal": "Subtotal",
+      "sscl": "SSCL",
+      "vat": "VAT",
+      "total": "Total"
+    },
+    "orderStatus": {
+      "draft": "Draft",
+      "confirmed": "Confirmed",
+      "partial": "Partly done",
+      "fulfilled": "Fulfilled",
+      "closed": "Closed",
+      "cancelled": "Cancelled",
+      "overdue": "Overdue"
+    },
+    "invoiceStatus": {
+      "open": "Unpaid",
+      "partially_paid": "Part paid",
+      "paid": "Paid",
+      "void": "Void",
+      "overdue": "Overdue"
+    },
+    "orderForm": {
+      "supplier": "Supplier",
+      "customer": "Customer",
+      "partnerRequired": "Choose who this order is for",
+      "receiveInto": "Receive into",
+      "shipFrom": "Ship from",
+      "reference": "Reference",
+      "quoteDate": "Quote date",
+      "orderDate": "Order date",
+      "expectedDelivery": "Expected delivery",
+      "validUntil": "Valid until",
+      "deliveryDate": "Delivery date",
+      "deliveryAddress": "Delivery address",
+      "notes": "Notes",
+      "noLines": "Add at least one product",
+      "badQuantity": "Every line needs a quantity above zero",
+      "confirmed": "{number} confirmed",
+      "saved": "{number} saved as draft",
+      "saveDraft": "Save draft",
+      "saveAndSend": "Save & send",
+      "saveAndConfirm": "Save & confirm"
+    },
+    "orders": {
+      "search": "Search number, reference or name",
+      "status": "Status",
+      "allStatuses": "All statuses",
+      "empty": {
+        "purchase": "No purchase orders yet",
+        "quotation": "No quotations yet",
+        "sales": "No sales orders yet"
+      },
+      "emptyBody": "Create one to start tracking it from order to payment.",
+      "new": {
+        "purchase": "New purchase order",
+        "quotation": "New quotation",
+        "sales": "New sales order"
+      },
+      "cols": {
+        "number": "Number",
+        "supplier": "Supplier",
+        "customer": "Customer",
+        "date": "Date",
+        "expected": "Expected",
+        "validUntil": "Valid until",
+        "total": "Total",
+        "status": "Status"
+      }
+    },
+    "order": {
+      "back": "All orders",
+      "print": "Print",
+      "copyTracking": "Copy tracking link",
+      "linkCopied": "Tracking link copied — share it with your customer",
+      "cancel": "Cancel order",
+      "close": "Close",
+      "convert": "Convert to sales order",
+      "converted": "Sales order {number} created",
+      "confirm": "Confirm",
+      "send": "Mark as sent",
+      "receive": "Receive goods",
+      "deliver": "Deliver",
+      "bill": "Enter bill",
+      "invoice": "Create invoice",
+      "more": "More actions",
+      "returnFrom": "Return from {number}",
+      "override": "Approve anyway",
+      "done": {
+        "confirm": "Order confirmed",
+        "cancel": "Order cancelled",
+        "close": "Order closed"
+      },
+      "supplier": "Supplier",
+      "customer": "Customer",
+      "receiveInto": "Receive into",
+      "shipFrom": "Ship from",
+      "date": "Order date",
+      "expected": "Expected",
+      "validUntil": "Valid until",
+      "reference": "Reference",
+      "deliveryAddress": "Delivery address",
+      "fromQuotation": "From quotation",
+      "salesOrder": "Sales order",
+      "items": "Items",
+      "notes": "Notes",
+      "received": "Received",
+      "delivered": "Delivered",
+      "billed": "Billed",
+      "invoiced": "Invoiced",
+      "bills": "Supplier bills",
+      "invoices": "Invoices",
+      "activity": "Activity",
+      "cols": {
+        "product": "Product",
+        "qty": "Qty",
+        "price": "Price",
+        "discount": "Disc",
+        "tax": "Tax",
+        "total": "Total",
+        "progress": "Progress"
+      },
+      "timeline": {
+        "created": "Order created",
+        "confirmed": "Confirmed",
+        "received": "Goods received · {number}",
+        "delivered": "Delivered · {number}",
+        "billed": "Bill entered · {number}",
+        "invoiced": "Invoiced · {number}",
+        "cancelled": "Cancelled"
+      }
+    },
+    "fulfil": {
+      "titleReceive": "Receive goods · {number}",
+      "titleDeliver": "Deliver · {number}",
+      "descReceive": "Creates a goods received note (GRN) and adds stock to {warehouse}.",
+      "descDeliver": "Creates a delivery note and issues stock from {warehouse}.",
+      "date": "Date",
+      "supplierRef": "Supplier delivery note no.",
+      "reference": "Reference",
+      "outstanding": "{qty} {unit} outstanding",
+      "qty": "Quantity",
+      "overQty": "More than outstanding",
+      "batch": "Batch",
+      "auto": "Auto (FEFO)",
+      "expiry": "Expiry",
+      "nothing": "Enter a quantity for at least one line",
+      "batchRequired": "Batch numbers are required for batch-tracked products",
+      "received": "GRN {number} posted",
+      "delivered": "Delivery {number} posted",
+      "submitReceive": "Post GRN",
+      "submitDeliver": "Post delivery"
+    },
+    "invoiceForm": {
+      "customer": "Customer",
+      "supplier": "Supplier",
+      "partnerRequired": "Choose who this is for",
+      "invoiceDate": "Invoice date",
+      "billDate": "Bill date",
+      "dueDate": "Due date",
+      "termsHint": "Default: {days} days from the invoice date",
+      "supplierRef": "Supplier invoice no.",
+      "deliverNow": "Deliver the goods now",
+      "deliverFrom": "Deliver from warehouse",
+      "directBillHint": "Bills for stock items are entered from the purchase order after receiving them (three-way match). Direct bills are for services and expenses.",
+      "nothingToInvoice": "Everything on this order has already been invoiced.",
+      "notes": "Notes",
+      "noLines": "Add at least one line with a quantity",
+      "overQty": "A quantity is more than is left to invoice",
+      "override": "Approve anyway",
+      "createdInvoice": "Invoice {number} created",
+      "createdBill": "Bill {number} recorded",
+      "submitInvoice": "Create invoice",
+      "submitBill": "Record bill"
+    },
+    "invoices": {
+      "search": "Search number, reference or name",
+      "status": "Status",
+      "allStatuses": "All statuses",
+      "emptyInvoices": "No invoices yet",
+      "emptyInvoicesBody": "Invoice from a sales order, or create one directly.",
+      "emptyBills": "No supplier bills yet",
+      "emptyBillsBody": "Bills are entered from received purchase orders.",
+      "newInvoice": "New invoice",
+      "newBill": "New bill",
+      "cols": {
+        "number": "Number",
+        "customer": "Customer",
+        "supplier": "Supplier",
+        "date": "Date",
+        "due": "Due",
+        "total": "Total",
+        "balance": "Balance",
+        "status": "Status"
+      }
+    },
+    "invoice": {
+      "invoice": "Invoice",
+      "bill": "Bill",
+      "backInvoices": "All invoices",
+      "backBills": "All bills",
+      "print": "Print",
+      "returnInward": "Customer return",
+      "returnOutward": "Return to supplier",
+      "receive": "Receive payment",
+      "pay": "Pay bill",
+      "customer": "Customer",
+      "supplier": "Supplier",
+      "date": "Date",
+      "due": "Due date",
+      "order": "Order",
+      "supplierRef": "Supplier invoice no.",
+      "taxNo": "Tax no.",
+      "address": "Address",
+      "paid": "Paid",
+      "balance": "Balance due",
+      "notes": "Notes",
+      "settlements": "Payments & credits",
+      "noSettlements": "Nothing paid yet.",
+      "creditNote": "Credit note",
+      "debitNote": "Debit note",
+      "cols": {
+        "item": "Item",
+        "qty": "Qty",
+        "price": "Price",
+        "discount": "Disc",
+        "tax": "Tax",
+        "amount": "Amount"
+      }
+    },
+    "payment": {
+      "titleReceipt": "Receive payment",
+      "titlePayment": "Pay supplier",
+      "customer": "Customer",
+      "supplier": "Supplier",
+      "amount": "Amount",
+      "date": "Date",
+      "method": "Payment method",
+      "account": "Into / from account",
+      "reference": "Reference",
+      "chequeNo": "Cheque no.",
+      "chequeDate": "Cheque date",
+      "allocate": "Apply to invoices",
+      "auto": "Oldest first",
+      "noOpen": "No open invoices — the amount stays on account.",
+      "dueOn": "Due {date}",
+      "open": "{amount} open",
+      "allocateTo": "Amount for {number}",
+      "allocated": "Applied {allocated} · on account {unallocated}",
+      "partnerRequired": "Choose who paid",
+      "amountRequired": "Enter an amount",
+      "overAllocated": "You applied more than the amount received",
+      "savedReceipt": "Receipt {number} recorded",
+      "savedPayment": "Payment {number} recorded",
+      "submitReceipt": "Record receipt",
+      "submitPayment": "Record payment"
+    },
+    "payments": {
+      "method": "Method",
+      "allMethods": "All methods",
+      "chequeStatus": "Cheque status",
+      "allCheques": "All cheques",
+      "pending": "Pending",
+      "cleared": "Cleared",
+      "bounced": "Bounced",
+      "posted": "Posted",
+      "receipt": "Receipt",
+      "payment": "Payment",
+      "clear": "Mark cleared",
+      "bounce": "Mark bounced",
+      "bounceConfirm": "Mark {number} as bounced? The payment is reversed and the invoices become due again.",
+      "clearedToast": "Cheque cleared",
+      "bouncedToast": "Cheque marked as bounced and reversed",
+      "emptyReceipts": "No receipts yet",
+      "emptyPayments": "No supplier payments yet",
+      "emptyCheques": "No cheques here",
+      "newReceipt": "Receive payment",
+      "newPayment": "Pay supplier",
+      "cols": {
+        "number": "Number",
+        "partner": "From / to",
+        "date": "Date",
+        "method": "Method",
+        "amount": "Amount",
+        "unallocated": "On account",
+        "status": "Status"
+      }
+    },
+    "returnForm": {
+      "introInward": "Goods come back into stock and a credit note is issued to the customer.",
+      "introOutward": "Goods leave stock and a debit note is raised against the supplier.",
+      "customer": "Customer",
+      "supplier": "Supplier",
+      "receiveInto": "Return into",
+      "returnFrom": "Send from",
+      "date": "Date",
+      "reason": "Reason",
+      "reasonPlaceholder": "e.g. damaged, wrong item, expired",
+      "invoiced": "{qty} invoiced",
+      "addLine": "Add product",
+      "taxHint": "Tax is credited at the original rate; values default to the invoice price.",
+      "partnerRequired": "Choose the customer or supplier",
+      "noLines": "Enter a quantity for at least one product",
+      "createdCredit": "Credit note {number} issued",
+      "createdDebit": "Debit note {number} raised",
+      "submitInward": "Record return & credit note",
+      "submitOutward": "Record return & debit note",
+      "cols": {
+        "product": "Product",
+        "qty": "Return qty",
+        "unitValue": "Unit value",
+        "batch": "Batch"
+      }
+    },
+    "notes": {
+      "emptyCredit": "No customer returns yet",
+      "emptyCreditBody": "Returns from customers create credit notes here.",
+      "emptyDebit": "No supplier returns yet",
+      "emptyDebitBody": "Returns to suppliers create debit notes here.",
+      "newInward": "New customer return",
+      "newOutward": "New supplier return",
+      "open": "Open",
+      "applied": "Applied",
+      "appliedToast": "Credit applied to the invoice",
+      "back": "All returns",
+      "creditNote": "Credit note",
+      "debitNote": "Debit note",
+      "print": "Print",
+      "customer": "Customer",
+      "supplier": "Supplier",
+      "stockDoc": "Stock document",
+      "reason": "Reason",
+      "subtotal": "Subtotal",
+      "tax": "Tax",
+      "total": "Total",
+      "applications": "Applied to",
+      "unapplied": "{amount} not applied yet",
+      "applyTo": "Apply to invoice…",
+      "apply": "Apply",
+      "cols": {
+        "number": "Number",
+        "partner": "Customer / supplier",
+        "date": "Date",
+        "invoice": "Invoice",
+        "total": "Total",
+        "status": "Status",
+        "product": "Product",
+        "qty": "Qty",
+        "unitValue": "Unit value",
+        "tax": "Tax"
+      }
+    },
+    "pos": {
+      "search": "Search or scan a product…",
+      "warehouse": "Warehouse",
+      "noProducts": "No products found",
+      "notFound": "No product with code {code}",
+      "walkIn": "Back to walk-in customer",
+      "walkInHint": "Walk-in customer unless you choose one",
+      "empty": "Tap products to add them",
+      "less": "Less",
+      "more": "More",
+      "qty": "Quantity",
+      "remove": "Remove",
+      "subtotal": "Subtotal",
+      "vat": "VAT",
+      "total": "Total",
+      "method": "Payment method",
+      "tendered": "Cash received",
+      "change": "Change",
+      "charge": "Charge {amount}",
+      "underpaid": "Cash received is less than the total",
+      "noAccount": "Set up a cash or bank account in Finance first",
+      "done": "Sale complete",
+      "giveChange": "Give change: {amount}",
+      "receipt": "Print receipt",
+      "newSale": "New sale"
+    },
+    "board": {
+      "title": "Order tracking",
+      "subtitle": "Every open customer and supplier order, by stage.",
+      "sales": "Customer orders",
+      "purchase": "Supplier orders",
+      "overdue": "{count, plural, one {# overdue} other {# overdue}}",
+      "empty": "Nothing here"
+    },
+    "track": {
+      "title": "Track your order",
+      "from": "Order from {company}",
+      "order": "Order",
+      "placedOn": "Placed {date}",
+      "expected": "expected {date}",
+      "cancelled": "This order was cancelled.",
+      "steps": {
+        "placed": "Placed",
+        "confirmed": "Confirmed",
+        "shipping": "On the way",
+        "delivered": "Delivered"
+      },
+      "deliveredOf": "{delivered} of {total} delivered",
+      "deliveries": "Deliveries",
+      "questions": "Questions? Call {phone}",
+      "notFound": "We couldn't find this order",
+      "notFoundBody": "The tracking link may be wrong or no longer valid."
+    },
+    "purchasing": {
+      "title": "Purchasing",
+      "subtitle": "Purchase orders, goods received, supplier bills and payments.",
+      "newOrder": "New purchase order",
+      "nav": {
+        "orders": "Orders",
+        "receipts": "Goods received",
+        "bills": "Bills",
+        "payments": "Payments",
+        "returns": "Returns"
+      }
+    },
+    "sales": {
+      "title": "Sales",
+      "subtitle": "Quotations, orders, deliveries, invoices and receipts.",
+      "newOrder": "New sales order",
+      "quickSale": "Quick sale",
+      "nav": {
+        "orders": "Orders",
+        "quotations": "Quotations",
+        "deliveries": "Deliveries",
+        "invoices": "Invoices",
+        "receipts": "Receipts",
+        "returns": "Returns",
+        "pos": "Quick sale"
+      }
+    },
+    "titles": {
+      "newPurchase": "New purchase order",
+      "newSales": "New sales order",
+      "newQuotation": "New quotation",
+      "newInvoice": "New invoice",
+      "newBill": "Record supplier bill",
+      "newCredit": "Customer return",
+      "newDebit": "Return to supplier",
+      "edit": "Edit {number}"
+    }
+  },
+  "finance": {
+    "title": "Finance",
+    "subtitle": "Cash, receivables, payables and your books — kept in balance automatically.",
+    "nav": {
+      "overview": "Overview",
+      "receivables": "Receivables",
+      "payables": "Payables",
+      "cheques": "Cheques",
+      "journal": "Journal",
+      "accounts": "Chart of accounts",
+      "statements": "Statements"
+    },
+    "types": {
+      "asset": "Assets",
+      "liability": "Liabilities",
+      "equity": "Equity",
+      "income": "Income",
+      "expense": "Expenses"
+    },
+    "overview": {
+      "cash": "Cash & bank",
+      "accounts": "{count, plural, one {# account} other {# accounts}}",
+      "receivable": "Customers owe you",
+      "overdue": "{amount} overdue on {count, plural, one {# invoice} other {# invoices}}",
+      "noOverdue": "Nothing overdue",
+      "payable": "You owe suppliers",
+      "vat": "VAT payable",
+      "vatHint": "This month so far",
+      "cashAndBank": "Cash & bank accounts",
+      "attention": "Needs attention",
+      "overdueInvoices": "Overdue customer invoices",
+      "pendingCheques": "Cheques waiting to clear",
+      "billsToPay": "Supplier bills to pay"
+    },
+    "accounts": {
+      "new": "New account",
+      "edit": "Edit account",
+      "saved": "Account saved",
+      "code": "Code",
+      "name": "Name",
+      "type": "Type",
+      "debit": "Debit",
+      "credit": "Credit",
+      "balance": "Balance",
+      "system": "System account",
+      "cash": "Cash/bank",
+      "inactive": "Inactive",
+      "isCash": "Cash or bank account (can receive and make payments)",
+      "active": "Active"
+    },
+    "journal": {
+      "new": "Manual journal",
+      "newHint": "Debits must equal credits. Posted entries can't be edited.",
+      "search": "Search number or memo",
+      "account": "Account",
+      "allAccounts": "All accounts",
+      "empty": "No journal entries",
+      "date": "Date",
+      "memo": "Description",
+      "debit": "Debit",
+      "credit": "Credit",
+      "addLine": "Add line",
+      "balanced": "Balanced",
+      "difference": "Out by {amount}",
+      "unbalanced": "Debits and credits must be equal",
+      "post": "Post entry",
+      "posted": "Journal posted",
+      "sources": {
+        "manual": "Manual",
+        "stock": {
+          "opening": "Opening stock",
+          "stock_in": "Stock in",
+          "stock_out": "Stock out",
+          "adjustment": "Adjustment",
+          "count": "Stock count",
+          "transfer": "Transfer",
+          "grn": "GRN",
+          "delivery": "Delivery",
+          "return_outward": "Return outward",
+          "return_inward": "Return inward"
+        },
+        "invoice": {
+          "sales": "Sales invoice",
+          "purchase": "Supplier bill"
+        },
+        "payment": {
+          "receipt": "Receipt",
+          "payment": "Payment",
+          "bounced": "Bounced cheque"
+        },
+        "note": {
+          "credit": "Credit note",
+          "debit": "Debit note"
+        }
+      }
+    },
+    "aging": {
+      "asOf": "As of {date}",
+      "export": "Export CSV",
+      "partner": "Name",
+      "total": "Total",
+      "emptyReceivable": "No customer owes you anything",
+      "emptyPayable": "You don't owe any supplier",
+      "buckets": {
+        "current": "Not due",
+        "d1_30": "1–30 days",
+        "d31_60": "31–60 days",
+        "d61_90": "61–90 days",
+        "d90_plus": "90+ days"
+      }
+    },
+    "statement": {
+      "title": "Statement · {name}",
+      "print": "Print",
+      "receive": "Receive payment",
+      "pay": "Pay",
+      "from": "From",
+      "to": "To",
+      "date": "Date",
+      "document": "Document",
+      "charges": "Invoiced",
+      "bills": "Billed",
+      "payments": "Paid",
+      "paid": "Paid",
+      "balance": "Balance",
+      "opening": "Opening balance",
+      "closing": "Closing balance",
+      "types": {
+        "invoice": "Invoice",
+        "payment": "Payment",
+        "note": "Credit/debit note",
+        "bounced": "Bounced cheque"
+      }
+    },
+    "statements": {
+      "tabs": {
+        "pnl": "Profit & loss",
+        "balance": "Balance sheet",
+        "trial": "Trial balance",
+        "vat": "VAT & SSCL"
+      },
+      "from": "From",
+      "to": "To",
+      "asOf": "As of",
+      "print": "Print",
+      "income": "Income",
+      "expenses": "Expenses",
+      "totalIncome": "Total income",
+      "totalExpenses": "Total expenses",
+      "grossProfit": "Gross profit",
+      "margin": "{pct}% gross margin",
+      "netProfit": "Net profit",
+      "assets": "Assets",
+      "liabilities": "Liabilities",
+      "equity": "Equity",
+      "currentEarnings": "Current earnings",
+      "totalAssets": "Total assets",
+      "totalLiabilities": "Total liabilities",
+      "totalEquity": "Total equity",
+      "balanced": "Books are balanced",
+      "unbalanced": "Books are out of balance",
+      "account": "Account",
+      "debit": "Debit",
+      "credit": "Credit",
+      "total": "Total",
+      "vatOutput": "Output VAT",
+      "vatOutputHint": "Charged on sales",
+      "vatInput": "Input VAT",
+      "vatInputHint": "Paid on purchases",
+      "vatPayable": "VAT payable",
+      "vatRefund": "Refundable",
+      "ssclPayable": "SSCL payable"
+    }
+  },
+  "reports": {
+    "title": "Reports",
+    "subtitle": "Sales, purchases, margins and stock value — export any of them to CSV.",
+    "nav": {
+      "sales": "Sales",
+      "purchases": "Purchases",
+      "margins": "Margins",
+      "valuation": "Stock value",
+      "import": "Import data"
+    },
+    "from": "From",
+    "to": "To",
+    "export": "Export CSV",
+    "groupByLabel": "Group by",
+    "groupBy": {
+      "day": "Day",
+      "month": "Month",
+      "product": "Product",
+      "customer": "Customer",
+      "supplier": "Supplier"
+    },
+    "netSales": "Net sales",
+    "netPurchases": "Net purchases",
+    "returns": "Returns",
+    "netAfterReturns": "After returns",
+    "totalWithTax": "Total incl. tax",
+    "grossMargin": "Gross margin",
+    "stockValue": "Stock value",
+    "products": "Products in stock",
+    "warehouse": "Warehouse",
+    "allWarehouses": "All warehouses",
+    "noData": "No data for this period",
+    "cols": {
+      "invoices": "Invoices",
+      "bills": "Bills",
+      "quantity": "Qty",
+      "net": "Net",
+      "tax": "Tax",
+      "total": "Total",
+      "product": "Product",
+      "revenue": "Revenue",
+      "cogs": "Cost of sales",
+      "margin": "Margin",
+      "category": "Category",
+      "unit": "Unit",
+      "avgCost": "Avg cost",
+      "value": "Value"
+    }
+  },
+  "importer": {
+    "datasets": {
+      "products": "Products",
+      "customers": "Customers",
+      "suppliers": "Suppliers",
+      "opening": "Opening stock"
+    },
+    "warehouse": "Warehouse",
+    "template": "Download template",
+    "columns": "Columns:",
+    "drop": "Drop a CSV file here or click to choose",
+    "dropHint": "Exported from Excel or Google Sheets (CSV, UTF-8). Up to 5,000 rows.",
+    "rowsRead": "{count, plural, one {# row} other {# rows}} read",
+    "emptyFile": "The file has no rows",
+    "parseError": "Couldn't read this file",
+    "readySummary": "{count, plural, one {# row is} other {# rows are}} ready to import",
+    "errorSummary": "{count, plural, one {# problem} other {# problems}} to fix before importing",
+    "importedSummary": "{count, plural, one {# row} other {# rows}} imported",
+    "createUpdate": "{creates} new · {updates} updated",
+    "import": "Import {count} rows",
+    "done": "Imported {count} rows",
+    "row": "Row",
+    "field": "Column",
+    "problem": "Problem"
+  },
+  "scanner": {
+    "scan": "Scan barcode",
+    "title": "Scan a barcode",
+    "hint": "Hold the barcode inside the frame",
+    "denied": "Camera access was blocked. Allow camera access for this site and try again.",
+    "close": "Close"
+  },
+  "mapsPage": {
+    "title": "Maps",
+    "subtitle": "Warehouses, customers and suppliers on one map.",
+    "kinds": {
+      "warehouse": "Warehouses",
+      "customer": "Customers",
+      "supplier": "Suppliers"
+    },
+    "directions": "Get directions",
+    "open": "Open in Google Maps",
+    "noKey": "Add a Google Maps API key (NEXT_PUBLIC_GOOGLE_MAPS_API_KEY) to see the interactive map. Locations are listed below.",
+    "emptyTitle": "No locations yet",
+    "emptyBody": "Pin locations on warehouses, customers and suppliers to see them here."
   }
 }

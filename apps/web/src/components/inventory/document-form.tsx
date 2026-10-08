@@ -29,6 +29,7 @@ import { ApiError, api } from "@/lib/api";
 import { handleFormError } from "@/lib/form-errors";
 import type { Partner, ProductDetail, ProductListItem, StockDocumentDetail, Warehouse } from "@/lib/types";
 import { cn } from "@/lib/utils";
+import { ScanButton } from "./barcode-scanner";
 import { ProductPicker } from "./product-picker";
 
 export const DOC_ICONS: Record<StockDocumentType, LucideIcon> = {
@@ -143,7 +144,10 @@ export function StockDocumentForm({ initialType, initialProductId }: { initialTy
 
   async function onScan(e: React.FormEvent) {
     e.preventDefault();
-    const code = scan.trim();
+    await addByCode(scan.trim());
+  }
+
+  async function addByCode(code: string) {
     if (!code) return;
     try {
       const p = await api<ProductListItem>(`/products/lookup?code=${encodeURIComponent(code)}`);
@@ -318,10 +322,13 @@ export function StockDocumentForm({ initialType, initialProductId }: { initialTy
             <Icon className="text-primary size-4" /> {t("items")}
             <span className="text-muted-foreground font-normal tabular-nums">({filled.length})</span>
           </div>
-          <form onSubmit={onScan} className="relative w-full sm:w-72">
-            <ScanLine className="text-muted-foreground pointer-events-none absolute left-2.5 top-2.5 size-4" />
-            <Input ref={scanRef} value={scan} onChange={(e) => setScan(e.target.value)} placeholder={t("scan")} aria-label={t("scan")} className="h-9 pl-8" />
-          </form>
+          <div className="flex w-full gap-2 sm:w-auto">
+            <form onSubmit={onScan} className="relative flex-1 sm:w-72">
+              <ScanLine className="text-muted-foreground pointer-events-none absolute left-2.5 top-2.5 size-4" />
+              <Input ref={scanRef} value={scan} onChange={(e) => setScan(e.target.value)} placeholder={t("scan")} aria-label={t("scan")} className="h-9 pl-8" />
+            </form>
+            <ScanButton onDetect={(code) => void addByCode(code)} />
+          </div>
         </div>
 
         <div className="overflow-x-auto">

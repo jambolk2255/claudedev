@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowDownToLine, ArrowLeftRight, ArrowUpFromLine, LayoutGrid, Package, ScrollText, Warehouse } from "lucide-react";
+import { ArrowDownToLine, ArrowLeftRight, ArrowUpFromLine, LayoutGrid, Package, ScrollText, Tags, Warehouse } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { SubNav } from "@/components/data/list";
 import { PageHeader } from "@/components/layout/page-header";
@@ -47,6 +47,7 @@ export default function InventoryLayout({ children }: { children: React.ReactNod
           { href: "/inventory/documents", label: t("nav.documents"), icon: ArrowLeftRight },
           { href: "/inventory/movements", label: t("nav.movements"), icon: ScrollText },
           { href: "/inventory/warehouses", label: t("nav.warehouses"), icon: Warehouse },
+          { href: "/inventory/labels", label: t("nav.labels"), icon: Tags },
         ]}
       />
       {children}

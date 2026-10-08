@@ -2,10 +2,11 @@
 
 import type { AuthUser, Paginated, StockAlert, StockSummary } from "@stockflow/schemas";
 import { useQuery } from "@tanstack/react-query";
-import { AlertTriangle, ArrowRight, Check, CheckCircle2, Coins, Lock, MapPin, UserPlus, Users, Warehouse, X } from "lucide-react";
+import { AlertTriangle, ArrowRight, Check, CheckCircle2, Coins, HandCoins, Lock, MapPin, TrendingUp, UserPlus, Users, Warehouse, X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useFormatter, useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
+import type { FinanceSummary } from "@/components/finance/overview";
 import { AlertRow } from "@/components/inventory/alerts-list";
 import { visibleCreateActions } from "@/components/layout/nav";
 import { Avatar } from "@/components/ui/avatar";
@@ -20,6 +21,7 @@ import { api } from "@/lib/api";
 import { fadeUp, stagger } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 import { AnimatedNumber } from "./animated-number";
+import { SalesTrend, useTrend } from "./sales-trend";
 
 interface Overview {
   warehouses: { id: string; name: string; code: string; address: string | null; latitude: string | null; longitude: string | null; isDefault: boolean }[];
@@ -178,6 +180,10 @@ export function Dashboard() {
   const inventoryOn = !!me?.organization.modules.includes("inventory") && can("inventory.view");
   const summary = useQuery({ queryKey: ["stock", "summary"], queryFn: () => api<StockSummary>("/stock/summary"), enabled: inventoryOn });
   const alerts = useQuery({ queryKey: ["stock", "alerts"], queryFn: () => api<StockAlert[]>("/stock/alerts"), enabled: inventoryOn });
+  const salesOn = !!me?.organization.modules.includes("sales") && (can("reports.view") || can("sales.view"));
+  const financeOn = !!me?.organization.modules.includes("finance") && can("finance.view");
+  const trend = useTrend(salesOn);
+  const finance = useQuery({ queryKey: ["finance", "summary"], queryFn: () => api<FinanceSummary>("/finance/summary"), enabled: financeOn });
   const activity = useQuery({ queryKey: ["audit", "recent"], queryFn: () => api<Paginated<AuditRow>>("/audit?pageSize=6"), enabled: can("audit.view") });
 
   if (!me) return null;
@@ -223,24 +229,56 @@ export function Dashboard() {
             href="/inventory/products?stock=low"
           />
         )}
-        <Stat
-          icon={Warehouse}
-          label={t("stats.warehouses")}
-          value={overview.data && <AnimatedNumber value={overview.data.warehouses.length} />}
-          footnote={defaultWarehouse && t("stats.defaultIs", { name: defaultWarehouse.name })}
-          href={can("warehouses.view") ? "/inventory/warehouses" : undefined}
-        />
-        <Stat
-          icon={Users}
-          label={t("stats.team")}
-          value={overview.data && <AnimatedNumber value={overview.data.users} />}
-          footnote={t("stats.roles", { count: overview.data?.roles ?? 0 })}
-          href={can("users.view") ? "/settings/users" : undefined}
-        />
+        {salesOn && (
+          <Stat
+            icon={TrendingUp}
+            label={t("stats.sales30")}
+            value={trend.data && <AnimatedNumber value={trend.data.totals.sales} format={f.compactMoney} />}
+            footnote={trend.data && t("stats.purchases30", { amount: f.compactMoney(trend.data.totals.purchases) })}
+            href="/reports"
+          />
+        )}
+        {financeOn && (
+          <Stat
+            icon={HandCoins}
+            label={t("stats.receivable")}
+            value={finance.data && <AnimatedNumber value={finance.data.receivable} format={f.compactMoney} />}
+            footnote={
+              finance.data &&
+              (finance.data.overdueInvoices
+                ? t("stats.overdue", { count: finance.data.overdueInvoices })
+                : t("stats.payable", { amount: f.compactMoney(finance.data.payable) }))
+            }
+            href="/finance/receivables"
+          />
+        )}
+        {!(salesOn && financeOn) && (
+          <Stat
+            icon={Warehouse}
+            label={t("stats.warehouses")}
+            value={overview.data && <AnimatedNumber value={overview.data.warehouses.length} />}
+            footnote={defaultWarehouse && t("stats.defaultIs", { name: defaultWarehouse.name })}
+            href={can("warehouses.view") ? "/inventory/warehouses" : undefined}
+          />
+        )}
+        {!salesOn && !financeOn && (
+          <Stat
+            icon={Users}
+            label={t("stats.team")}
+            value={overview.data && <AnimatedNumber value={overview.data.users} />}
+            footnote={t("stats.roles", { count: overview.data?.roles ?? 0 })}
+            href={can("users.view") ? "/settings/users" : undefined}
+          />
+        )}
       </div>
 
       <div className="mt-6 grid gap-6 xl:grid-cols-[1.6fr_1fr]">
         <div className="grid content-start gap-6">
+          {salesOn && (
+            <motion.div variants={fadeUp}>
+              <SalesTrend showPurchases={can("purchasing.view")} />
+            </motion.div>
+          )}
           <motion.div variants={fadeUp}>
             <Card>
               <CardHeader className="pb-2">
@@ -267,7 +305,6 @@ export function Dashboard() {
                       </span>
                       <span className="grid gap-0.5">
                         <span className={cn("text-sm font-medium", !ready && "text-muted-foreground")}>{tc(`actions.${a.key}`)}</span>
-                        {a.phase && <span className="text-muted-foreground text-[11px]">{tc("phase", { n: a.phase })}</span>}
                       </span>
                     </button>
                   );

@@ -7,8 +7,11 @@ mobile app (Android APK) later, and an architecture that can grow into a multi-t
 > **සිංහලෙන් කෙටියෙන්:** මෙය stock / inventory / order management පද්ධතියක්. **Phase 0** (ආරක්ෂිත
 > login, 2FA, භූමිකා, audit log, English + සිංහල UI, onboarding wizard) සහ **Phase 1** (භාණ්ඩ,
 > පාරිභෝගිකයින්/සැපයුම්කරුවන්, ගබඩා, stock in/out, ගැලපීම්, ගණන් කිරීම්, මාරු කිරීම්, FIFO /
-> සාමාන්‍ය පිරිවැය, batch + කල් ඉකුත් වීම, තොග අනතුරු ඇඟවීම්) සම්පූර්ණයි. GRN, returns,
-> credit/debit notes, finance ආදිය ඊළඟ phases වලින් (පහත Roadmap බලන්න).
+> සාමාන්‍ය පිරිවැය, batch + කල් ඉකුත් වීම, තොග අනතුරු ඇඟවීම්) සම්පූර්ණයි. **Phase 2–5** ද සම්පූර්ණයි:
+> මිලදී ගැනීම් (PO → GRN → බිල්පත → ගෙවීම, debit note), විකුණුම් (quotation → SO → බෙදාහැරීම →
+> ඉන්වොයිසිය → කුවිතාන්සිය, credit note, ඉක්මන් විකිණීම/POS, පාරිභෝගික පසුවිපරම් සබැඳිය), මූල්‍ය
+> (double-entry ජර්නල්, AR/AP aging, ප්‍රකාශන, චෙක්පත්, ලාභ අලාභ, ශේෂ පත්‍රය, VAT/SSCL) සහ වාර්තා,
+> CSV import/export, බාර්කෝඩ් ලේබල්/කැමරා ස්කෑන්, සිතියම් සහ offline PWA.
 
 ## What's in Phase 0
 
@@ -40,7 +43,23 @@ mobile app (Android APK) later, and an architecture that can grow into a multi-t
 | Alerts          | Out of stock, low stock, overstock, expiring and expired batches — in the bell, dashboard and inventory overview                   |
 | UX              | Barcode/SKU scan field, live on-hand per line, printable documents, sample data option in onboarding                               |
 
-Not yet in Phase 1 (planned for a later iteration): product variants, serial numbers, approval workflows and Excel import.
+Not yet in Phase 1 (planned for a later iteration): product variants and serial numbers.
+
+## What's in Phases 2–5 — Purchasing, Sales, Finance, Insights
+
+| Area           | Included                                                                                                                                                        |
+| -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Purchasing     | Purchase orders (draft → confirm/approve), partial **GRNs** with batch/expiry, supplier bills with **three-way match** (only received stock can be billed)      |
+| Sales          | Quotations → sales orders (credit-limit check with approver override), partial deliveries (FEFO), invoices with **VAT + SSCL**, invoice-and-deliver in one step |
+| Quick sale     | Touch-friendly POS: product grid, barcode/camera scan, walk-in customer, cash tendered & change — invoice, stock issue and receipt in one transaction           |
+| Returns        | Return outward → **debit note**, return inward → **credit note**; auto-applied to the invoice, over-return protection                                           |
+| Payments       | Receipts and supplier payments (cash, bank, cheque, card), allocation to open invoices (oldest first), cheque register with clear/bounce (bounce reverses)      |
+| Order tracking | Timeline per order, Kanban board with overdue highlighting, public **tracking link** for customers (no login)                                                   |
+| Finance        | Chart of accounts, append-only double-entry journals (unbalanced entries rejected by the database), manual journals, AR/AP aging, partner statements            |
+| Statements     | Profit & loss, balance sheet, trial balance, VAT/SSCL report — always balanced                                                                                  |
+| Reports        | Sales/purchases by day/month/product/partner, margins (revenue vs ledger cost), stock valuation; charts and CSV export                                          |
+| Data           | CSV import with dry run and row-level errors for products, customers, suppliers and opening stock; downloadable templates                                       |
+| Extras         | Barcode label printing, camera barcode scanning (BarcodeDetector), map of warehouses/customers/suppliers, dashboard sales trend, installable offline PWA        |
 
 ## Tech stack
 
@@ -118,6 +137,11 @@ docker compose --profile app up -d --build
 - `partners` — customers and suppliers (`?type=customer|supplier`)
 - `warehouses` — list with stock counts, create, update
 - `stock` — `summary`, `alerts`, `documents` (list, detail, create & post, `:id/receive`), `movements` (ledger)
+- `orders` — purchase orders, quotations and sales orders: list, detail, create/update draft, `:id/confirm|cancel|close|convert|fulfil`
+- `invoices` — sales invoices and supplier bills (from an order or direct); `payments` — receipts/payments, `:id/allocate|clear|bounce`
+- `returns`, `notes` (credit/debit notes, `:id/apply`), `quick-sale`, `track/:token` (public)
+- `finance` — `summary`, `accounts`, `journals`, `trial-balance`, `profit-and-loss`, `balance-sheet`, `vat`, `aging`, `statements/:partnerId`
+- `reports` — `sales`, `purchases`, `margins`, `stock-valuation`, `trend`; `import` — `products`, `partners`, `opening-stock`
 - `health`
 
 Web clients authenticate with cookies (+ `x-csrf-token` header on mutations). Mobile clients send
@@ -130,10 +154,10 @@ Web clients authenticate with cookies (+ `x-csrf-token` header on mutations). Mo
 | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
 | **0 – Foundation** ✅              | Monorepo, design system, auth + 2FA, RBAC, audit log, onboarding wizard                                                  |
 | **1 – Master data + Inventory** ✅ | Products/variants/UoM, warehouses, customers/suppliers, stock in/out, adjustments, transfers, stock ledger, stock alerts |
-| 2 – Purchasing                     | PO → GRN → supplier bill → payment, return outward + debit note, supplier order tracking                                 |
-| 3 – Sales                          | Quotation → SO → delivery → invoice → receipt, return inward + credit note, customer order tracking, quick sale          |
-| 4 – Finance                        | Double‑entry journals, AR/AP, statements, aging, cheques, P&L, valuation                                                 |
-| 5 – Insights                       | Dashboards, reports/exports, Excel import, barcodes, map views, offline PWA                                              |
+| **2 – Purchasing** ✅              | PO → GRN → supplier bill → payment, return outward + debit note, supplier order tracking                                 |
+| **3 – Sales** ✅                   | Quotation → SO → delivery → invoice → receipt, return inward + credit note, customer order tracking, quick sale          |
+| **4 – Finance** ✅                 | Double‑entry journals, AR/AP, statements, aging, cheques, P&L, valuation                                                 |
+| **5 – Insights** ✅                | Dashboards, reports/exports, CSV import, barcodes, map views, offline PWA                                                |
 | 6 – Mobile                         | Expo app → APK (stock checks, GRN, counts with camera scanning, push alerts)                                             |
 | 7 – SaaS                           | Self sign‑up, subscriptions, tenant administration                                                                       |
 

@@ -2,7 +2,7 @@
 
 import { STOCK_DOCUMENT_TYPES, type Paginated } from "@stockflow/schemas";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { ArrowLeftRight, ArrowRight } from "lucide-react";
+import { ArrowLeftRight, ArrowRight, PackageCheck, Truck, Undo2, type LucideIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { EmptyState, FilterSelect, Pagination, SearchInput, Toolbar } from "@/components/data/list";
@@ -19,18 +19,29 @@ import { DOC_ICONS } from "./document-form";
 
 const PAGE_SIZE = 25;
 
+/** Icons for every stock document type, including those created by purchasing and sales. */
+export const ALL_DOC_ICONS: Record<StockDocumentSummary["type"], LucideIcon> = {
+  ...DOC_ICONS,
+  opening: ArrowLeftRight,
+  grn: PackageCheck,
+  delivery: Truck,
+  return_outward: Undo2,
+  return_inward: Undo2,
+};
+const FILTER_TYPES = [...STOCK_DOCUMENT_TYPES, "grn", "delivery", "return_outward", "return_inward"] as const;
+
 export function DocStatusBadge({ status }: { status: StockDocumentSummary["status"] }) {
   const t = useTranslations("inventory.docStatus");
   return <Badge variant={status === "in_transit" ? "warning" : status === "received" ? "success" : "secondary"}>{t(status)}</Badge>;
 }
 
-export function DocumentsList() {
+export function DocumentsList({ fixedType }: { fixedType?: StockDocumentSummary["type"] } = {}) {
   const t = useTranslations("inventory.documents");
   const td = useTranslations("inventory.docTypes");
   const f = useFormat();
   const router = useRouter();
   const [search, setSearch] = useState("");
-  const [type, setType] = useState("");
+  const [type, setType] = useState<string>(fixedType ?? "");
   const [status, setStatus] = useState("");
   const [page, setPage] = useState(1);
   const q = useDebounced(search);
@@ -53,12 +64,14 @@ export function DocumentsList() {
     <Card className="overflow-hidden">
       <Toolbar>
         <SearchInput value={search} onChange={setSearch} placeholder={t("search")} className="min-w-56 flex-1" />
-        <FilterSelect
-          label={t("type")}
-          value={type}
-          onChange={setType}
-          options={[{ value: "", label: t("allTypes") }, ...STOCK_DOCUMENT_TYPES.map((ty) => ({ value: ty, label: td(ty) }))]}
-        />
+        {!fixedType && (
+          <FilterSelect
+            label={t("type")}
+            value={type}
+            onChange={setType}
+            options={[{ value: "", label: t("allTypes") }, ...FILTER_TYPES.map((ty) => ({ value: ty, label: td(ty) }))]}
+          />
+        )}
         <FilterSelect
           label={t("status")}
           value={status}
@@ -94,7 +107,7 @@ export function DocumentsList() {
           </THead>
           <TBody>
             {docs.data?.items.map((d) => {
-              const Icon = d.type === "opening" ? ArrowLeftRight : DOC_ICONS[d.type];
+              const Icon = ALL_DOC_ICONS[d.type];
               return (
                 <TR key={d.id} className="cursor-pointer" onClick={() => router.push(`/inventory/documents/${d.id}`)}>
                   <TD>

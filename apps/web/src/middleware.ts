@@ -4,7 +4,7 @@ import { routing } from "./i18n/routing";
 
 const intl = createIntlMiddleware(routing);
 
-const PUBLIC_PATHS = [/^\/login$/, /^\/register$/, /^\/invite\/[^/]+$/];
+const PUBLIC_PATHS = [/^\/login$/, /^\/register$/, /^\/invite\/[^/]+$/, /^\/track\/[^/]+$/];
 
 /** `sf_csrf` lives as long as the refresh token, so it is a cheap "probably signed in" hint. */
 const SESSION_HINT_COOKIE = "sf_csrf";

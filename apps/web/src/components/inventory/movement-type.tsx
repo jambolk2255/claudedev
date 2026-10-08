@@ -6,7 +6,8 @@ import type { Movement } from "@/lib/types";
 
 export function MovementTypeBadge({ type }: { type: Movement["type"] }) {
   const t = useTranslations("inventory.movementTypes");
-  const incoming = type === "stock_in" || type === "adjustment_in" || type === "transfer_in" || type === "opening";
+  const incoming =
+    type === "stock_in" || type === "adjustment_in" || type === "transfer_in" || type === "opening" || type === "purchase_in" || type === "return_in";
   return <Badge variant={incoming ? "success" : "secondary"}>{t(type)}</Badge>;
 }
 

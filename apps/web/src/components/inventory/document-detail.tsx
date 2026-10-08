@@ -41,12 +41,13 @@ export function DocumentDetail({ id }: { id: string }) {
   if (!doc.data) return null;
   const d = doc.data;
   const isCount = d.type === "count";
-  const showCost = d.type === "stock_in" || d.type === "adjustment";
 
   const meta = [
     { label: d.type === "transfer" ? t("from") : t("warehouse"), value: `${d.warehouse.name} (${d.warehouse.code})` },
     ...(d.toWarehouse ? [{ label: t("to"), value: `${d.toWarehouse.name} (${d.toWarehouse.code})` }] : []),
-    ...(d.partner ? [{ label: d.type === "stock_in" ? t("supplier") : t("customer"), value: d.partner.name }] : []),
+    ...(d.partner
+      ? [{ label: d.type === "stock_in" || d.type === "grn" || d.type === "return_outward" ? t("supplier") : t("customer"), value: d.partner.name }]
+      : []),
     ...(d.reason ? [{ label: t("reason"), value: tr(d.reason) }] : []),
     { label: t("date"), value: f.date(d.documentDate) },
     ...(d.reference ? [{ label: t("reference"), value: d.reference }] : []),
@@ -148,7 +149,7 @@ export function DocumentDetail({ id }: { id: string }) {
           </TBody>
         </Table>
         <div className="flex justify-end border-t px-5 py-3 text-sm">
-          <span className="text-muted-foreground mr-2">{showCost || d.type === "stock_out" || d.type === "transfer" ? t("total") : t("totalAdjusted")}:</span>
+          <span className="text-muted-foreground mr-2">{isCount ? t("totalAdjusted") : t("total")}:</span>
           <span className="font-semibold tabular-nums">{f.money(d.totalValue)}</span>
         </div>
       </Card>
