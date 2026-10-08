@@ -24,7 +24,10 @@ export type RegisterOwnerInput = z.infer<typeof registerOwnerSchema>;
 export const loginSchema = z.object({
   email: emailSchema,
   password: z.string().min(1).max(128),
-  totp: z.string().regex(/^\d{6}$/).optional(),
+  totp: z
+    .string()
+    .regex(/^\d{6}$/)
+    .optional(),
 });
 export type LoginInput = z.infer<typeof loginSchema>;
 

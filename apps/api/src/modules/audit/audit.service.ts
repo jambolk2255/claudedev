@@ -18,9 +18,7 @@ const SECRET_KEYS = new Set(["password", "passwordHash", "twoFactorSecret", "tok
 
 function redact(value: unknown): Prisma.InputJsonValue | undefined {
   if (value === undefined || value === null) return undefined;
-  return JSON.parse(
-    JSON.stringify(value, (key, v) => (SECRET_KEYS.has(key) ? "[redacted]" : v)),
-  ) as Prisma.InputJsonValue;
+  return JSON.parse(JSON.stringify(value, (key, v) => (SECRET_KEYS.has(key) ? "[redacted]" : v))) as Prisma.InputJsonValue;
 }
 
 @Injectable()

@@ -89,7 +89,11 @@ export class AuthController {
   @Post("logout")
   @Public()
   @HttpCode(204)
-  async logout(@Body(new ZodPipe(refreshSchema)) body: z.infer<typeof refreshSchema>, @Req() req: FastifyRequest, @Res({ passthrough: true }) reply: FastifyReply) {
+  async logout(
+    @Body(new ZodPipe(refreshSchema)) body: z.infer<typeof refreshSchema>,
+    @Req() req: FastifyRequest,
+    @Res({ passthrough: true }) reply: FastifyReply,
+  ) {
     const token = isMobileClient(req) ? body.refreshToken : req.cookies?.[REFRESH_COOKIE];
     // Logging out must work even with an expired access token, so it is keyed on the refresh token.
     if (token && (isMobileClient(req) || csrfValid(req))) await this.auth.logoutByRefreshToken(token);

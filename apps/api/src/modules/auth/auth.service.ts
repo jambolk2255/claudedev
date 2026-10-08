@@ -63,7 +63,15 @@ export class AuthService {
         data: { organizationId: org.id, email: input.email, name: input.name, passwordHash, roleId: owner.id },
       });
       await this.audit.record(
-        { organizationId: org.id, userId: created.id, action: "organization.created", entity: "Organization", entityId: org.id, after: { name: org.name }, ...meta },
+        {
+          organizationId: org.id,
+          userId: created.id,
+          action: "organization.created",
+          entity: "Organization",
+          entityId: org.id,
+          after: { name: org.name },
+          ...meta,
+        },
         tx,
       );
       return created;
@@ -173,7 +181,14 @@ export class AuthService {
     const session = await this.prisma.session.findFirst({ where: { id: sessionId, userId: user.id } });
     if (!session) throw new NotFoundException();
     await this.tokens.revokeFamily(session.familyId);
-    await this.audit.record({ organizationId: user.organizationId, userId: user.id, action: "auth.session_revoked", entity: "Session", entityId: sessionId, ...meta });
+    await this.audit.record({
+      organizationId: user.organizationId,
+      userId: user.id,
+      action: "auth.session_revoked",
+      entity: "Session",
+      entityId: sessionId,
+      ...meta,
+    });
   }
 
   async logoutOthers(user: RequestUser, meta: Meta) {
@@ -191,7 +206,14 @@ export class AuthService {
       data: { passwordHash: await this.hashPassword(newPassword), passwordChangedAt: new Date() },
     });
     await this.tokens.revokeAllForUser(user.id);
-    await this.audit.record({ organizationId: user.organizationId, userId: user.id, action: "auth.password_changed", entity: "User", entityId: user.id, ...meta });
+    await this.audit.record({
+      organizationId: user.organizationId,
+      userId: user.id,
+      action: "auth.password_changed",
+      entity: "User",
+      entityId: user.id,
+      ...meta,
+    });
     const tokens = await this.tokens.issue(record, meta);
     return { tokens, user: await this.buildAuthUser(user.id) };
   }
@@ -251,7 +273,15 @@ export class AuthService {
         data: { organizationId: inv.organizationId, email: inv.email, name: input.name, passwordHash, roleId: inv.roleId },
       });
       await this.audit.record(
-        { organizationId: inv.organizationId, userId: created.id, action: "user.joined", entity: "User", entityId: created.id, after: { email: created.email }, ...meta },
+        {
+          organizationId: inv.organizationId,
+          userId: created.id,
+          action: "user.joined",
+          entity: "User",
+          entityId: created.id,
+          after: { email: created.email },
+          ...meta,
+        },
         tx,
       );
       return created;

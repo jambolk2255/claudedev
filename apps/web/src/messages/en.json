@@ -1,0 +1,544 @@
+{
+  "meta": { "description": "Inventory, order, purchasing and finance management for businesses of every size." },
+  "common": {
+    "language": "Language",
+    "toggleTheme": "Toggle theme",
+    "optional": "Optional",
+    "remove": "Remove",
+    "back": "Back",
+    "continue": "Continue",
+    "skip": "Skip",
+    "save": "Save changes",
+    "edit": "Edit",
+    "close": "Close",
+    "delete": "Delete"
+  },
+  "validation": {
+    "invalid": "This value is not valid",
+    "required": "This field is required",
+    "too_small": "Must be at least {n} characters",
+    "too_big": "Must be at most {n} characters",
+    "min_items": "Add at least {n}",
+    "min_value": "Must be at least {n}",
+    "max_value": "Must be at most {n}",
+    "invalid_email": "Enter a valid email address",
+    "password_min": "Use at least 10 characters",
+    "password_max": "Use at most 128 characters",
+    "password_lower": "Add a lowercase letter",
+    "password_upper": "Add an uppercase letter",
+    "password_digit": "Add a number",
+    "warehouse_duplicateCode": "Warehouse codes must be unique"
+  },
+  "auth": {
+    "footer": "© StockFlow · Secured with encryption, 2FA and audit trails",
+    "hidePassword": "Hide password",
+    "showPassword": "Show password",
+    "strength": { "weak": "Weak password", "fair": "Fair password", "good": "Good password", "strong": "Strong password" },
+    "showcase": {
+      "grn": { "title": "GRN-2026-00042 received", "detail": "120 items · Main Store" },
+      "lowStock": { "title": "Low stock alert", "detail": "Panadol 500mg · 18 left" },
+      "dispatch": { "title": "Order dispatched", "detail": "SO-2026-00118 · Kandy" },
+      "warehouse": { "title": "3 warehouses live", "detail": "Colombo · Kandy · Galle" },
+      "chart": { "title": "Stock turnover" },
+      "headline": "Every item, order and rupee — under control.",
+      "subline": "Stock in and out, GRNs, returns, credit and debit notes, order tracking and finance in one fast, secure system."
+    },
+    "login": {
+      "title": "Welcome back",
+      "subtitle": "Sign in to manage your stock and orders.",
+      "twoFactorTitle": "Two-step verification",
+      "twoFactorSubtitle": "Enter the 6-digit code from your authenticator app.",
+      "twoFactorHint": "Your account is protected with 2FA",
+      "firstRun": "First time here? Set up your company",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Sign in",
+      "verify": "Verify and sign in",
+      "back": "Use a different account",
+      "locked": "Too many failed attempts. Your account is locked for 15 minutes.",
+      "invalidCode": "That code is not correct. Try again.",
+      "invalid": "Email or password is incorrect."
+    },
+    "register": {
+      "title": "Set up your company",
+      "subtitle": "Create the owner account. You'll configure the rest in a guided setup.",
+      "badge": "Step 1 of setup",
+      "companyName": "Company name",
+      "name": "Your full name",
+      "email": "Work email",
+      "password": "Password",
+      "passwordHint": "At least 10 characters with upper and lower case letters and a number.",
+      "submit": "Create account",
+      "haveAccount": "Already have an account?",
+      "toLogin": "Sign in",
+      "closedTitle": "Registration is closed",
+      "closedBody": "This workspace already has an owner. Ask an administrator to send you an invitation."
+    },
+    "invite": {
+      "title": "Join your team",
+      "subtitle": "You've been invited to {organization} as {role}.",
+      "email": "Email",
+      "name": "Your full name",
+      "password": "Choose a password",
+      "submit": "Accept invitation",
+      "invalidTitle": "Invitation not valid",
+      "invalidBody": "This link has expired or was already used. Ask your administrator for a new one.",
+      "toLogin": "Go to sign in"
+    }
+  },
+  "maps": {
+    "noGeolocation": "Location is not available on this device",
+    "geolocationDenied": "Location permission was denied",
+    "useMyLocation": "Use my location",
+    "openInMaps": "Open in Google Maps",
+    "clear": "Clear",
+    "clickToPin": "Click the map to drop a pin, then drag it to adjust.",
+    "noKey": "Add a Google Maps API key to pick on a map. Until then enter coordinates or use your device location.",
+    "latitude": "Latitude",
+    "longitude": "Longitude"
+  },
+  "onboarding": {
+    "metaTitle": "Set up",
+    "progressLabel": "Setup progress",
+    "stepOf": "Step {n} of {total}",
+    "finish": "Finish setup",
+    "steps": {
+      "company": "Company",
+      "industry": "Industry",
+      "modules": "Modules",
+      "finance": "Currency & tax",
+      "warehouses": "Warehouses",
+      "numbering": "Numbering",
+      "team": "Team",
+      "data": "Data",
+      "review": "Review"
+    },
+    "company": {
+      "title": "Tell us about your company",
+      "subtitle": "This appears on invoices, GRNs and every document you print.",
+      "name": "Trading name",
+      "legalName": "Legal name",
+      "legalNamePlaceholder": "As registered",
+      "registrationNo": "Business registration no.",
+      "vatNo": "VAT number",
+      "phone": "Phone",
+      "email": "Email",
+      "city": "City",
+      "cityPlaceholder": "Colombo",
+      "address": "Address"
+    },
+    "industry": {
+      "title": "What kind of business is it?",
+      "subtitle": "We'll prepare categories, units and alerts that fit your industry. You can change everything later.",
+      "options": {
+        "retail": "Retail shop",
+        "wholesale": "Wholesale & distribution",
+        "pharmacy": "Pharmacy",
+        "hardware": "Hardware",
+        "fmcg": "FMCG",
+        "food": "Food & restaurant",
+        "manufacturing": "Manufacturing",
+        "electronics": "Electronics",
+        "apparel": "Apparel & fashion",
+        "other": "Something else"
+      },
+      "required": "Choose the option closest to your business.",
+      "presetTitle": "We'll set up for you",
+      "categories": "Categories",
+      "units": "Units",
+      "expiry": "Expiry alerts {days} days before items expire"
+    },
+    "modules": {
+      "title": "Choose your experience",
+      "subtitle": "Start simple and switch on more power when you need it.",
+      "modeLabel": "Experience mode",
+      "simple": { "title": "Simple", "description": "Clean screens for small teams. Just the essentials." },
+      "advanced": { "title": "Advanced", "description": "Multi-warehouse, batches, serials and approval workflows." },
+      "core": "Core",
+      "recommended": "Recommended",
+      "advancedOnly": "Advanced",
+      "changeLater": "You can switch modules on or off any time from Settings."
+    },
+    "finance": {
+      "title": "Currency, tax and stock valuation",
+      "subtitle": "Defaults are set for Sri Lanka. Adjust them if your business is different.",
+      "currency": "Base currency",
+      "currencyHint": "Other currencies can be used on individual documents.",
+      "fiscalYear": "Financial year starts in",
+      "fiscalYearHint": "Sri Lanka's tax year starts in April.",
+      "vat": "VAT registered",
+      "vatHint": "Charge VAT on invoices and claim it on purchases.",
+      "vatRate": "VAT rate",
+      "sscl": "Social Security Contribution Levy (SSCL)",
+      "ssclHint": "Apply SSCL if your turnover requires it.",
+      "ssclRate": "SSCL rate",
+      "valuation": "Stock valuation method",
+      "methods": {
+        "fifo": { "title": "FIFO", "description": "First in, first out. Best for perishables and items with expiry." },
+        "weighted_average": { "title": "Weighted average", "description": "Average cost of all units. Simple and stable for most businesses." }
+      },
+      "negativeStock": "Allow negative stock",
+      "negativeStockHint": "Let users sell items before their GRN is recorded. Not recommended."
+    },
+    "warehouses": {
+      "title": "Where do you keep stock?",
+      "subtitle": "Add your stores, warehouses or branches. Pin them on the map for delivery and routing.",
+      "defaultName": "Main Store",
+      "untitled": "New warehouse",
+      "isDefault": "Default",
+      "makeDefault": "Make default",
+      "name": "Name",
+      "code": "Code",
+      "codeInvalid": "2–12 letters, numbers or dashes",
+      "address": "Address",
+      "location": "Location",
+      "duplicateCode": "Each warehouse needs a unique code.",
+      "add": "Add another warehouse",
+      "multiHint": "Tip: turn on the Multi-warehouse module (Advanced mode) to transfer stock between locations."
+    },
+    "numbering": {
+      "title": "Document numbering",
+      "subtitle": "How your invoices, GRNs, orders and notes are numbered.",
+      "includeYear": "Include year",
+      "digits": "Digits",
+      "invalid": "Prefixes must be 1–6 letters."
+    },
+    "team": {
+      "title": "Invite your team",
+      "subtitle": "Give each person only the access they need.",
+      "emptyTitle": "Working alone for now?",
+      "emptyBody": "That's fine — skip this step and invite people later from Settings → Users.",
+      "email": "Email",
+      "role": "Role",
+      "invalidEmail": "Enter a valid email address",
+      "add": "Add a person",
+      "linksNote": "You'll get a secure invitation link for each person after setup. Links expire in 7 days."
+    },
+    "data": {
+      "title": "How would you like to start?",
+      "subtitle": "You can import your products, customers and suppliers at any time.",
+      "soon": "Soon",
+      "empty": { "title": "Start fresh", "description": "A clean workspace ready for your own products and stock." },
+      "demo": { "title": "Explore with sample data", "description": "Sample products and stock will be added when the inventory module goes live." },
+      "import": { "title": "Import from Excel", "description": "Bring products, customers, suppliers and opening stock from a spreadsheet." }
+    },
+    "review": {
+      "title": "Review and finish",
+      "subtitle": "Check everything looks right. You can edit any section.",
+      "invites": "{count, plural, one {# invitation} other {# invitations}} will be created",
+      "noInvites": "No invitations"
+    },
+    "success": {
+      "title": "You're all set!",
+      "body": "Your workspace is ready. Next up: add your products and record your first stock.",
+      "invitesTitle": "Share these invitation links",
+      "copied": "Link copied",
+      "copyLink": "Copy link",
+      "cta": "Go to dashboard"
+    }
+  },
+  "modules": {
+    "inventory": { "name": "Inventory", "description": "Products, stock in/out, adjustments and stock ledger" },
+    "purchasing": { "name": "Purchasing", "description": "Purchase orders, GRN, supplier bills, returns outward" },
+    "sales": { "name": "Sales", "description": "Quotations, sales orders, invoices, returns inward" },
+    "orders": { "name": "Order tracking", "description": "Timeline and status of every customer and supplier order" },
+    "finance": { "name": "Finance", "description": "Receipts, payments, credit/debit notes, AR/AP and ledgers" },
+    "reports": { "name": "Reports", "description": "Dashboards, valuation, margins and exports" },
+    "maps": { "name": "Maps", "description": "Warehouses, customers and deliveries on Google Maps" },
+    "barcodes": { "name": "Barcodes", "description": "Print labels and scan with a scanner or phone camera" },
+    "pos": { "name": "Quick sale", "description": "Fast counter sales for shops" },
+    "multiWarehouse": { "name": "Multi-warehouse", "description": "Transfers between locations with in-transit tracking" },
+    "batches": { "name": "Batches & expiry", "description": "Track lots and expiry dates, FEFO picking" },
+    "serials": { "name": "Serial numbers", "description": "Track individual units for warranty and service" },
+    "approvals": { "name": "Approvals", "description": "Approval workflows for orders, adjustments and payments" }
+  },
+  "roles": {
+    "owner": { "name": "Owner", "description": "Full access to everything" },
+    "admin": { "name": "Administrator", "description": "Manages users, settings and all modules" },
+    "manager": { "name": "Manager", "description": "Runs daily operations and approves documents" },
+    "storekeeper": { "name": "Storekeeper", "description": "Receives, issues and counts stock" },
+    "sales": { "name": "Sales", "description": "Creates quotations, orders and invoices" },
+    "accountant": { "name": "Accountant", "description": "Manages receipts, payments and financial reports" },
+    "viewer": { "name": "Viewer", "description": "Read-only access" }
+  },
+  "documents": {
+    "purchaseOrder": "Purchase order",
+    "grn": "Goods received note (GRN)",
+    "supplierBill": "Supplier bill",
+    "returnOutward": "Return outward",
+    "debitNote": "Debit note",
+    "quotation": "Quotation",
+    "salesOrder": "Sales order",
+    "deliveryNote": "Delivery note",
+    "invoice": "Invoice",
+    "receipt": "Receipt",
+    "returnInward": "Return inward",
+    "creditNote": "Credit note",
+    "stockAdjustment": "Stock adjustment",
+    "stockTransfer": "Stock transfer"
+  },
+  "nav": {
+    "label": "Main navigation",
+    "soon": "Soon",
+    "expand": "Expand sidebar",
+    "collapse": "Collapse",
+    "close": "Close menu",
+    "groups": { "overview": "Overview", "operations": "Operations", "insights": "Money & insights", "settings": "Settings" },
+    "items": {
+      "dashboard": "Dashboard",
+      "inventory": "Inventory",
+      "purchasing": "Purchasing",
+      "sales": "Sales",
+      "orders": "Order tracking",
+      "finance": "Finance",
+      "reports": "Reports",
+      "maps": "Maps",
+      "company": "Company",
+      "users": "Users",
+      "roles": "Roles & permissions",
+      "security": "Security",
+      "audit": "Audit log"
+    }
+  },
+  "command": {
+    "title": "Command menu",
+    "placeholder": "Search pages and actions…",
+    "empty": "Nothing found.",
+    "actions": "Actions",
+    "toggleTheme": "Toggle dark mode",
+    "logout": "Sign out"
+  },
+  "topbar": {
+    "menu": "Open menu",
+    "search": "Search or jump to…",
+    "notifications": "Notifications",
+    "noNotifications": "You're all caught up",
+    "account": "Account menu",
+    "security": "Security",
+    "profile": "Profile",
+    "logout": "Sign out"
+  },
+  "errors": { "notFound": "This page doesn't exist.", "home": "Back to dashboard" },
+  "dashboard": {
+    "greeting": { "morning": "Good morning, {name}", "afternoon": "Good afternoon, {name}", "evening": "Good evening, {name}" },
+    "mode": { "simple": "Simple mode", "advanced": "Advanced mode" },
+    "stats": { "warehouses": "Warehouses", "team": "Team members", "modules": "Active modules", "roles": "Roles" },
+    "checklist": {
+      "title": "Getting started",
+      "subtitle": "Finish these to get the most out of StockFlow.",
+      "items": {
+        "company": "Set up your company",
+        "warehouse": "Add a warehouse",
+        "team": "Invite a team member",
+        "twoFactor": "Turn on two-factor authentication",
+        "products": "Add your products",
+        "grn": "Record your first GRN"
+      }
+    },
+    "soon": "Coming soon",
+    "warehouses": { "title": "Warehouses", "subtitle": "Where your stock lives", "default": "Default", "openMap": "Open in Google Maps" },
+    "roadmap": {
+      "title": "What's coming",
+      "subtitle": "Modules are delivered in phases",
+      "phase": "Phase {n}",
+      "items": {
+        "inventory": { "title": "Inventory", "detail": "Products, stock in/out, transfers, stock count, alerts" },
+        "purchasing": { "title": "Purchasing", "detail": "PO → GRN → bills, return outward, debit notes" },
+        "sales": { "title": "Sales & orders", "detail": "Quotes → orders → invoices, return inward, credit notes, tracking" },
+        "finance": { "title": "Finance", "detail": "Receipts, payments, AR/AP, statements, aging, P&L" }
+      }
+    },
+    "secure": { "title": "Protect your account", "body": "Add two-factor authentication so a stolen password is not enough to sign in.", "cta": "Enable 2FA" }
+  },
+  "planned": {
+    "phase": "Phase {n}",
+    "building": "In development — here's what this module will do",
+    "inventory": {
+      "summary": "Know exactly what you have, where, and what it's worth.",
+      "features": [
+        "Products with variants, units and barcodes",
+        "Stock in and stock out with reasons",
+        "Immutable stock ledger for every movement",
+        "Adjustments with approval",
+        "Warehouse transfers with in-transit tracking",
+        "Stock counts and variance reports",
+        "Batch, expiry and serial tracking",
+        "Low stock, overstock and expiry alerts"
+      ]
+    },
+    "purchasing": {
+      "summary": "From purchase order to paid supplier bill.",
+      "features": [
+        "Purchase requisitions and orders",
+        "GRN with partial receipts and quality check",
+        "Supplier bills matched to GRNs",
+        "Return outward with automatic debit note",
+        "Supplier payments and statements",
+        "Overdue PO and pending GRN tracking"
+      ]
+    },
+    "sales": {
+      "summary": "Quotes, orders, deliveries and invoices.",
+      "features": [
+        "Quotations and sales orders",
+        "Pick, pack and delivery notes",
+        "Invoices with VAT and SSCL",
+        "Receipts and allocations",
+        "Return inward with automatic credit note",
+        "Quick counter sale"
+      ]
+    },
+    "orders": {
+      "summary": "Track every customer and supplier order end to end.",
+      "features": [
+        "Status timeline for every order",
+        "Kanban board by stage",
+        "Expected vs actual dates",
+        "Overdue highlighting and alerts",
+        "Delivery location on the map",
+        "Shareable tracking links"
+      ]
+    },
+    "finance": {
+      "summary": "Inventory-driven accounting that always balances.",
+      "features": [
+        "Automatic double-entry journals",
+        "Accounts receivable and payable",
+        "Customer and supplier statements",
+        "Aging reports",
+        "Cheque tracking",
+        "Profit & loss and stock valuation"
+      ]
+    },
+    "reports": {
+      "summary": "Insights for every decision.",
+      "features": [
+        "Animated live dashboards",
+        "Stock valuation and movement",
+        "Margins by product and customer",
+        "Sales and purchase summaries",
+        "Tax reports",
+        "Export to Excel, PDF and CSV"
+      ]
+    },
+    "maps": {
+      "summary": "See your business on the map.",
+      "features": ["All warehouses on Google Maps", "Customer and supplier locations", "Delivery address picker", "Route view for deliveries"]
+    }
+  },
+  "permissions": {
+    "groups": {
+      "organization": "Company",
+      "users": "Users",
+      "roles": "Roles",
+      "audit": "Audit log",
+      "products": "Products",
+      "warehouses": "Warehouses",
+      "inventory": "Inventory",
+      "purchasing": "Purchasing",
+      "sales": "Sales",
+      "finance": "Finance",
+      "reports": "Reports"
+    },
+    "actions": {
+      "view": "View",
+      "manage": "Manage",
+      "invite": "Invite",
+      "stock_in": "Stock in",
+      "stock_out": "Stock out",
+      "adjust": "Adjust",
+      "transfer": "Transfer",
+      "count": "Count",
+      "approve": "Approve",
+      "receive": "Receive (GRN)",
+      "dispatch": "Dispatch",
+      "post": "Post entries",
+      "export": "Export"
+    }
+  },
+  "settings": {
+    "company": {
+      "title": "Company",
+      "subtitle": "Your business details and enabled modules.",
+      "profile": "Profile",
+      "modules": "Modules",
+      "saved": "Company settings saved"
+    },
+    "users": {
+      "title": "Users",
+      "subtitle": "Manage who can access your workspace.",
+      "invite": "Invite user",
+      "inviteTitle": "Invite a user",
+      "inviteBody": "They'll set their own password using a secure link.",
+      "linkReady": "Invitation created. Share this link with them:",
+      "copied": "Link copied",
+      "copy": "Copy",
+      "linkNote": "The link works once and expires in 7 days.",
+      "email": "Email",
+      "role": "Role",
+      "send": "Create invitation",
+      "updated": "User updated",
+      "columns": { "user": "User", "role": "Role", "lastLogin": "Last sign-in", "active": "Active" },
+      "you": "You",
+      "never": "Never",
+      "pending": "Pending invitations",
+      "expires": "Expires {when}",
+      "revoke": "Revoke invitation"
+    },
+    "roles": {
+      "title": "Roles & permissions",
+      "subtitle": "Control exactly what each role can see and do.",
+      "create": "New role",
+      "saved": "Permissions saved",
+      "system": "System",
+      "locked": "Locked",
+      "name": "Role name"
+    },
+    "audit": {
+      "title": "Audit log",
+      "subtitle": "Every important action, who did it and when.",
+      "columns": { "when": "When", "user": "User", "action": "Action", "ip": "IP address" },
+      "empty": "No activity yet",
+      "system": "System",
+      "pageOf": "Page {page} of {pages}",
+      "prev": "Previous page",
+      "next": "Next page"
+    },
+    "security": {
+      "title": "Security",
+      "subtitle": "Your profile, password, two-factor authentication and devices.",
+      "profile": { "title": "Profile", "name": "Full name", "language": "Language", "saved": "Profile saved" },
+      "password": {
+        "title": "Password",
+        "subtitle": "Changing your password signs you out on all other devices.",
+        "current": "Current password",
+        "new": "New password",
+        "submit": "Change password",
+        "changed": "Password changed"
+      },
+      "twoFactor": {
+        "title": "Two-factor authentication",
+        "subtitle": "Require a code from an authenticator app (Google Authenticator, Microsoft Authenticator, 1Password) when signing in.",
+        "on": "On",
+        "off": "Off",
+        "qrAlt": "QR code for your authenticator app",
+        "scan": "Scan the QR code with your authenticator app, then enter the 6-digit code it shows.",
+        "confirmDisable": "Enter a code from your authenticator app to turn off 2FA.",
+        "disable": "Turn off 2FA",
+        "verify": "Verify and enable",
+        "cancel": "Cancel",
+        "enable": "Set up 2FA",
+        "enabled": "Two-factor authentication is on",
+        "disabled": "Two-factor authentication is off"
+      },
+      "sessions": {
+        "title": "Active sessions",
+        "subtitle": "Devices that are signed in to your account.",
+        "logoutOthers": "Sign out other devices",
+        "othersDone": "Other devices signed out",
+        "current": "This device",
+        "revoke": "Sign out"
+      }
+    }
+  }
+}

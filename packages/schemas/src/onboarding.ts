@@ -2,14 +2,26 @@ import { z } from "zod";
 import { CURRENCIES, DOCUMENT_TYPES, INDUSTRIES, VALUATION_METHODS, type DocumentType } from "./presets";
 import { MODULE_KEYS } from "./modules";
 
-const optionalText = (max: number) => z.string().trim().max(max).optional().or(z.literal("").transform(() => undefined));
+const optionalText = (max: number) =>
+  z
+    .string()
+    .trim()
+    .max(max)
+    .optional()
+    .or(z.literal("").transform(() => undefined));
 
 export const companyStepSchema = z.object({
   name: z.string().trim().min(2).max(150),
   legalName: optionalText(200),
   registrationNo: optionalText(50),
   vatNo: optionalText(50),
-  email: z.string().trim().email().max(254).optional().or(z.literal("").transform(() => undefined)),
+  email: z
+    .string()
+    .trim()
+    .email()
+    .max(254)
+    .optional()
+    .or(z.literal("").transform(() => undefined)),
   phone: optionalText(30),
   address: optionalText(300),
   city: optionalText(100),
@@ -40,7 +52,11 @@ export const longitudeSchema = z.number().min(-180).max(180);
 
 export const warehouseInputSchema = z.object({
   name: z.string().trim().min(2).max(100),
-  code: z.string().trim().toUpperCase().regex(/^[A-Z0-9-]{2,12}$/),
+  code: z
+    .string()
+    .trim()
+    .toUpperCase()
+    .regex(/^[A-Z0-9-]{2,12}$/),
   address: optionalText(300),
   latitude: latitudeSchema.nullable().optional(),
   longitude: longitudeSchema.nullable().optional(),
@@ -56,7 +72,11 @@ export const warehousesStepSchema = z.object({
     .refine((ws) => new Set(ws.map((w) => w.code)).size === ws.length, { message: "warehouse.duplicateCode" }),
 });
 
-const prefixSchema = z.string().trim().toUpperCase().regex(/^[A-Z]{1,6}$/);
+const prefixSchema = z
+  .string()
+  .trim()
+  .toUpperCase()
+  .regex(/^[A-Z]{1,6}$/);
 export const numberingStepSchema = z.object({
   prefixes: z.record(z.enum(DOCUMENT_TYPES as [DocumentType, ...DocumentType[]]), prefixSchema),
   includeYear: z.boolean(),
@@ -64,9 +84,7 @@ export const numberingStepSchema = z.object({
 });
 
 export const teamStepSchema = z.object({
-  invites: z
-    .array(z.object({ email: z.string().trim().toLowerCase().email().max(254), roleKey: z.string().min(2).max(40) }))
-    .max(50),
+  invites: z.array(z.object({ email: z.string().trim().toLowerCase().email().max(254), roleKey: z.string().min(2).max(40) })).max(50),
 });
 
 export const dataStepSchema = z.object({ start: z.enum(["empty", "demo"]) });

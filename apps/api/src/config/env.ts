@@ -7,9 +7,7 @@ const envSchema = z.object({
   CORS_ORIGINS: z.string().default("http://localhost:3000"),
   WEB_URL: z.string().url().default("http://localhost:3000"),
   JWT_ACCESS_SECRET: z.string().min(32, "JWT_ACCESS_SECRET must be at least 32 characters"),
-  ENCRYPTION_KEY: z
-    .string()
-    .refine((v) => Buffer.from(v, "base64").length === 32, "ENCRYPTION_KEY must be 32 bytes, base64 encoded"),
+  ENCRYPTION_KEY: z.string().refine((v) => Buffer.from(v, "base64").length === 32, "ENCRYPTION_KEY must be 32 bytes, base64 encoded"),
   ACCESS_TOKEN_TTL_SECONDS: z.coerce.number().int().min(60).max(3600).default(900),
   REFRESH_TOKEN_TTL_DAYS: z.coerce.number().int().min(1).max(90).default(30),
   /** Requests per minute per IP on login/register/2FA endpoints. */

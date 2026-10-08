@@ -2,17 +2,7 @@ import { Injectable, OnModuleDestroy, OnModuleInit } from "@nestjs/common";
 import { Prisma, PrismaClient } from "@prisma/client";
 
 /** Models that belong to an organization and must always be filtered by it. */
-const TENANT_MODELS = new Set<string>([
-  "User",
-  "Role",
-  "Invitation",
-  "AuditLog",
-  "Warehouse",
-  "TaxRate",
-  "DocumentSequence",
-  "Category",
-  "Unit",
-]);
+const TENANT_MODELS = new Set<string>(["User", "Role", "Invitation", "AuditLog", "Warehouse", "TaxRate", "DocumentSequence", "Category", "Unit"]);
 
 const WHERE_OPERATIONS = new Set([
   "findUnique",

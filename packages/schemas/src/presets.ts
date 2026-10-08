@@ -1,17 +1,6 @@
 import type { ModuleKey } from "./modules";
 
-export const INDUSTRIES = [
-  "retail",
-  "wholesale",
-  "pharmacy",
-  "hardware",
-  "fmcg",
-  "food",
-  "manufacturing",
-  "electronics",
-  "apparel",
-  "other",
-] as const;
+export const INDUSTRIES = ["retail", "wholesale", "pharmacy", "hardware", "fmcg", "food", "manufacturing", "electronics", "apparel", "other"] as const;
 export type Industry = (typeof INDUSTRIES)[number];
 
 export interface IndustryPreset {
@@ -22,14 +11,54 @@ export interface IndustryPreset {
 }
 
 export const INDUSTRY_PRESETS: Record<Industry, IndustryPreset> = {
-  retail: { categories: ["Groceries", "Household", "Personal care", "Stationery"], units: ["pcs", "kg", "g", "l", "pack"], suggestedModules: ["pos", "barcodes"], expiryAlertDays: 30 },
-  wholesale: { categories: ["General goods", "Bulk items"], units: ["pcs", "box", "carton", "kg"], suggestedModules: ["maps", "multiWarehouse"], expiryAlertDays: 30 },
-  pharmacy: { categories: ["Prescription", "OTC", "Surgical", "Supplements"], units: ["pcs", "strip", "box", "bottle"], suggestedModules: ["batches", "barcodes", "pos"], expiryAlertDays: 90 },
-  hardware: { categories: ["Tools", "Electrical", "Plumbing", "Paint", "Building materials"], units: ["pcs", "m", "kg", "l", "box"], suggestedModules: ["barcodes"], expiryAlertDays: null },
-  fmcg: { categories: ["Beverages", "Snacks", "Dairy", "Personal care"], units: ["pcs", "pack", "carton", "case"], suggestedModules: ["maps", "batches", "multiWarehouse"], expiryAlertDays: 45 },
-  food: { categories: ["Raw materials", "Ingredients", "Packaging", "Finished goods"], units: ["kg", "g", "l", "ml", "pcs"], suggestedModules: ["batches"], expiryAlertDays: 7 },
-  manufacturing: { categories: ["Raw materials", "Work in progress", "Finished goods", "Spare parts"], units: ["pcs", "kg", "m", "l", "set"], suggestedModules: ["batches", "multiWarehouse", "approvals"], expiryAlertDays: null },
-  electronics: { categories: ["Mobile phones", "Accessories", "Computers", "Appliances"], units: ["pcs", "box", "set"], suggestedModules: ["serials", "barcodes"], expiryAlertDays: null },
+  retail: {
+    categories: ["Groceries", "Household", "Personal care", "Stationery"],
+    units: ["pcs", "kg", "g", "l", "pack"],
+    suggestedModules: ["pos", "barcodes"],
+    expiryAlertDays: 30,
+  },
+  wholesale: {
+    categories: ["General goods", "Bulk items"],
+    units: ["pcs", "box", "carton", "kg"],
+    suggestedModules: ["maps", "multiWarehouse"],
+    expiryAlertDays: 30,
+  },
+  pharmacy: {
+    categories: ["Prescription", "OTC", "Surgical", "Supplements"],
+    units: ["pcs", "strip", "box", "bottle"],
+    suggestedModules: ["batches", "barcodes", "pos"],
+    expiryAlertDays: 90,
+  },
+  hardware: {
+    categories: ["Tools", "Electrical", "Plumbing", "Paint", "Building materials"],
+    units: ["pcs", "m", "kg", "l", "box"],
+    suggestedModules: ["barcodes"],
+    expiryAlertDays: null,
+  },
+  fmcg: {
+    categories: ["Beverages", "Snacks", "Dairy", "Personal care"],
+    units: ["pcs", "pack", "carton", "case"],
+    suggestedModules: ["maps", "batches", "multiWarehouse"],
+    expiryAlertDays: 45,
+  },
+  food: {
+    categories: ["Raw materials", "Ingredients", "Packaging", "Finished goods"],
+    units: ["kg", "g", "l", "ml", "pcs"],
+    suggestedModules: ["batches"],
+    expiryAlertDays: 7,
+  },
+  manufacturing: {
+    categories: ["Raw materials", "Work in progress", "Finished goods", "Spare parts"],
+    units: ["pcs", "kg", "m", "l", "set"],
+    suggestedModules: ["batches", "multiWarehouse", "approvals"],
+    expiryAlertDays: null,
+  },
+  electronics: {
+    categories: ["Mobile phones", "Accessories", "Computers", "Appliances"],
+    units: ["pcs", "box", "set"],
+    suggestedModules: ["serials", "barcodes"],
+    expiryAlertDays: null,
+  },
   apparel: { categories: ["Men", "Women", "Kids", "Accessories"], units: ["pcs", "pair", "set"], suggestedModules: ["barcodes", "pos"], expiryAlertDays: null },
   other: { categories: ["General"], units: ["pcs", "kg", "l"], suggestedModules: [], expiryAlertDays: 30 },
 };

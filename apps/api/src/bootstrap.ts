@@ -8,11 +8,9 @@ import { env } from "./config/env";
 /** Builds the configured app. Shared by main.ts and the e2e tests. */
 export async function createApp(options: { logger?: boolean } = {}): Promise<NestFastifyApplication> {
   const config = env();
-  const app = await NestFactory.create<NestFastifyApplication>(
-    AppModule,
-    new FastifyAdapter({ trustProxy: true, bodyLimit: 1_048_576 }),
-    { logger: options.logger === false ? false : ["error", "warn", "log"] },
-  );
+  const app = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter({ trustProxy: true, bodyLimit: 1_048_576 }), {
+    logger: options.logger === false ? false : ["error", "warn", "log"],
+  });
 
   await app.register(fastifyHelmet, {
     contentSecurityPolicy: { directives: { defaultSrc: ["'none'"], frameAncestors: ["'none'"] } },

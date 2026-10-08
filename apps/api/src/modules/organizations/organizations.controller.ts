@@ -47,7 +47,16 @@ export class OrganizationsController {
       ...(body.modules || body.mode ? { modules: normalizeModules(mode, (body.modules ?? before.modules) as never) } : {}),
     };
     const org = await this.prisma.organization.update({ where: { id: ctx.user.organizationId }, data });
-    await this.audit.record({ organizationId: org.id, userId: ctx.user.id, action: "organization.updated", entity: "Organization", entityId: org.id, after: body, ip: ctx.ip, userAgent: ctx.userAgent });
+    await this.audit.record({
+      organizationId: org.id,
+      userId: ctx.user.id,
+      action: "organization.updated",
+      entity: "Organization",
+      entityId: org.id,
+      after: body,
+      ip: ctx.ip,
+      userAgent: ctx.userAgent,
+    });
     const { onboardingState: _state, ...rest } = org;
     return rest;
   }

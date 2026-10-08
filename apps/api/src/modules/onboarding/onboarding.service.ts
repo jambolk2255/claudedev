@@ -148,7 +148,14 @@ export class OnboardingService {
           if (existing) continue;
           const token = randomToken(32);
           await tx.invitation.create({
-            data: { organizationId: orgId, email: invite.email, roleId: role.id, tokenHash: sha256(token), invitedById: ctx.user.id, expiresAt: new Date(Date.now() + 7 * 86_400_000) },
+            data: {
+              organizationId: orgId,
+              email: invite.email,
+              roleId: role.id,
+              tokenHash: sha256(token),
+              invitedById: ctx.user.id,
+              expiresAt: new Date(Date.now() + 7 * 86_400_000),
+            },
           });
           invites.push({ email: invite.email, inviteUrl: `${env().WEB_URL}/invite/${token}` });
         }

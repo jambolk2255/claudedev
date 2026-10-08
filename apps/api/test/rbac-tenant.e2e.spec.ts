@@ -22,6 +22,7 @@ describe("RBAC, invitations, tenant isolation and onboarding (e2e)", () => {
 
   it("invites a viewer who can read but not manage", async () => {
     const roles = await ownerA.send("get", "/roles");
+    expect(roles.body.map((r: { key: string }) => r.key)).toEqual(["owner", "admin", "manager", "storekeeper", "sales", "accountant", "viewer"]);
     const viewerRole = roles.body.find((r: { key: string }) => r.key === "viewer");
     const invite = await ownerA.send("post", "/users/invitations", { email: "viewer@alpha.lk", roleId: viewerRole.id });
     expect(invite.status).toBe(201);
@@ -77,8 +78,22 @@ describe("RBAC, invitations, tenant isolation and onboarding (e2e)", () => {
       company: { name: "Alpha Stores (Pvt) Ltd", vatNo: "123456789-7000", city: "Colombo", country: "LK" },
       industry: { industry: "pharmacy" },
       modules: { mode: "simple", modules: ["inventory", "sales", "batches"] },
-      finance: { currency: "LKR", fiscalYearStartMonth: 4, vatRegistered: true, vatRate: 18, ssclEnabled: true, ssclRate: 2.5, valuationMethod: "fifo", allowNegativeStock: false },
-      warehouses: { warehouses: [{ name: "Main Store", code: "main", latitude: 6.9271, longitude: 79.8612, isDefault: true }, { name: "Kandy Branch", code: "KDY" }] },
+      finance: {
+        currency: "LKR",
+        fiscalYearStartMonth: 4,
+        vatRegistered: true,
+        vatRate: 18,
+        ssclEnabled: true,
+        ssclRate: 2.5,
+        valuationMethod: "fifo",
+        allowNegativeStock: false,
+      },
+      warehouses: {
+        warehouses: [
+          { name: "Main Store", code: "main", latitude: 6.9271, longitude: 79.8612, isDefault: true },
+          { name: "Kandy Branch", code: "KDY" },
+        ],
+      },
       numbering: { prefixes: { invoice: "ALINV" }, includeYear: true, padding: 5 },
       team: { invites: [{ email: "store@alpha.lk", roleKey: "storekeeper" }] },
       data: { start: "empty" },

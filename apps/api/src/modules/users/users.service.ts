@@ -111,7 +111,16 @@ export class UsersService {
       },
       select: { id: true, email: true, expiresAt: true, role: { select: { id: true, name: true } } },
     });
-    await this.audit.record({ organizationId: orgId, userId: ctx.user.id, action: "user.invited", entity: "Invitation", entityId: invitation.id, after: { email, role: role.name }, ip: ctx.ip, userAgent: ctx.userAgent });
+    await this.audit.record({
+      organizationId: orgId,
+      userId: ctx.user.id,
+      action: "user.invited",
+      entity: "Invitation",
+      entityId: invitation.id,
+      after: { email, role: role.name },
+      ip: ctx.ip,
+      userAgent: ctx.userAgent,
+    });
     return { invitation, inviteUrl: `${env().WEB_URL}/invite/${token}` };
   }
 
@@ -119,6 +128,14 @@ export class UsersService {
     const db = this.prisma.tenant(ctx.user.organizationId);
     const result = await db.invitation.updateMany({ where: { id, acceptedAt: null, revokedAt: null }, data: { revokedAt: new Date() } });
     if (result.count === 0) throw new NotFoundException();
-    await this.audit.record({ organizationId: ctx.user.organizationId, userId: ctx.user.id, action: "user.invite_revoked", entity: "Invitation", entityId: id, ip: ctx.ip, userAgent: ctx.userAgent });
+    await this.audit.record({
+      organizationId: ctx.user.organizationId,
+      userId: ctx.user.id,
+      action: "user.invite_revoked",
+      entity: "Invitation",
+      entityId: id,
+      ip: ctx.ip,
+      userAgent: ctx.userAgent,
+    });
   }
 }

@@ -1,5 +1,18 @@
-import { BadRequestException, Body, Controller, Delete, ForbiddenException, Get, HttpCode, NotFoundException, Param, ParseUUIDPipe, Patch, Post } from "@nestjs/common";
-import { PERMISSION_GROUPS, roleInputSchema } from "@stockflow/schemas";
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Delete,
+  ForbiddenException,
+  Get,
+  HttpCode,
+  NotFoundException,
+  Param,
+  ParseUUIDPipe,
+  Patch,
+  Post,
+} from "@nestjs/common";
+import { PERMISSION_GROUPS, SYSTEM_ROLES, roleInputSchema } from "@stockflow/schemas";
 import type { z } from "zod";
 import { Ctx, CurrentUser, RequirePermissions } from "../../common/decorators";
 import type { RequestContext, RequestUser } from "../../common/request-user";
@@ -18,11 +31,17 @@ export class RolesController {
 
   @Get()
   @RequirePermissions("roles.view")
-  list(@CurrentUser() user: RequestUser) {
-    return this.prisma.tenant(user.organizationId).role.findMany({
-      orderBy: [{ isSystem: "desc" }, { createdAt: "asc" }],
+  async list(@CurrentUser() user: RequestUser) {
+    const roles = await this.prisma.tenant(user.organizationId).role.findMany({
+      orderBy: [{ createdAt: "asc" }, { name: "asc" }],
       include: { _count: { select: { users: true } } },
     });
+    // System roles in their defined order (owner first), then custom roles.
+    const rank = (key: string | null) => {
+      const i = SYSTEM_ROLES.findIndex((r) => r.key === key);
+      return i === -1 ? SYSTEM_ROLES.length : i;
+    };
+    return roles.sort((a, b) => rank(a.key) - rank(b.key));
   }
 
   @Get("permissions")
@@ -37,7 +56,16 @@ export class RolesController {
     const role = await this.prisma.tenant(ctx.user.organizationId).role.create({
       data: { organizationId: ctx.user.organizationId, name: body.name, description: body.description, permissions: body.permissions },
     });
-    await this.audit.record({ organizationId: ctx.user.organizationId, userId: ctx.user.id, action: "role.created", entity: "Role", entityId: role.id, after: body, ip: ctx.ip, userAgent: ctx.userAgent });
+    await this.audit.record({
+      organizationId: ctx.user.organizationId,
+      userId: ctx.user.id,
+      action: "role.created",
+      entity: "Role",
+      entityId: role.id,
+      after: body,
+      ip: ctx.ip,
+      userAgent: ctx.userAgent,
+    });
     return role;
   }
 
@@ -53,7 +81,17 @@ export class RolesController {
       where: { id },
       data: { permissions: body.permissions, ...(role.isSystem ? {} : { name: body.name, description: body.description }) },
     });
-    await this.audit.record({ organizationId: ctx.user.organizationId, userId: ctx.user.id, action: "role.updated", entity: "Role", entityId: id, before: { name: role.name, permissions: role.permissions }, after: body, ip: ctx.ip, userAgent: ctx.userAgent });
+    await this.audit.record({
+      organizationId: ctx.user.organizationId,
+      userId: ctx.user.id,
+      action: "role.updated",
+      entity: "Role",
+      entityId: id,
+      before: { name: role.name, permissions: role.permissions },
+      after: body,
+      ip: ctx.ip,
+      userAgent: ctx.userAgent,
+    });
     return updated;
   }
 
@@ -67,6 +105,15 @@ export class RolesController {
     if (role.isSystem) throw new ForbiddenException({ message: "System roles cannot be deleted", code: "SYSTEM_ROLE" });
     if (role._count.users > 0) throw new BadRequestException({ message: "Move users to another role first", code: "ROLE_IN_USE" });
     await db.role.delete({ where: { id } });
-    await this.audit.record({ organizationId: ctx.user.organizationId, userId: ctx.user.id, action: "role.deleted", entity: "Role", entityId: id, before: { name: role.name }, ip: ctx.ip, userAgent: ctx.userAgent });
+    await this.audit.record({
+      organizationId: ctx.user.organizationId,
+      userId: ctx.user.id,
+      action: "role.deleted",
+      entity: "Role",
+      entityId: id,
+      before: { name: role.name },
+      ip: ctx.ip,
+      userAgent: ctx.userAgent,
+    });
   }
 }

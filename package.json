@@ -12,10 +12,14 @@
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",
     "test": "turbo run test",
-    "db:migrate": "pnpm --filter @stockflow/api prisma:migrate"
+    "db:migrate": "pnpm --filter @stockflow/api prisma:migrate",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "devDependencies": {
     "turbo": "2.11.7",
-    "typescript": "5.9.3"
+    "typescript": "5.9.3",
+    "prettier": "3.6.2",
+    "prettier-plugin-tailwindcss": "0.6.14"
   }
 }
