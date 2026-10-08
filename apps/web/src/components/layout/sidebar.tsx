@@ -137,7 +137,7 @@ export function Sidebar({ user, collapsed, onToggle, onLogout }: { user: AuthUse
     <motion.aside
       animate={{ width: collapsed ? 64 : 240 }}
       transition={{ type: "spring", stiffness: 400, damping: 40 }}
-      className="bg-sidebar sticky top-0 hidden h-dvh shrink-0 flex-col border-r lg:flex"
+      className="bg-sidebar sticky top-0 hidden h-dvh shrink-0 flex-col border-r lg:flex print:hidden"
     >
       <div className="flex h-14 items-center gap-1 px-2.5">
         <div className="min-w-0 flex-1">

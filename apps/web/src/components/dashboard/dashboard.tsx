@@ -1,11 +1,12 @@
 "use client";
 
-import type { AuthUser, Paginated } from "@stockflow/schemas";
+import type { AuthUser, Paginated, StockAlert, StockSummary } from "@stockflow/schemas";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowRight, Check, LayoutGrid, Lock, MapPin, ShieldCheck, ShieldOff, UserPlus, Users, Warehouse, X } from "lucide-react";
+import { AlertTriangle, ArrowRight, Check, CheckCircle2, Coins, Lock, MapPin, UserPlus, Users, Warehouse, X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useFormatter, useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
+import { AlertRow } from "@/components/inventory/alerts-list";
 import { visibleCreateActions } from "@/components/layout/nav";
 import { Avatar } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -13,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useCan, useMe } from "@/hooks/use-auth";
+import { useFormat } from "@/hooks/use-format";
 import { Link, useRouter } from "@/i18n/navigation";
 import { api } from "@/lib/api";
 import { fadeUp, stagger } from "@/lib/motion";
@@ -39,7 +41,7 @@ function greetingKey() {
   return h < 12 ? "morning" : h < 17 ? "afternoon" : "evening";
 }
 
-function SetupProgress({ me, overview }: { me: AuthUser; overview?: Overview }) {
+function SetupProgress({ me, overview, summary }: { me: AuthUser; overview?: Overview; summary?: StockSummary }) {
   const t = useTranslations("dashboard.checklist");
   const [dismissed, setDismissed] = useState(true);
   useEffect(() => {
@@ -50,13 +52,13 @@ function SetupProgress({ me, overview }: { me: AuthUser; overview?: Overview }) 
     }
   }, []);
 
-  const steps = [
+  const steps: { key: string; done: boolean; href?: string; locked?: boolean }[] = [
     { key: "company", done: me.organization.onboardingCompleted, href: "/settings/company" },
     { key: "warehouse", done: (overview?.warehouses.length ?? 0) > 0, href: "/settings/company" },
     { key: "team", done: (overview?.users ?? 0) > 1, href: "/settings/users?invite=1" },
     { key: "twoFactor", done: me.twoFactorEnabled, href: "/settings/security" },
-    { key: "products", done: false, locked: true },
-    { key: "grn", done: false, locked: true },
+    { key: "products", done: (summary?.products ?? 0) > 0, href: "/inventory/products?new=1" },
+    { key: "stockIn", done: (summary?.units ?? 0) > 0, href: "/inventory/documents/new?type=stock_in" },
   ];
   const done = steps.filter((s) => s.done).length;
   const next = steps.find((s) => !s.done && !s.locked);
@@ -172,6 +174,10 @@ export function Dashboard() {
   const can = useCan();
   const { data: me } = useMe();
   const overview = useQuery({ queryKey: ["organization", "overview"], queryFn: () => api<Overview>("/organization/overview") });
+  const f = useFormat();
+  const inventoryOn = !!me?.organization.modules.includes("inventory") && can("inventory.view");
+  const summary = useQuery({ queryKey: ["stock", "summary"], queryFn: () => api<StockSummary>("/stock/summary"), enabled: inventoryOn });
+  const alerts = useQuery({ queryKey: ["stock", "alerts"], queryFn: () => api<StockAlert[]>("/stock/alerts"), enabled: inventoryOn });
   const activity = useQuery({ queryKey: ["audit", "recent"], queryFn: () => api<Paginated<AuditRow>>("/audit?pageSize=6"), enabled: can("audit.view") });
 
   if (!me) return null;
@@ -196,14 +202,33 @@ export function Dashboard() {
         </div>
       </motion.div>
 
-      <SetupProgress me={me} overview={overview.data} />
+      <SetupProgress me={me} overview={overview.data} summary={summary.data} />
 
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-4">
+        {inventoryOn && (
+          <Stat
+            icon={Coins}
+            label={t("stats.stockValue")}
+            value={summary.data && <AnimatedNumber value={summary.data.stockValue} format={f.compactMoney} />}
+            footnote={summary.data && t("stats.productsCount", { count: summary.data.products })}
+            href="/inventory"
+          />
+        )}
+        {inventoryOn && (
+          <Stat
+            icon={AlertTriangle}
+            label={t("stats.alerts")}
+            value={summary.data && <AnimatedNumber value={summary.data.lowStock + summary.data.outOfStock + summary.data.expiring} />}
+            footnote={summary.data && t("stats.alertsBreakdown", { low: summary.data.lowStock, out: summary.data.outOfStock })}
+            href="/inventory/products?stock=low"
+          />
+        )}
         <Stat
           icon={Warehouse}
           label={t("stats.warehouses")}
           value={overview.data && <AnimatedNumber value={overview.data.warehouses.length} />}
           footnote={defaultWarehouse && t("stats.defaultIs", { name: defaultWarehouse.name })}
+          href={can("warehouses.view") ? "/inventory/warehouses" : undefined}
         />
         <Stat
           icon={Users}
@@ -211,24 +236,6 @@ export function Dashboard() {
           value={overview.data && <AnimatedNumber value={overview.data.users} />}
           footnote={t("stats.roles", { count: overview.data?.roles ?? 0 })}
           href={can("users.view") ? "/settings/users" : undefined}
-        />
-        <Stat
-          icon={LayoutGrid}
-          label={t("stats.modules")}
-          value={<AnimatedNumber value={me.organization.modules.length} />}
-          footnote={t(`mode.${me.organization.mode}`)}
-          href={can("organization.view") ? "/settings/company" : undefined}
-        />
-        <Stat
-          icon={me.twoFactorEnabled ? ShieldCheck : ShieldOff}
-          label={t("stats.security")}
-          value={
-            <span className={me.twoFactorEnabled ? "text-success" : "text-warning-foreground dark:text-warning"}>
-              {me.twoFactorEnabled ? t("stats.twoFactorOn") : t("stats.twoFactorOff")}
-            </span>
-          }
-          footnote={me.twoFactorEnabled ? t("stats.protected") : t("stats.enable2fa")}
-          href="/settings/security"
         />
       </div>
 
@@ -354,18 +361,30 @@ export function Dashboard() {
             </CardContent>
           </Card>
 
-          {overview.data && overview.data.taxRates.length > 0 && (
+          {inventoryOn && (
             <Card>
-              <CardHeader className="pb-2">
-                <CardTitle>{t("tax.title")}</CardTitle>
+              <CardHeader className="flex-row items-center justify-between pb-2">
+                <CardTitle>{t("stockAlerts.title")}</CardTitle>
+                <Button variant="ghost" size="sm" asChild>
+                  <Link href="/inventory">
+                    {t("activity.viewAll")} <ArrowRight />
+                  </Link>
+                </Button>
               </CardHeader>
-              <CardContent className="grid gap-2">
-                {overview.data.taxRates.map((r) => (
-                  <div key={r.code} className="flex items-center justify-between text-sm">
-                    <span className="text-muted-foreground">{r.code}</span>
-                    <span className="font-medium tabular-nums">{Number(r.rate)}%</span>
+              <CardContent>
+                {alerts.isPending ? (
+                  <Skeleton className="h-24" />
+                ) : alerts.data?.length === 0 ? (
+                  <p className="text-muted-foreground flex items-center gap-2 py-3 text-sm">
+                    <CheckCircle2 className="text-success size-4" /> {t("stockAlerts.none")}
+                  </p>
+                ) : (
+                  <div className="grid">
+                    {alerts.data?.slice(0, 5).map((a, i) => (
+                      <AlertRow key={`${a.type}-${a.productId}-${a.batchNo ?? i}`} alert={a} />
+                    ))}
                   </div>
-                ))}
+                )}
               </CardContent>
             </Card>
           )}

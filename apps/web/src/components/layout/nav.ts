@@ -3,6 +3,11 @@ import {
   ArrowDownToLine,
   ArrowLeftRight,
   ArrowUpFromLine,
+  BookUser,
+  ClipboardList,
+  Contact,
+  PackagePlus,
+  SlidersHorizontal,
   BarChart3,
   Building2,
   ClipboardCheck,
@@ -42,7 +47,8 @@ export const NAV: NavGroup[] = [
   {
     key: "operations",
     items: [
-      { key: "inventory", href: "/inventory", icon: Package, module: "inventory", permission: "inventory.view", phase: 1 },
+      { key: "inventory", href: "/inventory", icon: Package, module: "inventory", permission: "inventory.view" },
+      { key: "contacts", href: "/contacts", icon: BookUser },
       { key: "purchasing", href: "/purchasing", icon: Truck, module: "purchasing", permission: "purchasing.view", phase: 2 },
       { key: "sales", href: "/sales", icon: ShoppingCart, module: "sales", permission: "sales.view", phase: 3 },
       { key: "orders", href: "/orders", icon: ClipboardCheck, module: "orders", phase: 3 },
@@ -79,13 +85,46 @@ export interface CreateAction {
 
 /** Everything a user can create, in one place (topbar "Create" menu and dashboard quick actions). */
 export const CREATE_ACTIONS: CreateAction[] = [
-  { key: "stockIn", icon: ArrowDownToLine, group: "inventory", module: "inventory", permission: "inventory.stock_in", phase: 1 },
-  { key: "stockOut", icon: ArrowUpFromLine, group: "inventory", module: "inventory", permission: "inventory.stock_out", phase: 1 },
-  { key: "transfer", icon: ArrowLeftRight, group: "inventory", module: "inventory", permission: "inventory.transfer", phase: 1 },
+  {
+    key: "stockIn",
+    icon: ArrowDownToLine,
+    group: "inventory",
+    href: "/inventory/documents/new?type=stock_in",
+    module: "inventory",
+    permission: "inventory.stock_in",
+  },
+  {
+    key: "stockOut",
+    icon: ArrowUpFromLine,
+    group: "inventory",
+    href: "/inventory/documents/new?type=stock_out",
+    module: "inventory",
+    permission: "inventory.stock_out",
+  },
+  {
+    key: "adjustment",
+    icon: SlidersHorizontal,
+    group: "inventory",
+    href: "/inventory/documents/new?type=adjustment",
+    module: "inventory",
+    permission: "inventory.adjust",
+  },
+  { key: "count", icon: ClipboardList, group: "inventory", href: "/inventory/documents/new?type=count", module: "inventory", permission: "inventory.count" },
+  {
+    key: "transfer",
+    icon: ArrowLeftRight,
+    group: "inventory",
+    href: "/inventory/documents/new?type=transfer",
+    module: "multiWarehouse",
+    permission: "inventory.transfer",
+  },
+  { key: "product", icon: PackagePlus, group: "inventory", href: "/inventory/products?new=1", permission: "products.manage" },
   { key: "purchaseOrder", icon: FileText, group: "purchasing", module: "purchasing", permission: "purchasing.manage", phase: 2 },
   { key: "grn", icon: PackageCheck, group: "purchasing", module: "purchasing", permission: "purchasing.receive", phase: 2 },
   { key: "salesOrder", icon: ShoppingCart, group: "sales", module: "sales", permission: "sales.manage", phase: 3 },
   { key: "invoice", icon: FileText, group: "sales", module: "sales", permission: "sales.manage", phase: 3 },
+  { key: "customer", icon: Contact, group: "people", href: "/contacts/customers?new=1", permission: "sales.manage" },
+  { key: "supplier", icon: Truck, group: "people", href: "/contacts/suppliers?new=1", permission: "purchasing.manage" },
   { key: "inviteUser", icon: UserPlus, group: "people", href: "/settings/users?invite=1", permission: "users.invite" },
 ];
 

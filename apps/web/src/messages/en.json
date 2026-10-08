@@ -13,7 +13,8 @@
     "save": "Save changes",
     "edit": "Edit",
     "close": "Close",
-    "delete": "Delete"
+    "delete": "Delete",
+    "cancel": "Cancel"
   },
   "validation": {
     "invalid": "This value is not valid",
@@ -29,7 +30,14 @@
     "password_lower": "Add a lowercase letter",
     "password_upper": "Add an uppercase letter",
     "password_digit": "Add a number",
-    "warehouse_duplicateCode": "Warehouse codes must be unique"
+    "warehouse_duplicateCode": "Warehouse codes must be unique",
+    "sku_invalid": "Letters, numbers, dots, dashes or underscores (max 40)",
+    "maxLevel_belowReorder": "Must be at least the reorder level",
+    "max_decimals": "Use at most 4 decimal places",
+    "quantity_zero": "Quantity can't be zero",
+    "lines_duplicate": "Each product/batch can appear only once",
+    "date_invalid": "Enter a valid date",
+    "transfer_sameWarehouse": "Choose a different destination warehouse"
   },
   "auth": {
     "footer": "© StockFlow · Secured with encryption, 2FA and audit trails",
@@ -261,7 +269,7 @@
       },
       "demo": {
         "title": "Explore with sample data",
-        "description": "Sample products and stock will be added when the inventory module goes live."
+        "description": "Adds sample products with opening stock so you can try every screen right away."
       },
       "import": {
         "title": "Import from Excel",
@@ -381,7 +389,10 @@
     "returnInward": "Return inward",
     "creditNote": "Credit note",
     "stockAdjustment": "Stock adjustment",
-    "stockTransfer": "Stock transfer"
+    "stockTransfer": "Stock transfer",
+    "stockIn": "Stock in",
+    "stockOut": "Stock out",
+    "stockCount": "Stock count"
   },
   "nav": {
     "label": "Main navigation",
@@ -409,7 +420,8 @@
       "roles": "Roles & permissions",
       "security": "Security",
       "audit": "Audit log",
-      "settings": "Settings"
+      "settings": "Settings",
+      "contacts": "Contacts"
     },
     "breadcrumb": "Breadcrumb"
   },
@@ -425,7 +437,9 @@
     "menu": "Open menu",
     "search": "Search or jump to…",
     "notifications": "Notifications",
-    "noNotifications": "You're all caught up"
+    "noNotifications": "You're all caught up",
+    "notificationsCount": "{count} alerts",
+    "viewAllAlerts": "View all alerts"
   },
   "errors": {
     "notFound": "This page doesn't exist.",
@@ -451,7 +465,11 @@
       "twoFactorOn": "2FA on",
       "twoFactorOff": "2FA off",
       "protected": "Your account is protected",
-      "enable2fa": "Turn on two-factor authentication"
+      "enable2fa": "Turn on two-factor authentication",
+      "stockValue": "Stock value",
+      "productsCount": "{count, plural, one {# product} other {# products}}",
+      "alerts": "Stock alerts",
+      "alertsBreakdown": "{low} low · {out} out of stock"
     },
     "checklist": {
       "title": "Finish setting up StockFlow",
@@ -461,7 +479,7 @@
         "team": "Invite a team member",
         "twoFactor": "Turn on two-factor authentication",
         "products": "Add your products",
-        "grn": "Record your first GRN"
+        "stockIn": "Record your first stock-in"
       },
       "progress": "{done} of {total} done",
       "dismiss": "Hide setup guide"
@@ -503,6 +521,10 @@
     },
     "tax": {
       "title": "Tax rates"
+    },
+    "stockAlerts": {
+      "title": "Stock alerts",
+      "none": "All stock levels look healthy"
     }
   },
   "planned": {
@@ -740,7 +762,414 @@
       "grn": "Goods received (GRN)",
       "salesOrder": "Sales order",
       "invoice": "Invoice",
-      "inviteUser": "Invite user"
+      "inviteUser": "Invite user",
+      "adjustment": "Stock adjustment",
+      "count": "Stock count",
+      "product": "Product",
+      "customer": "Customer",
+      "supplier": "Supplier"
+    }
+  },
+  "list": {
+    "range": "{from}–{to} of {total}",
+    "prev": "Previous page",
+    "next": "Next page"
+  },
+  "inventory": {
+    "title": "Inventory",
+    "subtitle": "Stock levels, movements and warehouses.",
+    "nav": {
+      "overview": "Overview",
+      "products": "Products",
+      "documents": "Stock documents",
+      "movements": "Stock ledger",
+      "warehouses": "Warehouses"
+    },
+    "docTypes": {
+      "stock_in": "Stock in",
+      "stock_out": "Stock out",
+      "adjustment": "Adjustment",
+      "count": "Stock count",
+      "transfer": "Transfer",
+      "opening": "Opening stock"
+    },
+    "docStatus": {
+      "posted": "Posted",
+      "in_transit": "In transit",
+      "received": "Received"
+    },
+    "reasons": {
+      "damaged": "Damaged",
+      "lost": "Lost / stolen",
+      "expired": "Expired",
+      "found": "Found",
+      "correction": "Correction",
+      "sample": "Free sample",
+      "other": "Other",
+      "sale": "Sale",
+      "internal_use": "Internal use",
+      "return_to_supplier": "Return to supplier",
+      "write_off": "Write-off"
+    },
+    "movementTypes": {
+      "opening": "Opening",
+      "stock_in": "Stock in",
+      "stock_out": "Stock out",
+      "adjustment_in": "Adjustment +",
+      "adjustment_out": "Adjustment −",
+      "transfer_out": "Transfer out",
+      "transfer_in": "Transfer in"
+    },
+    "status": {
+      "service": "Service",
+      "out": "Out of stock",
+      "low": "Low stock",
+      "over": "Overstock",
+      "in": "In stock"
+    },
+    "picker": {
+      "placeholder": "Select a product…",
+      "search": "Search by name, SKU or barcode",
+      "loading": "Searching…",
+      "empty": "No products found",
+      "batched": "Batch-tracked"
+    },
+    "form": {
+      "typeLabel": "Document type",
+      "warehouse": "Warehouse",
+      "fromWarehouse": "From warehouse",
+      "toWarehouse": "To warehouse",
+      "supplier": "Supplier",
+      "customer": "Customer",
+      "optional": "Optional",
+      "reason": "Reason",
+      "date": "Date",
+      "reference": "Reference",
+      "referencePlaceholder": "Invoice / delivery note no.",
+      "items": "Items",
+      "scan": "Scan barcode or type SKU + Enter",
+      "scanNotFound": "No product with code {code}",
+      "scanFailed": "Couldn't look up that code",
+      "product": "Product",
+      "system": "System qty",
+      "onHand": "On hand",
+      "batch": "Batch",
+      "direction": "Direction",
+      "counted": "Counted",
+      "quantity": "Quantity",
+      "unitCost": "Unit cost",
+      "variance": "Variance",
+      "lineValue": "Value",
+      "after": "After",
+      "noBatch": "—",
+      "batchNo": "Batch no.",
+      "expiry": "Expiry date",
+      "fefo": "Auto (first expiry first)",
+      "remove": "Remove −",
+      "add": "Add +",
+      "atCost": "at average cost",
+      "removeLine": "Remove line",
+      "addLine": "Add line",
+      "total": "Total",
+      "note": "Note",
+      "finalNote": "Posted documents can't be edited. Correct mistakes with an adjustment.",
+      "cancel": "Cancel",
+      "post": "Post {type}",
+      "posted": "{number} posted",
+      "errors": {
+        "warehouse": "Choose a warehouse",
+        "toWarehouse": "Choose a different destination warehouse",
+        "noLines": "Add at least one product",
+        "quantity": "Enter a valid quantity for {sku}",
+        "batch": "{sku} needs a batch number"
+      }
+    },
+    "productForm": {
+      "newTitle": "New product",
+      "editTitle": "Edit product",
+      "newSubtitle": "Add an item you buy, stock or sell.",
+      "create": "Create product",
+      "updated": "Product updated",
+      "created": "Product {sku} created",
+      "name": "Name",
+      "sku": "SKU",
+      "skuInvalid": "Letters, numbers, . _ - only",
+      "skuHint": "Leave empty to generate one",
+      "barcode": "Barcode",
+      "category": "Category",
+      "unit": "Unit",
+      "pricing": "Pricing",
+      "cost": "Cost price",
+      "price": "Selling price",
+      "tax": "Tax",
+      "stockControl": "Stock control",
+      "reorder": "Reorder level",
+      "reorderHint": "Alert when stock falls to this level",
+      "max": "Maximum level",
+      "maxHint": "Alert when stock exceeds this",
+      "maxInvalid": "Must be at least the reorder level",
+      "trackBatches": "Track batches & expiry",
+      "trackBatchesHint": "Require a batch number on receipts and pick first-expiry-first-out",
+      "type": "Type",
+      "types": {
+        "stock": "Stocked item",
+        "service": "Service (no stock)"
+      },
+      "active": "Active",
+      "description": "Description"
+    },
+    "products": {
+      "search": "Search name, SKU or barcode",
+      "filters": {
+        "stock": "Stock",
+        "allStock": "All stock",
+        "inStock": "In stock",
+        "low": "Low or out",
+        "out": "Out of stock",
+        "category": "Category",
+        "allCategories": "All categories",
+        "warehouse": "Warehouse",
+        "allWarehouses": "All warehouses",
+        "status": "Status",
+        "active": "Active",
+        "inactive": "Inactive"
+      },
+      "new": "New product",
+      "noMatch": "No products match these filters",
+      "emptyTitle": "No products yet",
+      "emptyBody": "Add your first product, then record a stock-in to start tracking.",
+      "columns": {
+        "product": "Product",
+        "category": "Category",
+        "onHand": "On hand",
+        "status": "Status",
+        "cost": "Cost",
+        "price": "Price",
+        "value": "Stock value"
+      },
+      "batched": "Batch-tracked"
+    },
+    "product": {
+      "back": "Products",
+      "inactive": "Inactive",
+      "actions": {
+        "stock_in": "Stock in",
+        "stock_out": "Stock out",
+        "adjustment": "Adjust",
+        "count": "Count"
+      },
+      "edit": "Edit",
+      "onHand": "On hand",
+      "value": "Stock value",
+      "avgCost": "Average cost",
+      "margin": "{pct}% margin",
+      "reorder": "Reorder level",
+      "max": "Max {qty}",
+      "byWarehouse": "Stock by warehouse",
+      "noStock": "No stock recorded yet.",
+      "batches": "Batches",
+      "noBatches": "No batches in stock.",
+      "expires": "Expires {date}",
+      "noExpiry": "No expiry",
+      "history": "Recent movements",
+      "fullLedger": "Full ledger",
+      "noMovements": "No movements yet.",
+      "cols": {
+        "date": "Date",
+        "type": "Type",
+        "document": "Document",
+        "warehouse": "Warehouse",
+        "qty": "Qty",
+        "cost": "Unit cost",
+        "balance": "Balance"
+      }
+    },
+    "documents": {
+      "search": "Search number or reference",
+      "type": "Type",
+      "allTypes": "All types",
+      "status": "Status",
+      "allStatuses": "All statuses",
+      "posted": "Posted",
+      "inTransit": "In transit",
+      "received": "Received",
+      "emptyTitle": "No stock documents yet",
+      "emptyBody": "Stock in, stock out, adjustments, counts and transfers will appear here.",
+      "cols": {
+        "number": "Number",
+        "type": "Type",
+        "warehouse": "Warehouse",
+        "party": "Supplier / customer",
+        "value": "Value",
+        "status": "Status",
+        "date": "Date"
+      }
+    },
+    "document": {
+      "receivedToast": "Transfer received",
+      "from": "From",
+      "warehouse": "Warehouse",
+      "to": "To",
+      "supplier": "Supplier",
+      "customer": "Customer",
+      "reason": "Reason",
+      "date": "Date",
+      "reference": "Reference",
+      "postedBy": "Posted by",
+      "receivedAt": "Received",
+      "back": "Stock documents",
+      "print": "Print",
+      "receive": "Receive transfer",
+      "inTransitNote": "This stock has left the source warehouse and will be added to {to} when received.",
+      "note": "Note",
+      "items": "Items",
+      "cols": {
+        "product": "Product",
+        "batch": "Batch",
+        "system": "System",
+        "counted": "Counted",
+        "qty": "Qty",
+        "variance": "Variance",
+        "unitCost": "Unit cost",
+        "value": "Value",
+        "type": "Type",
+        "warehouse": "Warehouse",
+        "balance": "Balance after"
+      },
+      "total": "Total value",
+      "totalAdjusted": "Value adjusted",
+      "ledger": "Ledger entries",
+      "noMovements": "No stock changed (counts matched)."
+    },
+    "movements": {
+      "type": "Type",
+      "allTypes": "All movement types",
+      "warehouse": "Warehouse",
+      "allWarehouses": "All warehouses",
+      "product": "Product",
+      "immutable": "Ledger entries can't be edited or deleted",
+      "emptyTitle": "No movements yet",
+      "emptyBody": "Every stock change is recorded here permanently.",
+      "cols": {
+        "date": "Date",
+        "product": "Product",
+        "type": "Type",
+        "document": "Document",
+        "warehouse": "WH",
+        "qty": "Qty",
+        "value": "Value",
+        "balance": "Balance",
+        "user": "By"
+      }
+    },
+    "warehouses": {
+      "saved": "Warehouse saved",
+      "invalid": "Check the name and code (2–12 letters, numbers or dashes)",
+      "edit": "Edit warehouse",
+      "new": "New warehouse",
+      "name": "Name",
+      "code": "Code",
+      "codeHint": "Short unique code, e.g. CMB",
+      "address": "Address",
+      "location": "Location",
+      "default": "Default warehouse",
+      "active": "Active",
+      "activeHint": "Inactive warehouses can't receive or issue stock",
+      "subtitle": "Stores, warehouses and branches where you keep stock.",
+      "defaultBadge": "Default",
+      "inactive": "Inactive",
+      "noAddress": "No address",
+      "products": "products",
+      "units": "units",
+      "map": "Map"
+    },
+    "alerts": {
+      "detail": {
+        "out_of_stock": "No stock left · reorder at {threshold}",
+        "low_stock": "{qty} left · reorder at {threshold}",
+        "overstock": "{qty} on hand · max {threshold}",
+        "expiring": "Batch {batch} expires {date} · {qty} left",
+        "expired": "Batch {batch} expired {date} · {qty} left"
+      },
+      "types": {
+        "out_of_stock": "Out",
+        "low_stock": "Low",
+        "overstock": "Over",
+        "expiring": "Expiring",
+        "expired": "Expired"
+      }
+    },
+    "overview": {
+      "stats": {
+        "value": "Stock value",
+        "products": "Products",
+        "low": "Low stock",
+        "out": "Out of stock",
+        "expiring": "Expiring batches"
+      },
+      "alerts": "Needs attention",
+      "noAlerts": "Nothing needs attention right now",
+      "byWarehouse": "Value by warehouse",
+      "recent": "Recent documents",
+      "viewAll": "View all",
+      "noDocuments": "No documents yet."
+    }
+  },
+  "contacts": {
+    "title": "Contacts",
+    "subtitle": "Customers you sell to and suppliers you buy from.",
+    "customers": "Customers",
+    "suppliers": "Suppliers",
+    "search": "Search name, code, phone or email",
+    "status": "Status",
+    "active": "Active",
+    "inactive": "Inactive",
+    "new": {
+      "customer": "New customer",
+      "supplier": "New supplier"
+    },
+    "noMatch": "No contacts match your search",
+    "empty": {
+      "customer": "No customers yet",
+      "supplier": "No suppliers yet"
+    },
+    "cols": {
+      "name": "Name",
+      "contact": "Contact",
+      "city": "City",
+      "terms": "Payment terms",
+      "credit": "Credit limit"
+    },
+    "map": "Open in Google Maps",
+    "days": "{n} days",
+    "cash": "Cash / immediate",
+    "form": {
+      "edit": {
+        "customer": "Edit customer",
+        "supplier": "Edit supplier"
+      },
+      "new": {
+        "customer": "New customer",
+        "supplier": "New supplier"
+      },
+      "name": "Name",
+      "code": "Code",
+      "codeHint": "Leave empty to generate",
+      "codeInvalid": "Letters, numbers, . _ - (max 20)",
+      "contactName": "Contact person",
+      "phone": "Phone",
+      "email": "Email",
+      "taxNo": "VAT / tax no.",
+      "paymentTerms": "Payment terms (days)",
+      "paymentTermsHint": "0 means cash on delivery",
+      "creditLimit": "Credit limit",
+      "address": "Address",
+      "city": "City",
+      "location": "Location",
+      "notes": "Notes",
+      "active": "Active",
+      "updated": "Contact updated",
+      "created": "Contact created"
     }
   }
 }

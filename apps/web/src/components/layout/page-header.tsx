@@ -21,7 +21,7 @@ export function PageHeader({
         <Heading className={cn("font-semibold tracking-tight", level === "page" ? "text-2xl" : "text-lg")}>{title}</Heading>
         {description && <p className="text-muted-foreground text-sm">{description}</p>}
       </div>
-      {actions && <div className="flex shrink-0 items-center gap-2">{actions}</div>}
+      {actions && <div className="flex shrink-0 items-center gap-2 print:hidden">{actions}</div>}
     </div>
   );
 }

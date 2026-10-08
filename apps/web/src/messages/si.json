@@ -13,7 +13,8 @@
     "save": "වෙනස්කම් සුරකින්න",
     "edit": "සංස්කරණය",
     "close": "වසන්න",
-    "delete": "මකන්න"
+    "delete": "මකන්න",
+    "cancel": "අවලංගු කරන්න"
   },
   "validation": {
     "invalid": "මෙම අගය වලංගු නැත",
@@ -29,7 +30,14 @@
     "password_lower": "කුඩා අකුරක් (a-z) එක් කරන්න",
     "password_upper": "කැපිටල් අකුරක් (A-Z) එක් කරන්න",
     "password_digit": "අංකයක් එක් කරන්න",
-    "warehouse_duplicateCode": "ගබඩා කේත එකිනෙකට වෙනස් විය යුතුයි"
+    "warehouse_duplicateCode": "ගබඩා කේත එකිනෙකට වෙනස් විය යුතුයි",
+    "sku_invalid": "අකුරු, අංක, තිත්, ඉරි හෝ underscore (උපරිම 40)",
+    "maxLevel_belowReorder": "Reorder මට්ටමට වඩා අඩු විය නොහැක",
+    "max_decimals": "උපරිම දශම ස්ථාන 4ක් පමණි",
+    "quantity_zero": "ප්‍රමාණය ශුන්‍ය විය නොහැක",
+    "lines_duplicate": "එක් භාණ්ඩයක්/batch එකක් එක් වරක් පමණි",
+    "date_invalid": "වලංගු දිනයක් ඇතුළත් කරන්න",
+    "transfer_sameWarehouse": "වෙනත් ගමනාන්ත ගබඩාවක් තෝරන්න"
   },
   "auth": {
     "footer": "© StockFlow · encryption, 2FA සහ audit trails මඟින් ආරක්ෂිතයි",
@@ -261,7 +269,7 @@
       },
       "demo": {
         "title": "නියැදි දත්ත සමඟ බලන්න",
-        "description": "Inventory module එක ක්‍රියාත්මක වූ විට නියැදි භාණ්ඩ සහ තොග එක් කෙරේ."
+        "description": "සෑම තිරයක්ම වහාම උත්සාහ කිරීමට ආරම්භක තොග සහිත නියැදි භාණ්ඩ එක් කරයි."
       },
       "import": {
         "title": "Excel වෙතින් import කරන්න",
@@ -381,7 +389,10 @@
     "returnInward": "Return inward (පාරිභෝගිකයාගෙන් ආපසු)",
     "creditNote": "Credit note",
     "stockAdjustment": "තොග ගැලපීම",
-    "stockTransfer": "තොග මාරු කිරීම"
+    "stockTransfer": "තොග මාරු කිරීම",
+    "stockIn": "Stock in",
+    "stockOut": "Stock out",
+    "stockCount": "තොග ගණන් කිරීම"
   },
   "nav": {
     "label": "ප්‍රධාන සංචාලනය",
@@ -409,7 +420,8 @@
       "roles": "භූමිකා සහ අවසර",
       "security": "ආරක්ෂාව",
       "audit": "Audit log",
-      "settings": "සැකසුම්"
+      "settings": "සැකසුම්",
+      "contacts": "සම්බන්ධතා"
     },
     "breadcrumb": "Breadcrumb"
   },
@@ -425,7 +437,9 @@
     "menu": "මෙනුව විවෘත කරන්න",
     "search": "සොයන්න හෝ යන්න…",
     "notifications": "දැනුම්දීම්",
-    "noNotifications": "අලුත් දැනුම්දීම් නැත"
+    "noNotifications": "අලුත් දැනුම්දීම් නැත",
+    "notificationsCount": "අනතුරු ඇඟවීම් {count}",
+    "viewAllAlerts": "සියලු අනතුරු ඇඟවීම් බලන්න"
   },
   "errors": {
     "notFound": "මෙම පිටුව නොපවතී.",
@@ -451,7 +465,11 @@
       "twoFactorOn": "2FA සක්‍රියයි",
       "twoFactorOff": "2FA අක්‍රියයි",
       "protected": "ඔබේ ගිණුම ආරක්ෂිතයි",
-      "enable2fa": "Two-factor authentication සක්‍රිය කරන්න"
+      "enable2fa": "Two-factor authentication සක්‍රිය කරන්න",
+      "stockValue": "තොග වටිනාකම",
+      "productsCount": "භාණ්ඩ {count}",
+      "alerts": "තොග අනතුරු ඇඟවීම්",
+      "alertsBreakdown": "අඩු {low} · අවසන් {out}"
     },
     "checklist": {
       "title": "StockFlow සැකසීම අවසන් කරන්න",
@@ -461,7 +479,7 @@
         "team": "කණ්ඩායම් සාමාජිකයෙකුට ආරාධනා කරන්න",
         "twoFactor": "Two-factor authentication සක්‍රිය කරන්න",
         "products": "ඔබේ භාණ්ඩ එක් කරන්න",
-        "grn": "පළමු GRN එක සටහන් කරන්න"
+        "stockIn": "පළමු stock-in එක සටහන් කරන්න"
       },
       "progress": "{total}න් {done}ක් අවසන්",
       "dismiss": "සැකසීමේ මාර්ගෝපදේශය සඟවන්න"
@@ -503,6 +521,10 @@
     },
     "tax": {
       "title": "බදු අනුපාත"
+    },
+    "stockAlerts": {
+      "title": "තොග අනතුරු ඇඟවීම්",
+      "none": "සියලු තොග මට්ටම් හොඳ තත්ත්වයේ"
     }
   },
   "planned": {
@@ -740,7 +762,414 @@
       "grn": "භාණ්ඩ ලැබීම (GRN)",
       "salesOrder": "විකුණුම් ඇණවුම",
       "invoice": "ඉන්වොයිසිය",
-      "inviteUser": "පරිශීලකයෙකුට ආරාධනා"
+      "inviteUser": "පරිශීලකයෙකුට ආරාධනා",
+      "adjustment": "තොග ගැලපීම",
+      "count": "තොග ගණන් කිරීම",
+      "product": "භාණ්ඩයක්",
+      "customer": "පාරිභෝගිකයෙක්",
+      "supplier": "සැපයුම්කරුවෙක්"
+    }
+  },
+  "list": {
+    "range": "{total}න් {from}–{to}",
+    "prev": "පෙර පිටුව",
+    "next": "ඊළඟ පිටුව"
+  },
+  "inventory": {
+    "title": "තොග",
+    "subtitle": "තොග මට්ටම්, චලනයන් සහ ගබඩා.",
+    "nav": {
+      "overview": "දළ විශ්ලේෂණය",
+      "products": "භාණ්ඩ",
+      "documents": "තොග ලේඛන",
+      "movements": "තොග ලෙජරය",
+      "warehouses": "ගබඩා"
+    },
+    "docTypes": {
+      "stock_in": "Stock in",
+      "stock_out": "Stock out",
+      "adjustment": "ගැලපීම",
+      "count": "තොග ගණන් කිරීම",
+      "transfer": "මාරු කිරීම",
+      "opening": "ආරම්භක තොග"
+    },
+    "docStatus": {
+      "posted": "සටහන් කළා",
+      "in_transit": "මාර්ගයේ",
+      "received": "ලැබුණා"
+    },
+    "reasons": {
+      "damaged": "හානි වූ",
+      "lost": "නැති වූ / සොරකම්",
+      "expired": "කල් ඉකුත් වූ",
+      "found": "හමු වූ",
+      "correction": "නිවැරදි කිරීම",
+      "sample": "නොමිලේ නියැදි",
+      "other": "වෙනත්",
+      "sale": "විකිණීම",
+      "internal_use": "අභ්‍යන්තර භාවිතය",
+      "return_to_supplier": "සැපයුම්කරුට ආපසු",
+      "write_off": "කපා හැරීම"
+    },
+    "movementTypes": {
+      "opening": "ආරම්භක",
+      "stock_in": "Stock in",
+      "stock_out": "Stock out",
+      "adjustment_in": "ගැලපීම +",
+      "adjustment_out": "ගැලපීම −",
+      "transfer_out": "මාරු කිරීම (පිටතට)",
+      "transfer_in": "මාරු කිරීම (ඇතුළට)"
+    },
+    "status": {
+      "service": "සේවාව",
+      "out": "තොග අවසන්",
+      "low": "අඩු තොග",
+      "over": "අතිරික්ත",
+      "in": "තොග ඇත"
+    },
+    "picker": {
+      "placeholder": "භාණ්ඩයක් තෝරන්න…",
+      "search": "නම, SKU හෝ barcode මඟින් සොයන්න",
+      "loading": "සොයමින්…",
+      "empty": "භාණ්ඩ හමු නොවීය",
+      "batched": "Batch ලුහුබඳිනවා"
+    },
+    "form": {
+      "typeLabel": "ලේඛන වර්ගය",
+      "warehouse": "ගබඩාව",
+      "fromWarehouse": "සිට (ගබඩාව)",
+      "toWarehouse": "දක්වා (ගබඩාව)",
+      "supplier": "සැපයුම්කරු",
+      "customer": "පාරිභෝගිකයා",
+      "optional": "අත්‍යවශ්‍ය නැත",
+      "reason": "හේතුව",
+      "date": "දිනය",
+      "reference": "යොමුව",
+      "referencePlaceholder": "ඉන්වොයිස් / බෙදාහැරීමේ සටහන් අංකය",
+      "items": "අයිතම",
+      "scan": "Barcode scan කරන්න හෝ SKU type කර Enter",
+      "scanNotFound": "{code} කේතය සහිත භාණ්ඩයක් නැත",
+      "scanFailed": "කේතය සොයා ගැනීමට නොහැකි විය",
+      "product": "භාණ්ඩය",
+      "system": "පද්ධති ප්‍රමාණය",
+      "onHand": "අත ඇති",
+      "batch": "Batch",
+      "direction": "දිශාව",
+      "counted": "ගණන් කළ",
+      "quantity": "ප්‍රමාණය",
+      "unitCost": "ඒකක පිරිවැය",
+      "variance": "වෙනස",
+      "lineValue": "වටිනාකම",
+      "after": "පසුව",
+      "noBatch": "—",
+      "batchNo": "Batch අංකය",
+      "expiry": "කල් ඉකුත් දිනය",
+      "fefo": "ස්වයංක්‍රීය (මුලින් කල් ඉකුත් වන එක)",
+      "remove": "අඩු කරන්න −",
+      "add": "එක් කරන්න +",
+      "atCost": "සාමාන්‍ය පිරිවැයට",
+      "removeLine": "පේළිය ඉවත් කරන්න",
+      "addLine": "පේළියක් එක් කරන්න",
+      "total": "එකතුව",
+      "note": "සටහන",
+      "finalNote": "සටහන් කළ ලේඛන සංස්කරණය කළ නොහැක. වැරදි ගැලපීමකින් නිවැරදි කරන්න.",
+      "cancel": "අවලංගු කරන්න",
+      "post": "{type} සටහන් කරන්න",
+      "posted": "{number} සටහන් කළා",
+      "errors": {
+        "warehouse": "ගබඩාවක් තෝරන්න",
+        "toWarehouse": "වෙනත් ගමනාන්ත ගබඩාවක් තෝරන්න",
+        "noLines": "අවම වශයෙන් එක් භාණ්ඩයක් එක් කරන්න",
+        "quantity": "{sku} සඳහා වලංගු ප්‍රමාණයක් ඇතුළත් කරන්න",
+        "batch": "{sku} සඳහා batch අංකයක් අවශ්‍යයි"
+      }
+    },
+    "productForm": {
+      "newTitle": "නව භාණ්ඩය",
+      "editTitle": "භාණ්ඩය සංස්කරණය",
+      "newSubtitle": "ඔබ මිලදී ගන්නා, ගබඩා කරන හෝ විකුණන අයිතමයක් එක් කරන්න.",
+      "create": "භාණ්ඩය සාදන්න",
+      "updated": "භාණ්ඩය යාවත්කාලීන කළා",
+      "created": "{sku} භාණ්ඩය සෑදුවා",
+      "name": "නම",
+      "sku": "SKU",
+      "skuInvalid": "අකුරු, අංක, . _ - පමණි",
+      "skuHint": "ස්වයංක්‍රීයව සෑදීමට හිස්ව තබන්න",
+      "barcode": "Barcode",
+      "category": "කාණ්ඩය",
+      "unit": "ඒකකය",
+      "pricing": "මිල ගණන්",
+      "cost": "පිරිවැය මිල",
+      "price": "විකුණුම් මිල",
+      "tax": "බද්ද",
+      "stockControl": "තොග පාලනය",
+      "reorder": "Reorder මට්ටම",
+      "reorderHint": "තොග මෙම මට්ටමට වැටුණු විට අනතුරු අඟවන්න",
+      "max": "උපරිම මට්ටම",
+      "maxHint": "තොග මෙය ඉක්මවූ විට අනතුරු අඟවන්න",
+      "maxInvalid": "Reorder මට්ටමට වඩා අඩු විය නොහැක",
+      "trackBatches": "Batches සහ කල් ඉකුත් වීම ලුහුබඳින්න",
+      "trackBatchesHint": "ලැබීම් වලදී batch අංකය අවශ්‍ය කර, මුලින් කල් ඉකුත් වන එක මුලින් නිකුත් කරන්න",
+      "type": "වර්ගය",
+      "types": {
+        "stock": "තොග අයිතමය",
+        "service": "සේවාව (තොග නැත)"
+      },
+      "active": "සක්‍රිය",
+      "description": "විස්තරය"
+    },
+    "products": {
+      "search": "නම, SKU හෝ barcode සොයන්න",
+      "filters": {
+        "stock": "තොග",
+        "allStock": "සියලු තොග",
+        "inStock": "තොග ඇති",
+        "low": "අඩු හෝ අවසන්",
+        "out": "තොග අවසන්",
+        "category": "කාණ්ඩය",
+        "allCategories": "සියලු කාණ්ඩ",
+        "warehouse": "ගබඩාව",
+        "allWarehouses": "සියලු ගබඩා",
+        "status": "තත්ත්වය",
+        "active": "සක්‍රිය",
+        "inactive": "අක්‍රිය"
+      },
+      "new": "නව භාණ්ඩය",
+      "noMatch": "මෙම පෙරහන්වලට ගැලපෙන භාණ්ඩ නැත",
+      "emptyTitle": "තවම භාණ්ඩ නැත",
+      "emptyBody": "ඔබේ පළමු භාණ්ඩය එක් කර, ලුහුබැඳීම ආරම්භ කිරීමට stock-in එකක් සටහන් කරන්න.",
+      "columns": {
+        "product": "භාණ්ඩය",
+        "category": "කාණ්ඩය",
+        "onHand": "අත ඇති",
+        "status": "තත්ත්වය",
+        "cost": "පිරිවැය",
+        "price": "මිල",
+        "value": "තොග වටිනාකම"
+      },
+      "batched": "Batch ලුහුබඳිනවා"
+    },
+    "product": {
+      "back": "භාණ්ඩ",
+      "inactive": "අක්‍රිය",
+      "actions": {
+        "stock_in": "Stock in",
+        "stock_out": "Stock out",
+        "adjustment": "ගැලපීම",
+        "count": "ගණන් කිරීම"
+      },
+      "edit": "සංස්කරණය",
+      "onHand": "අත ඇති",
+      "value": "තොග වටිනාකම",
+      "avgCost": "සාමාන්‍ය පිරිවැය",
+      "margin": "ලාභ ආන්තිකය {pct}%",
+      "reorder": "Reorder මට්ටම",
+      "max": "උපරිම {qty}",
+      "byWarehouse": "ගබඩා අනුව තොග",
+      "noStock": "තවම තොග සටහන් කර නැත.",
+      "batches": "Batches",
+      "noBatches": "තොගයේ batches නැත.",
+      "expires": "කල් ඉකුත් වේ {date}",
+      "noExpiry": "කල් ඉකුත් දිනයක් නැත",
+      "history": "මෑත චලනයන්",
+      "fullLedger": "සම්පූර්ණ ලෙජරය",
+      "noMovements": "තවම චලනයන් නැත.",
+      "cols": {
+        "date": "දිනය",
+        "type": "වර්ගය",
+        "document": "ලේඛනය",
+        "warehouse": "ගබඩාව",
+        "qty": "ප්‍රමාණය",
+        "cost": "ඒකක පිරිවැය",
+        "balance": "ශේෂය"
+      }
+    },
+    "documents": {
+      "search": "අංකය හෝ යොමුව සොයන්න",
+      "type": "වර්ගය",
+      "allTypes": "සියලු වර්ග",
+      "status": "තත්ත්වය",
+      "allStatuses": "සියලු තත්ත්ව",
+      "posted": "සටහන් කළා",
+      "inTransit": "මාර්ගයේ",
+      "received": "ලැබුණා",
+      "emptyTitle": "තවම තොග ලේඛන නැත",
+      "emptyBody": "Stock in, stock out, ගැලපීම්, ගණන් කිරීම් සහ මාරු කිරීම් මෙහි දිස්වේ.",
+      "cols": {
+        "number": "අංකය",
+        "type": "වර්ගය",
+        "warehouse": "ගබඩාව",
+        "party": "සැපයුම්කරු / පාරිභෝගිකයා",
+        "value": "වටිනාකම",
+        "status": "තත්ත්වය",
+        "date": "දිනය"
+      }
+    },
+    "document": {
+      "receivedToast": "මාරු කිරීම ලැබුණා",
+      "from": "සිට",
+      "warehouse": "ගබඩාව",
+      "to": "දක්වා",
+      "supplier": "සැපයුම්කරු",
+      "customer": "පාරිභෝගිකයා",
+      "reason": "හේතුව",
+      "date": "දිනය",
+      "reference": "යොමුව",
+      "postedBy": "සටහන් කළේ",
+      "receivedAt": "ලැබුණේ",
+      "back": "තොග ලේඛන",
+      "print": "මුද්‍රණය",
+      "receive": "මාරු කිරීම ලබා ගන්න",
+      "inTransitNote": "මෙම තොගය මූලාශ්‍ර ගබඩාවෙන් පිටව ගොස් ඇති අතර, ලැබුණු පසු {to} වෙත එක් කෙරේ.",
+      "note": "සටහන",
+      "items": "අයිතම",
+      "cols": {
+        "product": "භාණ්ඩය",
+        "batch": "Batch",
+        "system": "පද්ධතිය",
+        "counted": "ගණන් කළ",
+        "qty": "ප්‍රමාණය",
+        "variance": "වෙනස",
+        "unitCost": "ඒකක පිරිවැය",
+        "value": "වටිනාකම",
+        "type": "වර්ගය",
+        "warehouse": "ගබඩාව",
+        "balance": "පසු ශේෂය"
+      },
+      "total": "මුළු වටිනාකම",
+      "totalAdjusted": "ගැලපූ වටිනාකම",
+      "ledger": "ලෙජර සටහන්",
+      "noMovements": "තොග වෙනස් වූයේ නැත (ගණන් කිරීම් ගැලපුණා)."
+    },
+    "movements": {
+      "type": "වර්ගය",
+      "allTypes": "සියලු චලන වර්ග",
+      "warehouse": "ගබඩාව",
+      "allWarehouses": "සියලු ගබඩා",
+      "product": "භාණ්ඩය",
+      "immutable": "ලෙජර සටහන් සංස්කරණය හෝ මැකීම කළ නොහැක",
+      "emptyTitle": "තවම චලනයන් නැත",
+      "emptyBody": "සෑම තොග වෙනසක්ම ස්ථිරව මෙහි සටහන් වේ.",
+      "cols": {
+        "date": "දිනය",
+        "product": "භාණ්ඩය",
+        "type": "වර්ගය",
+        "document": "ලේඛනය",
+        "warehouse": "ගබඩාව",
+        "qty": "ප්‍රමාණය",
+        "value": "වටිනාකම",
+        "balance": "ශේෂය",
+        "user": "කළේ"
+      }
+    },
+    "warehouses": {
+      "saved": "ගබඩාව සුරැකිණි",
+      "invalid": "නම සහ කේතය පරීක්ෂා කරන්න (අකුරු, අංක හෝ ඉරි 2–12)",
+      "edit": "ගබඩාව සංස්කරණය",
+      "new": "නව ගබඩාව",
+      "name": "නම",
+      "code": "කේතය",
+      "codeHint": "කෙටි අනන්‍ය කේතයක්, උදා. CMB",
+      "address": "ලිපිනය",
+      "location": "ස්ථානය",
+      "default": "ප්‍රධාන ගබඩාව",
+      "active": "සක්‍රිය",
+      "activeHint": "අක්‍රිය ගබඩාවලට තොග ලබා ගැනීමට හෝ නිකුත් කිරීමට නොහැක",
+      "subtitle": "ඔබ තොග තබා ගන්නා වෙළඳසැල්, ගබඩා සහ ශාඛා.",
+      "defaultBadge": "ප්‍රධාන",
+      "inactive": "අක්‍රිය",
+      "noAddress": "ලිපිනයක් නැත",
+      "products": "භාණ්ඩ",
+      "units": "ඒකක",
+      "map": "සිතියම"
+    },
+    "alerts": {
+      "detail": {
+        "out_of_stock": "තොග ඉතිරි නැත · reorder {threshold}",
+        "low_stock": "{qty}ක් ඉතිරියි · reorder {threshold}",
+        "overstock": "{qty}ක් ඇත · උපරිම {threshold}",
+        "expiring": "Batch {batch} කල් ඉකුත් වේ {date} · {qty}ක් ඉතිරියි",
+        "expired": "Batch {batch} කල් ඉකුත් විය {date} · {qty}ක් ඉතිරියි"
+      },
+      "types": {
+        "out_of_stock": "අවසන්",
+        "low_stock": "අඩුයි",
+        "overstock": "අතිරික්ත",
+        "expiring": "කල් ඉකුත් වේ",
+        "expired": "කල් ඉකුත්"
+      }
+    },
+    "overview": {
+      "stats": {
+        "value": "තොග වටිනාකම",
+        "products": "භාණ්ඩ",
+        "low": "අඩු තොග",
+        "out": "තොග අවසන්",
+        "expiring": "කල් ඉකුත් වන batches"
+      },
+      "alerts": "අවධානය අවශ්‍යයි",
+      "noAlerts": "දැනට කිසිවකට අවධානය අවශ්‍ය නැත",
+      "byWarehouse": "ගබඩා අනුව වටිනාකම",
+      "recent": "මෑත ලේඛන",
+      "viewAll": "සියල්ල බලන්න",
+      "noDocuments": "තවම ලේඛන නැත."
+    }
+  },
+  "contacts": {
+    "title": "සම්බන්ධතා",
+    "subtitle": "ඔබ විකුණන පාරිභෝගිකයින් සහ ඔබ මිලදී ගන්නා සැපයුම්කරුවන්.",
+    "customers": "පාරිභෝගිකයින්",
+    "suppliers": "සැපයුම්කරුවන්",
+    "search": "නම, කේතය, දුරකථනය හෝ ඊමේල් සොයන්න",
+    "status": "තත්ත්වය",
+    "active": "සක්‍රිය",
+    "inactive": "අක්‍රිය",
+    "new": {
+      "customer": "නව පාරිභෝගිකයා",
+      "supplier": "නව සැපයුම්කරු"
+    },
+    "noMatch": "ඔබේ සෙවුමට ගැලපෙන සම්බන්ධතා නැත",
+    "empty": {
+      "customer": "තවම පාරිභෝගිකයින් නැත",
+      "supplier": "තවම සැපයුම්කරුවන් නැත"
+    },
+    "cols": {
+      "name": "නම",
+      "contact": "සම්බන්ධතාව",
+      "city": "නගරය",
+      "terms": "ගෙවීම් කොන්දේසි",
+      "credit": "ණය සීමාව"
+    },
+    "map": "Google Maps හි විවෘත කරන්න",
+    "days": "දින {n}",
+    "cash": "මුදල් / වහාම",
+    "form": {
+      "edit": {
+        "customer": "පාරිභෝගිකයා සංස්කරණය",
+        "supplier": "සැපයුම්කරු සංස්කරණය"
+      },
+      "new": {
+        "customer": "නව පාරිභෝගිකයා",
+        "supplier": "නව සැපයුම්කරු"
+      },
+      "name": "නම",
+      "code": "කේතය",
+      "codeHint": "ස්වයංක්‍රීයව සෑදීමට හිස්ව තබන්න",
+      "codeInvalid": "අකුරු, අංක, . _ - (උපරිම 20)",
+      "contactName": "සම්බන්ධ කරගත යුතු පුද්ගලයා",
+      "phone": "දුරකථනය",
+      "email": "ඊමේල්",
+      "taxNo": "VAT / බදු අංකය",
+      "paymentTerms": "ගෙවීම් කොන්දේසි (දින)",
+      "paymentTermsHint": "0 යනු බෙදාහැරීමේදී මුදල්",
+      "creditLimit": "ණය සීමාව",
+      "address": "ලිපිනය",
+      "city": "නගරය",
+      "location": "ස්ථානය",
+      "notes": "සටහන්",
+      "active": "සක්‍රිය",
+      "updated": "සම්බන්ධතාව යාවත්කාලීන කළා",
+      "created": "සම්බන්ධතාව සෑදුවා"
     }
   }
 }
