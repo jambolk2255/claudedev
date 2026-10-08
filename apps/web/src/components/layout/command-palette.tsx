@@ -7,7 +7,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { usePathname, useRouter } from "@/i18n/navigation";
-import { visibleNav, visibleSettings } from "./nav";
+import { navAccess, visibleNav, visibleSettings } from "./nav";
 
 const itemClass =
   "flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5 text-sm outline-none data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground [&_svg]:size-4 [&_svg]:text-muted-foreground";
@@ -29,7 +29,10 @@ export function CommandPalette({
   const pathname = usePathname();
   const locale = useLocale();
   const { resolvedTheme, setTheme } = useTheme();
-  const groups = [...visibleNav(user.organization.modules, user.permissions), { key: "settings", items: visibleSettings(user.permissions) }];
+  const groups = [
+    ...visibleNav(user.organization.modules, user.permissions, navAccess(user)),
+    { key: "settings", items: visibleSettings(user.permissions, navAccess(user)) },
+  ];
 
   function run(fn: () => void) {
     onOpenChange(false);

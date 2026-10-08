@@ -14,7 +14,9 @@ import {
   FileText,
   KeyRound,
   Landmark,
+  CreditCard,
   LayoutDashboard,
+  Server,
   MonitorSmartphone,
   MapPinned,
   Package,
@@ -36,6 +38,10 @@ export interface NavItem {
   permission?: Permission;
   /** Delivery phase for modules that are not built yet. */
   phase?: number;
+  /** Only in SaaS mode (the company has a subscription). */
+  saasOnly?: boolean;
+  /** Only for platform operators. */
+  platformOnly?: boolean;
 }
 
 export interface NavGroup {
@@ -63,6 +69,7 @@ export const NAV: NavGroup[] = [
       { key: "maps", href: "/maps", icon: MapPinned, module: "maps" },
     ],
   },
+  { key: "platform", items: [{ key: "platform", href: "/admin", icon: Server, platformOnly: true }] },
 ];
 
 /** Secondary navigation inside the Settings area. */
@@ -72,6 +79,7 @@ export const SETTINGS_NAV: NavItem[] = [
   { key: "roles", href: "/settings/roles", icon: KeyRound, permission: "roles.view" },
   { key: "security", href: "/settings/security", icon: ShieldCheck },
   { key: "audit", href: "/settings/audit", icon: ScrollText, permission: "audit.view" },
+  { key: "billing", href: "/settings/billing", icon: CreditCard, permission: "organization.view", saasOnly: true },
 ];
 
 export interface CreateAction {
@@ -131,16 +139,27 @@ export const CREATE_ACTIONS: CreateAction[] = [
   { key: "inviteUser", icon: UserPlus, group: "people", href: "/settings/users?invite=1", permission: "users.invite" },
 ];
 
+export interface NavAccess {
+  platformAdmin?: boolean;
+  saas?: boolean;
+}
+
 const allowed = (item: { module?: ModuleKey; permission?: Permission }, modules: string[], permissions: string[]) =>
   (!item.module || modules.includes(item.module)) && (!item.permission || permissions.includes(item.permission));
+const accessible = (item: NavItem, access: NavAccess) => (!item.platformOnly || !!access.platformAdmin) && (!item.saasOnly || !!access.saas);
 
-export function visibleNav(modules: string[], permissions: string[]): NavGroup[] {
-  return NAV.map((g) => ({ ...g, items: g.items.filter((i) => allowed(i, modules, permissions)) })).filter((g) => g.items.length > 0);
+export function visibleNav(modules: string[], permissions: string[], access: NavAccess = {}): NavGroup[] {
+  return NAV.map((g) => ({ ...g, items: g.items.filter((i) => allowed(i, modules, permissions) && accessible(i, access)) })).filter((g) => g.items.length > 0);
 }
 
-export function visibleSettings(permissions: string[]): NavItem[] {
-  return SETTINGS_NAV.filter((i) => allowed(i, [], permissions));
+export function visibleSettings(permissions: string[], access: NavAccess = {}): NavItem[] {
+  return SETTINGS_NAV.filter((i) => allowed(i, [], permissions) && accessible(i, access));
 }
+
+export const navAccess = (user: { platformAdmin: boolean; subscription: unknown }): NavAccess => ({
+  platformAdmin: user.platformAdmin,
+  saas: !!user.subscription,
+});
 
 export function visibleCreateActions(modules: string[], permissions: string[]): CreateAction[] {
   return CREATE_ACTIONS.filter((a) => allowed(a, modules, permissions));

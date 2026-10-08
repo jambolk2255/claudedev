@@ -6,9 +6,10 @@ import { X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useState } from "react";
+import { SubscriptionBanner } from "@/components/billing/subscription-banner";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useMe } from "@/hooks/use-auth";
-import { useRouter } from "@/i18n/navigation";
+import { usePathname, useRouter } from "@/i18n/navigation";
 import { ApiError, api, setSessionExpiredHandler } from "@/lib/api";
 import { CommandPalette } from "./command-palette";
 import { Sidebar, SidebarFooter, SidebarNav, WorkspaceHeader } from "./sidebar";
@@ -40,6 +41,7 @@ function ShellSkeleton() {
 export function AppShell({ children }: { children: React.ReactNode }) {
   const t = useTranslations("nav");
   const router = useRouter();
+  const pathname = usePathname();
   const qc = useQueryClient();
   const me = useMe();
   const [collapsed, setCollapsed] = useState(false);
@@ -63,8 +65,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (me.error instanceof ApiError && me.error.status === 401) toLogin();
-    if (me.data && !me.data.organization.onboardingCompleted && me.data.permissions.includes("organization.manage")) router.replace("/onboarding");
-  }, [me.error, me.data, router, toLogin]);
+    // Platform operators can use the console without setting up their own company first.
+    const inConsole = me.data?.platformAdmin && pathname.startsWith("/admin");
+    if (me.data && !inConsole && !me.data.organization.onboardingCompleted && me.data.permissions.includes("organization.manage"))
+      router.replace("/onboarding");
+  }, [me.error, me.data, router, toLogin, pathname]);
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
@@ -144,6 +149,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       </DialogPrimitive.Root>
 
       <div className="flex min-w-0 flex-1 flex-col">
+        <SubscriptionBanner user={user} />
         <Topbar user={user} onMenu={() => setMobileOpen(true)} onSearch={() => setPaletteOpen(true)} />
         <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">{children}</main>
       </div>

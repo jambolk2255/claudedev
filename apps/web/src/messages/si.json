@@ -86,7 +86,8 @@
       "back": "වෙනත් ගිණුමක් භාවිත කරන්න",
       "locked": "අසාර්ථක උත්සාහයන් වැඩියි. ඔබේ ගිණුම මිනිත්තු 15කට අගුළු දමා ඇත.",
       "invalidCode": "කේතය වැරදියි. නැවත උත්සාහ කරන්න.",
-      "invalid": "ඊමේල් හෝ මුරපදය වැරදියි."
+      "invalid": "ඊමේල් හෝ මුරපදය වැරදියි.",
+      "startTrial": "අලුත්ද? දින {days} නොමිලේ අත්හදා බැලීම අරඹන්න"
     },
     "register": {
       "title": "ඔබේ සමාගම සකසන්න",
@@ -101,7 +102,9 @@
       "haveAccount": "දැනටමත් ගිණුමක් තිබේද?",
       "toLogin": "ඇතුළු වන්න",
       "closedTitle": "ලියාපදිංචිය වසා ඇත",
-      "closedBody": "මෙම workspace එකට දැනටමත් හිමිකරුවෙක් සිටී. ආරාධනාවක් එවන්න කියා පරිපාලකගෙන් ඉල්ලන්න."
+      "closedBody": "මෙම workspace එකට දැනටමත් හිමිකරුවෙක් සිටී. ආරාධනාවක් එවන්න කියා පරිපාලකගෙන් ඉල්ලන්න.",
+      "trialBadge": "දින {days} නොමිලේ · කාඩ්පතක් අවශ්‍ය නැත",
+      "trialSubtitle": "ඔබගේ සමාගම් ගිණුම සාදන්න. ඉතිරි සියල්ල මඟපෙන්වන විශාරදයකින් සකසනු ඇත."
     },
     "invite": {
       "title": "ඔබේ කණ්ඩායමට එක්වන්න",
@@ -404,7 +407,8 @@
       "overview": "දළ විශ්ලේෂණය",
       "operations": "මෙහෙයුම්",
       "insights": "මුදල් සහ තොරතුරු",
-      "settings": "සැකසුම්"
+      "settings": "සැකසුම්",
+      "platform": "වේදිකාව"
     },
     "items": {
       "dashboard": "Dashboard",
@@ -421,7 +425,9 @@
       "security": "ආරක්ෂාව",
       "audit": "Audit log",
       "settings": "සැකසුම්",
-      "contacts": "සම්බන්ධතා"
+      "contacts": "සම්බන්ධතා",
+      "platform": "වේදිකා පරිපාලනය",
+      "billing": "බිල්පත් සහ සැලසුම"
     },
     "breadcrumb": "Breadcrumb"
   },
@@ -573,7 +579,11 @@
         "stock_grn": "භාණ්ඩ භාර ගත්තා (GRN)",
         "stock_delivery": "භාණ්ඩ බෙදාහැරියා",
         "stock_return_outward": "සැපයුම්කරුවෙකුට ආපසු යැවුවා",
-        "stock_return_inward": "පාරිභෝගික ආපසු භාරදීමක් භාර ගත්තා"
+        "stock_return_inward": "පාරිභෝගික ආපසු භාරදීමක් භාර ගත්තා",
+        "billing_payhere": "ඔන්ලයින් ගෙවීමක් ආරම්භ කළා",
+        "billing_bank_transfer": "බැංකු මාරුවක් දැනුම් දුන්නා",
+        "billing_paid": "දායකත්ව ගෙවීම ලැබුණා",
+        "billing_subscription_changed": "StockFlow විසින් දායකත්වය වෙනස් කළා"
       }
     },
     "tax": {
@@ -1922,5 +1932,186 @@
     "noKey": "අන්තර්ක්‍රියාකාරී සිතියම බැලීමට Google Maps API යතුරක් (NEXT_PUBLIC_GOOGLE_MAPS_API_KEY) එක් කරන්න. ස්ථාන පහත ලැයිස්තුගත කර ඇත.",
     "emptyTitle": "තවම ස්ථාන නැත",
     "emptyBody": "මෙහි දැකීමට ගබඩා, පාරිභෝගිකයින් සහ සැපයුම්කරුවන්ගේ ස්ථාන සලකුණු කරන්න."
+  },
+  "billing": {
+    "title": "සැලසුම සහ බිල්පත්",
+    "subtitle": "ඔබගේ දායකත්වය, භාවිතය සහ ගෙවීම්.",
+    "disabled": "මෙම ස්ථාපනයේ බිල්පත් භාවිත නොකෙරේ.",
+    "currentPlan": "වත්මන් සැලසුම",
+    "trialEnds": "අත්හදා බැලීම {date} අවසන් වේ",
+    "paidUntil": "{date} දක්වා ගෙවා ඇත",
+    "daysLeft": "{count, plural, =0 {අද අවසන් වේ} other {දින # ක් ඉතිරියි}}",
+    "readOnlyHint": "ඔබගේ ගිණුම කියවීමට පමණි. දිගටම වැඩ කිරීමට පහතින් සැලසුමක් තෝරන්න.",
+    "suspendedHint": "ඔබගේ ගිණුම අත්හිටුවා ඇත. පහතින් ගෙවන්න හෝ සහාය අමතන්න.",
+    "usedOf": "{max} න් {used}",
+    "usedUnlimited": "{used} · සීමා රහිත",
+    "limits": {
+      "users": "පරිශීලකයින්",
+      "warehouses": "ගබඩා",
+      "products": "භාණ්ඩ"
+    },
+    "upTo": {
+      "users": "පරිශීලකයින් {count} දක්වා",
+      "warehouses": "ගබඩා {count} දක්වා",
+      "products": "භාණ්ඩ {count} දක්වා"
+    },
+    "unlimited": {
+      "users": "සීමා රහිත පරිශීලකයින්",
+      "warehouses": "සීමා රහිත ගබඩා",
+      "products": "සීමා රහිත භාණ්ඩ"
+    },
+    "pendingTransfer": "{plan} සඳහා ඔබගේ බැංකු මාරුව ({number}) අපි පරීක්ෂා කරමින් සිටිමු. තහවුරු වූ වහාම සැලසුම යාවත්කාලීන වේ.",
+    "choosePlan": "සැලසුමක් තෝරන්න",
+    "monthly": "මාසික",
+    "yearly": "වාර්ෂික",
+    "save": "මාස 2 ක් නොමිලේ",
+    "perMonth": "මාසය",
+    "perYear": "වර්ෂය",
+    "popular": "වඩාත් ජනප්‍රිය",
+    "choose": "සැලසුම තෝරන්න",
+    "renew": "අලුත් කරන්න",
+    "history": "ගෙවීම්",
+    "noHistory": "තවම ගෙවීම් නැත.",
+    "until": "{date} දක්වා",
+    "cancel": "අවලංගු කරන්න",
+    "cols": {
+      "number": "අංකය",
+      "date": "දිනය",
+      "plan": "සැලසුම",
+      "method": "ක්‍රමය",
+      "amount": "මුදල",
+      "status": "තත්ත්වය"
+    },
+    "status": {
+      "trialing": "අත්හදා බැලීම",
+      "active": "සක්‍රිය",
+      "past_due": "ගෙවීම ප්‍රමාදයි",
+      "cancelled": "අවලංගුයි",
+      "expired": "කල් ඉකුත්",
+      "suspended": "අත්හිටුවා ඇත"
+    },
+    "invoiceStatus": {
+      "pending": "බලාපොරොත්තුවෙන්",
+      "paid": "ගෙවා ඇත",
+      "cancelled": "අවලංගුයි",
+      "failed": "අසාර්ථකයි"
+    },
+    "methods": {
+      "payhere": "කාඩ්පත / PayHere",
+      "bank_transfer": "බැංකු මාරුව",
+      "manual": "අතින්"
+    },
+    "payTitle": "{plan} සඳහා ගෙවන්න",
+    "oneMonth": "මාස 1",
+    "oneYear": "වසර 1",
+    "method": "ගෙවීමේ ක්‍රමය",
+    "payOnline": "ඔන්ලයින් ගෙවන්න",
+    "payOnlineHint": "PayHere හරහා Visa, Mastercard, Amex, eZ Cash, mCash",
+    "bankTransfer": "බැංකු මාරුව",
+    "bankTransferHint": "අපගේ ගිණුමට ගෙවන්න; පරීක්ෂා කළ පසු සක්‍රිය කරමු",
+    "reference": "මාරු කිරීමේ යොමුව",
+    "referenceHint": "බැංකුව, දිනය සහ ස්ලිප් හෝ යොමු අංකය",
+    "payNow": "{amount} ගෙවන්න",
+    "iHavePaid": "මම මුදල් මාරු කළා",
+    "transferRecorded": "ස්තූතියි! ගෙවීම {number} තහවුරු කිරීමට බලාපොරොත්තුවෙන්.",
+    "paidNotice": "ස්තූතියි — ගෙවීම {number} ලැබුණා. ඔබගේ සැලසුම මොහොතකින් යාවත්කාලීන වේ.",
+    "cancelledNotice": "ගෙවීම අවලංගු විය. ඕනෑම වේලාවක නැවත උත්සාහ කළ හැක.",
+    "banner": {
+      "trial": "ඔබගේ නොමිලේ අත්හදා බැලීම දින {days} කින් අවසන් වේ.",
+      "renew": "ඔබගේ {plan} සැලසුම දින {days} කින් අලුත් කළ යුතුයි.",
+      "pastDue": "ඔබගේ ගෙවීම ප්‍රමාදයි — බාධාවකින් තොරව සිටීමට අලුත් කරන්න.",
+      "expired": "ඔබගේ දායකත්වය අවසන් වී ඇත. දත්ත ආරක්ෂිතයි, නමුත් කියවීමට පමණි.",
+      "suspended": "මෙම ගිණුම අත්හිටුවා ඇත.",
+      "upgrade": "සැලසුමක් තෝරන්න",
+      "pay": "දැන් ගෙවන්න"
+    }
+  },
+  "platform": {
+    "title": "වේදිකා පරිපාලනය",
+    "subtitle": "StockFlow හි සියලු සමාගම්, ඔවුන්ගේ සැලසුම් සහ ගෙවීම්.",
+    "denied": "මෙම පිටුව විවෘත කළ හැක්කේ වේදිකා පරිපාලකයින්ට පමණි.",
+    "nav": {
+      "overview": "දළ විශ්ලේෂණය",
+      "tenants": "සමාගම්",
+      "payments": "ගෙවීම්",
+      "plans": "සැලසුම්"
+    },
+    "overview": {
+      "tenants": "සමාගම්",
+      "mrr": "මාසික පුනරාවර්තන ආදායම",
+      "mrrHint": "සක්‍රිය ගෙවන සැලසුම්",
+      "revenue30d": "එකතු කළ · දින 30",
+      "payments": "ගෙවීම් {count}",
+      "pending": "තහවුරු කිරීමට ඇති",
+      "trialsEnding": "අවසන් වන අත්හදා බැලීම්",
+      "trialsEndingHint": "දින 3 ක් ඇතුළත",
+      "byStatus": "දායකත්ව",
+      "reviewPayments": "බලාපොරොත්තු ගෙවීම් බලන්න"
+    },
+    "tenants": {
+      "search": "සමාගම හෝ ඊමේල් සොයන්න",
+      "empty": "තවම සමාගම් නැත",
+      "cols": {
+        "company": "සමාගම",
+        "owner": "හිමිකරු",
+        "plan": "සැලසුම",
+        "users": "පරිශීලකයින්",
+        "products": "භාණ්ඩ",
+        "joined": "එක්වූ දිනය"
+      },
+      "usage": {
+        "users": "පරිශීලකයින්",
+        "warehouses": "ගබඩා",
+        "products": "භාණ්ඩ"
+      },
+      "subscription": "දායකත්වය",
+      "plan": "සැලසුම",
+      "status": "තත්ත්වය",
+      "interval": "බිල්පත් කාලය",
+      "intervals": {
+        "month": "මාසික",
+        "year": "වාර්ෂික"
+      },
+      "trialEnds": "අත්හදා බැලීම අවසන්",
+      "periodEnds": "ගෙවා ඇති දිනය දක්වා",
+      "note": "සටහන (හේතුව)",
+      "saveSubscription": "දායකත්වය සුරකින්න",
+      "saved": "දායකත්වය යාවත්කාලීන කළා",
+      "users": "පරිශීලකයින්",
+      "neverLoggedIn": "කිසිදා පිවිස නැත",
+      "payments": "ගෙවීම්"
+    },
+    "payments": {
+      "status": "තත්ත්වය",
+      "all": "සියල්ල",
+      "empty": "මෙහි කිසිවක් නැත",
+      "markPaid": "ගෙවීම තහවුරු කරන්න",
+      "cancel": "ප්‍රතික්ෂේප කරන්න",
+      "confirmPaid": "{company} වෙතින් {number} ලැබුණු බව තහවුරු කරන්නද? ඔවුන්ගේ සැලසුම වහාම සක්‍රිය වේ.",
+      "markedPaid": "ගෙවීම තහවුරු කර සැලසුම සක්‍රිය කළා",
+      "cancelled": "ගෙවීම ප්‍රතික්ෂේප කළා",
+      "cols": {
+        "number": "අංකය",
+        "company": "සමාගම",
+        "plan": "සැලසුම",
+        "reference": "යොමුව",
+        "amount": "මුදල",
+        "status": "තත්ත්වය"
+      }
+    },
+    "plans": {
+      "subscribers": "සමාගම් {count}",
+      "name": "නම",
+      "description": "විස්තරය",
+      "monthly": "මාසික මිල",
+      "yearly": "වාර්ෂික මිල",
+      "maxUsers": "පරිශීලකයින්",
+      "maxWarehouses": "ගබඩා",
+      "maxProducts": "භාණ්ඩ",
+      "modules": "ඇතුළත් modules",
+      "active": "මිලදී ගැනීමට ලබා ගත හැක",
+      "save": "සැලසුම සුරකින්න",
+      "saved": "{name} සුරැකුණා"
+    }
   }
 }

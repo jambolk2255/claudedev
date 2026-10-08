@@ -61,6 +61,23 @@ Not yet in Phase 1 (planned for a later iteration): product variants and serial 
 | Data           | CSV import with dry run and row-level errors for products, customers, suppliers and opening stock; downloadable templates                                       |
 | Extras         | Barcode label printing, camera barcode scanning (BarcodeDetector), map of warehouses/customers/suppliers, dashboard sales trend, installable offline PWA        |
 
+## Phase 7 — SaaS mode (optional)
+
+Set `SAAS_MODE=true` on the API to run StockFlow as a service for many companies:
+
+| Area           | Included                                                                                                                                    |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| Sign-up        | Anyone can create a company; it starts a free trial (`TRIAL_DAYS`, default 14) on `TRIAL_PLAN` (default Business)                           |
+| Plans          | Starter / Business / Enterprise in LKR (monthly or yearly) with user, warehouse and product limits and the modules each plan includes       |
+| Enforcement    | Limits are checked on invites, warehouses, products, imports, onboarding and module settings; an ended trial or subscription is read-only   |
+| Payments       | **PayHere** (cards, eZ Cash, mCash) with signed checkout and verified notifications, or **bank transfer** confirmed by the platform admin   |
+| Tenant billing | Settings → Billing: plan, usage meters, plan comparison, pay online or by transfer, payment history; banners before and after expiry        |
+| Platform admin | `/admin` for `PLATFORM_ADMIN_EMAILS`: MRR, revenue, companies, change/extend/suspend subscriptions, confirm payments, edit plans and prices |
+
+PayHere settings: `PAYHERE_MERCHANT_ID`, `PAYHERE_MERCHANT_SECRET`, `PAYHERE_SANDBOX` (true for testing) and, if the API isn't
+reached through `WEB_URL`, `API_PUBLIC_URL` for the notify URL. `BANK_TRANSFER_DETAILS` is shown to companies paying by transfer.
+Without `SAAS_MODE` everything works as a single-company installation, exactly as before.
+
 ## Tech stack
 
 - **Monorepo:** Turborepo + pnpm
@@ -142,6 +159,8 @@ docker compose --profile app up -d --build
 - `returns`, `notes` (credit/debit notes, `:id/apply`), `quick-sale`, `track/:token` (public)
 - `finance` — `summary`, `accounts`, `journals`, `trial-balance`, `profit-and-loss`, `balance-sheet`, `vat`, `aging`, `statements/:partnerId`
 - `reports` — `sales`, `purchases`, `margins`, `stock-valuation`, `trend`; `import` — `products`, `partners`, `opening-stock`
+- `billing` — overview, `checkout` (PayHere), `bank-transfer`, `invoices/:id/cancel`, `payhere/notify` (public, signature-verified)
+- `platform` — platform admins only: `summary`, `tenants`, `tenants/:id/subscription`, `invoices` (`:id/mark-paid|cancel`), `plans`
 - `health`
 
 Web clients authenticate with cookies (+ `x-csrf-token` header on mutations). Mobile clients send
@@ -159,7 +178,7 @@ Web clients authenticate with cookies (+ `x-csrf-token` header on mutations). Mo
 | **4 – Finance** ✅                 | Double‑entry journals, AR/AP, statements, aging, cheques, P&L, valuation                                                 |
 | **5 – Insights** ✅                | Dashboards, reports/exports, CSV import, barcodes, map views, offline PWA                                                |
 | 6 – Mobile                         | Expo app → APK (stock checks, GRN, counts with camera scanning, push alerts)                                             |
-| 7 – SaaS                           | Self sign‑up, subscriptions, tenant administration                                                                       |
+| **7 – SaaS** ✅                    | Self sign‑up, trials, plans and limits, PayHere/bank-transfer billing, platform admin console                            |
 
 Design principles: stock is never edited directly (every change is an immutable movement), every
 financial document posts a balanced journal, posted documents are reversed rather than edited, and

@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { PageHeader } from "@/components/layout/page-header";
-import { visibleSettings } from "@/components/layout/nav";
+import { navAccess, visibleSettings } from "@/components/layout/nav";
 import { useMe } from "@/hooks/use-auth";
 import { Link, usePathname } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
@@ -12,7 +12,7 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
   const tn = useTranslations("nav.items");
   const pathname = usePathname();
   const { data: me } = useMe();
-  const items = me ? visibleSettings(me.permissions) : [];
+  const items = me ? visibleSettings(me.permissions, navAccess(me)) : [];
 
   return (
     <>

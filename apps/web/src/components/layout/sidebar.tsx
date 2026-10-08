@@ -8,7 +8,7 @@ import { LogoMark } from "@/components/brand";
 import { Tooltip } from "@/components/ui/tooltip";
 import { Link, usePathname } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
-import { visibleNav, type NavItem } from "./nav";
+import { navAccess, visibleNav, type NavItem } from "./nav";
 import { UserMenu } from "./user-menu";
 
 function NavLink({
@@ -62,7 +62,7 @@ function NavLink({
 export function SidebarNav({ user, collapsed, onNavigate }: { user: AuthUser; collapsed?: boolean; onNavigate?: () => void }) {
   const t = useTranslations("nav");
   const pathname = usePathname();
-  const groups = visibleNav(user.organization.modules, user.permissions);
+  const groups = visibleNav(user.organization.modules, user.permissions, navAccess(user));
 
   return (
     <nav className="grid gap-4" aria-label={t("label")}>

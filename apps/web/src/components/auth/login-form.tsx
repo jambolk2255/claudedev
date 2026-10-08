@@ -34,7 +34,7 @@ export function LoginForm() {
   const [needsTotp, setNeedsTotp] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const setup = useQuery({ queryKey: ["setup-status"], queryFn: () => api<{ needsSetup: boolean }>("/auth/setup-status") });
+  const setup = useQuery({ queryKey: ["setup-status"], queryFn: () => api<{ needsSetup: boolean; saas?: boolean; trialDays?: number }>("/auth/setup-status") });
   const form = useForm<FormValues>({ resolver: zodResolver(loginSchema.pick({ email: true, password: true })), defaultValues: { email: "", password: "" } });
   const { errors, isSubmitting } = form.formState;
 
@@ -69,14 +69,14 @@ export function LoginForm() {
       </motion.div>
 
       <AnimatePresence>
-        {setup.data?.needsSetup && (
+        {(setup.data?.needsSetup || setup.data?.saas) && (
           <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }}>
             <Link
               href="/register"
               className="border-primary/30 bg-primary/5 hover:bg-primary/10 group flex items-center gap-3 rounded-xl border p-3 text-sm transition"
             >
               <Sparkles className="text-primary size-5" />
-              <span className="flex-1">{t("firstRun")}</span>
+              <span className="flex-1">{setup.data.needsSetup ? t("firstRun") : t("startTrial", { days: setup.data.trialDays ?? 14 })}</span>
               <ArrowRight className="text-primary size-4 transition group-hover:translate-x-0.5" />
             </Link>
           </motion.div>

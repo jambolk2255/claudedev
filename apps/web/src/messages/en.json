@@ -86,7 +86,8 @@
       "back": "Use a different account",
       "locked": "Too many failed attempts. Your account is locked for 15 minutes.",
       "invalidCode": "That code is not correct. Try again.",
-      "invalid": "Email or password is incorrect."
+      "invalid": "Email or password is incorrect.",
+      "startTrial": "New here? Start your free {days}-day trial"
     },
     "register": {
       "title": "Set up your company",
@@ -101,7 +102,9 @@
       "haveAccount": "Already have an account?",
       "toLogin": "Sign in",
       "closedTitle": "Registration is closed",
-      "closedBody": "This workspace already has an owner. Ask an administrator to send you an invitation."
+      "closedBody": "This workspace already has an owner. Ask an administrator to send you an invitation.",
+      "trialBadge": "Free {days}-day trial · no card needed",
+      "trialSubtitle": "Create your company account. You'll set everything up in a guided wizard."
     },
     "invite": {
       "title": "Join your team",
@@ -404,7 +407,8 @@
       "overview": "Overview",
       "operations": "Operations",
       "insights": "Money & insights",
-      "settings": "Settings"
+      "settings": "Settings",
+      "platform": "Platform"
     },
     "items": {
       "dashboard": "Dashboard",
@@ -421,7 +425,9 @@
       "security": "Security",
       "audit": "Audit log",
       "settings": "Settings",
-      "contacts": "Contacts"
+      "contacts": "Contacts",
+      "platform": "Platform admin",
+      "billing": "Billing"
     },
     "breadcrumb": "Breadcrumb"
   },
@@ -573,7 +579,11 @@
         "stock_grn": "received goods (GRN)",
         "stock_delivery": "delivered goods",
         "stock_return_outward": "sent a supplier return",
-        "stock_return_inward": "took back a customer return"
+        "stock_return_inward": "took back a customer return",
+        "billing_payhere": "started an online payment",
+        "billing_bank_transfer": "reported a bank transfer",
+        "billing_paid": "subscription payment received",
+        "billing_subscription_changed": "subscription changed by StockFlow"
       }
     },
     "tax": {
@@ -1922,5 +1932,186 @@
     "noKey": "Add a Google Maps API key (NEXT_PUBLIC_GOOGLE_MAPS_API_KEY) to see the interactive map. Locations are listed below.",
     "emptyTitle": "No locations yet",
     "emptyBody": "Pin locations on warehouses, customers and suppliers to see them here."
+  },
+  "billing": {
+    "title": "Plan & billing",
+    "subtitle": "Your subscription, usage and payments.",
+    "disabled": "Billing isn't used on this installation.",
+    "currentPlan": "Current plan",
+    "trialEnds": "Trial ends {date}",
+    "paidUntil": "Paid until {date}",
+    "daysLeft": "{count, plural, =0 {ends today} one {# day left} other {# days left}}",
+    "readOnlyHint": "Your account is read-only. Choose a plan below to keep working.",
+    "suspendedHint": "Your account is suspended. Pay below or contact support.",
+    "usedOf": "{used} of {max}",
+    "usedUnlimited": "{used} · unlimited",
+    "limits": {
+      "users": "Users",
+      "warehouses": "Warehouses",
+      "products": "Products"
+    },
+    "upTo": {
+      "users": "Up to {count} users",
+      "warehouses": "{count, plural, one {# warehouse} other {Up to # warehouses}}",
+      "products": "Up to {count} products"
+    },
+    "unlimited": {
+      "users": "Unlimited users",
+      "warehouses": "Unlimited warehouses",
+      "products": "Unlimited products"
+    },
+    "pendingTransfer": "We're checking your bank transfer for {plan} ({number}). Your plan is updated as soon as it's confirmed.",
+    "choosePlan": "Choose a plan",
+    "monthly": "Monthly",
+    "yearly": "Yearly",
+    "save": "2 months free",
+    "perMonth": "month",
+    "perYear": "year",
+    "popular": "Most popular",
+    "choose": "Choose plan",
+    "renew": "Renew",
+    "history": "Payments",
+    "noHistory": "No payments yet.",
+    "until": "until {date}",
+    "cancel": "Cancel",
+    "cols": {
+      "number": "Number",
+      "date": "Date",
+      "plan": "Plan",
+      "method": "Method",
+      "amount": "Amount",
+      "status": "Status"
+    },
+    "status": {
+      "trialing": "Trial",
+      "active": "Active",
+      "past_due": "Payment due",
+      "cancelled": "Cancelled",
+      "expired": "Expired",
+      "suspended": "Suspended"
+    },
+    "invoiceStatus": {
+      "pending": "Pending",
+      "paid": "Paid",
+      "cancelled": "Cancelled",
+      "failed": "Failed"
+    },
+    "methods": {
+      "payhere": "Card / PayHere",
+      "bank_transfer": "Bank transfer",
+      "manual": "Manual"
+    },
+    "payTitle": "Pay for {plan}",
+    "oneMonth": "1 month",
+    "oneYear": "1 year",
+    "method": "Payment method",
+    "payOnline": "Pay online",
+    "payOnlineHint": "Visa, Mastercard, Amex, eZ Cash, mCash via PayHere",
+    "bankTransfer": "Bank transfer",
+    "bankTransferHint": "Pay to our account; we activate it after checking",
+    "reference": "Transfer reference",
+    "referenceHint": "Bank, date and slip or reference number",
+    "payNow": "Pay {amount}",
+    "iHavePaid": "I've made the transfer",
+    "transferRecorded": "Thanks! Payment {number} is waiting for confirmation.",
+    "paidNotice": "Thank you — payment {number} received. Your plan updates in a moment.",
+    "cancelledNotice": "The payment was cancelled. You can try again any time.",
+    "banner": {
+      "trial": "Your free trial ends in {days} days.",
+      "renew": "Your {plan} plan renews in {days} days.",
+      "pastDue": "Your payment is overdue — renew to avoid interruption.",
+      "expired": "Your subscription has ended. Your data is safe but read-only.",
+      "suspended": "This account is suspended.",
+      "upgrade": "Choose a plan",
+      "pay": "Pay now"
+    }
+  },
+  "platform": {
+    "title": "Platform admin",
+    "subtitle": "Every company on StockFlow, their plans and payments.",
+    "denied": "Only platform administrators can open this page.",
+    "nav": {
+      "overview": "Overview",
+      "tenants": "Companies",
+      "payments": "Payments",
+      "plans": "Plans"
+    },
+    "overview": {
+      "tenants": "Companies",
+      "mrr": "Monthly recurring revenue",
+      "mrrHint": "Active paid plans",
+      "revenue30d": "Collected · 30 days",
+      "payments": "{count, plural, one {# payment} other {# payments}}",
+      "pending": "Waiting for confirmation",
+      "trialsEnding": "Trials ending",
+      "trialsEndingHint": "Within 3 days",
+      "byStatus": "Subscriptions",
+      "reviewPayments": "Review pending payments"
+    },
+    "tenants": {
+      "search": "Search company or email",
+      "empty": "No companies yet",
+      "cols": {
+        "company": "Company",
+        "owner": "Owner",
+        "plan": "Plan",
+        "users": "Users",
+        "products": "Products",
+        "joined": "Joined"
+      },
+      "usage": {
+        "users": "Users",
+        "warehouses": "Warehouses",
+        "products": "Products"
+      },
+      "subscription": "Subscription",
+      "plan": "Plan",
+      "status": "Status",
+      "interval": "Billing",
+      "intervals": {
+        "month": "Monthly",
+        "year": "Yearly"
+      },
+      "trialEnds": "Trial ends",
+      "periodEnds": "Paid until",
+      "note": "Note (reason)",
+      "saveSubscription": "Save subscription",
+      "saved": "Subscription updated",
+      "users": "Users",
+      "neverLoggedIn": "Never signed in",
+      "payments": "Payments"
+    },
+    "payments": {
+      "status": "Status",
+      "all": "All",
+      "empty": "Nothing here",
+      "markPaid": "Confirm payment",
+      "cancel": "Reject",
+      "confirmPaid": "Confirm {number} from {company} as received? Their plan is activated immediately.",
+      "markedPaid": "Payment confirmed and plan activated",
+      "cancelled": "Payment rejected",
+      "cols": {
+        "number": "Number",
+        "company": "Company",
+        "plan": "Plan",
+        "reference": "Reference",
+        "amount": "Amount",
+        "status": "Status"
+      }
+    },
+    "plans": {
+      "subscribers": "{count, plural, one {# company} other {# companies}}",
+      "name": "Name",
+      "description": "Description",
+      "monthly": "Monthly price",
+      "yearly": "Yearly price",
+      "maxUsers": "Users",
+      "maxWarehouses": "Warehouses",
+      "maxProducts": "Products",
+      "modules": "Included modules",
+      "active": "Available for purchase",
+      "save": "Save plan",
+      "saved": "{name} saved"
+    }
   }
 }

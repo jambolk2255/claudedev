@@ -24,7 +24,10 @@ export function RegisterForm() {
   const msg = useZodMessage();
   const router = useRouter();
   const setMe = useSetMe();
-  const status = useQuery({ queryKey: ["setup-status"], queryFn: () => api<{ needsSetup: boolean; signupOpen: boolean }>("/auth/setup-status") });
+  const status = useQuery({
+    queryKey: ["setup-status"],
+    queryFn: () => api<{ needsSetup: boolean; signupOpen: boolean; saas?: boolean; trialDays?: number }>("/auth/setup-status"),
+  });
 
   const form = useForm<RegisterOwnerInput>({
     resolver: zodResolver(registerOwnerSchema),
@@ -74,10 +77,10 @@ export function RegisterForm() {
     <motion.div variants={stagger(0.07)} initial="hidden" animate="show" className="grid gap-6">
       <motion.div variants={fadeUp} className="grid gap-2">
         <span className="bg-primary/10 text-primary inline-flex w-fit items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium">
-          <Building2 className="size-3.5" /> {t("badge")}
+          <Building2 className="size-3.5" /> {status.data?.saas ? t("trialBadge", { days: status.data.trialDays ?? 14 }) : t("badge")}
         </span>
         <h1 className="text-3xl font-semibold tracking-tight">{t("title")}</h1>
-        <p className="text-muted-foreground">{t("subtitle")}</p>
+        <p className="text-muted-foreground">{status.data?.saas ? t("trialSubtitle") : t("subtitle")}</p>
       </motion.div>
       <motion.form variants={fadeUp} onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4" noValidate>
         <Field label={t("companyName")} htmlFor="companyName" error={msg(errors.companyName?.message)}>
