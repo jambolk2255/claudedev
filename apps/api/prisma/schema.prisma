@@ -40,47 +40,59 @@ model Organization {
   fiscalYearStartMonth  Int             @default(4)
   valuationMethod       ValuationMethod @default(weighted_average)
   allowNegativeStock    Boolean         @default(false)
+  /// Days before expiry that batches are flagged.
+  expiryAlertDays       Int             @default(30)
   /// Progress of the onboarding wizard: { currentStep, completedSteps, data }
   onboardingState       Json            @default("{}")
   onboardingCompletedAt DateTime?
   createdAt             DateTime        @default(now())
   updatedAt             DateTime        @updatedAt
 
-  users        User[]
-  roles        Role[]
-  invitations  Invitation[]
-  auditLogs    AuditLog[]
-  warehouses   Warehouse[]
-  taxRates     TaxRate[]
-  sequences    DocumentSequence[]
-  categories   Category[]
-  units        Unit[]
+  users          User[]
+  roles          Role[]
+  invitations    Invitation[]
+  auditLogs      AuditLog[]
+  warehouses     Warehouse[]
+  taxRates       TaxRate[]
+  sequences      DocumentSequence[]
+  categories     Category[]
+  units          Unit[]
+  products       Product[]
+  partners       Partner[]
+  batches        Batch[]
+  stockLevels    StockLevel[]
+  batchBalances  BatchBalance[]
+  costLayers     CostLayer[]
+  stockDocuments StockDocument[]
+  stockMovements StockMovement[]
 }
 
 model User {
-  id               String    @id @default(uuid()) @db.Uuid
-  organizationId   String    @db.Uuid
-  email            String    @unique
-  name             String
-  passwordHash     String
-  roleId           String    @db.Uuid
-  active           Boolean   @default(true)
-  locale           String    @default("en")
+  id                String    @id @default(uuid()) @db.Uuid
+  organizationId    String    @db.Uuid
+  email             String    @unique
+  name              String
+  passwordHash      String
+  roleId            String    @db.Uuid
+  active            Boolean   @default(true)
+  locale            String    @default("en")
   /// AES-256-GCM encrypted TOTP secret
-  twoFactorSecret  String?
-  twoFactorEnabled Boolean   @default(false)
-  failedLoginCount Int       @default(0)
-  lockedUntil      DateTime?
-  lastLoginAt      DateTime?
-  passwordChangedAt DateTime @default(now())
-  createdAt        DateTime  @default(now())
-  updatedAt        DateTime  @updatedAt
+  twoFactorSecret   String?
+  twoFactorEnabled  Boolean   @default(false)
+  failedLoginCount  Int       @default(0)
+  lockedUntil       DateTime?
+  lastLoginAt       DateTime?
+  passwordChangedAt DateTime  @default(now())
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
 
-  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  role         Role         @relation(fields: [roleId], references: [id])
-  sessions     Session[]
-  auditLogs    AuditLog[]
-  invitationsSent Invitation[] @relation("InvitedBy")
+  organization    Organization    @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  role            Role            @relation(fields: [roleId], references: [id])
+  sessions        Session[]
+  auditLogs       AuditLog[]
+  stockDocuments  StockDocument[] @relation("DocumentCreatedBy")
+  movements       StockMovement[]
+  invitationsSent Invitation[]    @relation("InvitedBy")
 
   @@index([organizationId])
 }
@@ -108,16 +120,16 @@ model Role {
 /// One row per issued refresh token. Rotation links tokens of a login into a family;
 /// presenting an already-rotated token revokes the whole family (reuse detection).
 model Session {
-  id           String    @id @default(uuid()) @db.Uuid
-  userId       String    @db.Uuid
-  familyId     String    @db.Uuid
-  tokenHash    String    @unique
-  userAgent    String?
-  ip           String?
-  expiresAt    DateTime
-  revokedAt    DateTime?
-  rotatedAt    DateTime?
-  createdAt    DateTime  @default(now())
+  id        String    @id @default(uuid()) @db.Uuid
+  userId    String    @db.Uuid
+  familyId  String    @db.Uuid
+  tokenHash String    @unique
+  userAgent String?
+  ip        String?
+  expiresAt DateTime
+  revokedAt DateTime?
+  rotatedAt DateTime?
+  createdAt DateTime  @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -177,7 +189,12 @@ model Warehouse {
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
-  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organization  Organization    @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  stockLevels   StockLevel[]
+  batchBalances BatchBalance[]
+  movements     StockMovement[]
+  documents     StockDocument[] @relation("DocumentWarehouse")
+  incoming      StockDocument[] @relation("DocumentToWarehouse")
 
   @@unique([organizationId, code])
 }
@@ -193,6 +210,7 @@ model TaxRate {
   updatedAt      DateTime @updatedAt
 
   organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  products     Product[]
 
   @@unique([organizationId, code])
 }
@@ -223,6 +241,7 @@ model Category {
   organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   parent       Category?    @relation("CategoryTree", fields: [parentId], references: [id], onDelete: SetNull)
   children     Category[]   @relation("CategoryTree")
+  products     Product[]
 
   @@unique([organizationId, name])
 }
@@ -235,6 +254,256 @@ model Unit {
   createdAt      DateTime @default(now())
 
   organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  products     Product[]
 
   @@unique([organizationId, code])
+}
+
+// ─── Phase 1: master data & inventory ──────────────────────────────────────────
+
+enum ProductType {
+  stock
+  service
+}
+
+model Product {
+  id             String      @id @default(uuid()) @db.Uuid
+  organizationId String      @db.Uuid
+  sku            String
+  name           String
+  description    String?
+  barcode        String?
+  type           ProductType @default(stock)
+  categoryId     String?     @db.Uuid
+  unitId         String?     @db.Uuid
+  taxRateId      String?     @db.Uuid
+  costPrice      Decimal     @default(0) @db.Decimal(18, 4)
+  sellPrice      Decimal     @default(0) @db.Decimal(18, 4)
+  reorderLevel   Decimal?    @db.Decimal(18, 4)
+  maxLevel       Decimal?    @db.Decimal(18, 4)
+  trackBatches   Boolean     @default(false)
+  active         Boolean     @default(true)
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  organization Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  category     Category?           @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  unit         Unit?               @relation(fields: [unitId], references: [id], onDelete: SetNull)
+  taxRate      TaxRate?            @relation(fields: [taxRateId], references: [id], onDelete: SetNull)
+  levels       StockLevel[]
+  batches      Batch[]
+  movements    StockMovement[]
+  costLayers   CostLayer[]
+  lines        StockDocumentLine[]
+
+  @@unique([organizationId, sku])
+  @@index([organizationId, name])
+  @@index([organizationId, barcode])
+}
+
+enum PartnerType {
+  customer
+  supplier
+}
+
+/// Customers and suppliers share one table; `type` tells them apart.
+model Partner {
+  id               String      @id @default(uuid()) @db.Uuid
+  organizationId   String      @db.Uuid
+  type             PartnerType
+  code             String
+  name             String
+  contactName      String?
+  email            String?
+  phone            String?
+  taxNo            String?
+  address          String?
+  city             String?
+  latitude         Decimal?    @db.Decimal(9, 6)
+  longitude        Decimal?    @db.Decimal(9, 6)
+  creditLimit      Decimal?    @db.Decimal(18, 2)
+  paymentTermsDays Int         @default(0)
+  notes            String?
+  active           Boolean     @default(true)
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+
+  organization Organization    @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  documents    StockDocument[]
+
+  @@unique([organizationId, type, code])
+  @@index([organizationId, type, name])
+}
+
+model Batch {
+  id             String    @id @default(uuid()) @db.Uuid
+  organizationId String    @db.Uuid
+  productId      String    @db.Uuid
+  batchNo        String
+  expiryDate     DateTime? @db.Date
+  createdAt      DateTime  @default(now())
+
+  organization Organization    @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  product      Product         @relation(fields: [productId], references: [id], onDelete: Cascade)
+  balances     BatchBalance[]
+  movements    StockMovement[]
+
+  @@unique([productId, batchNo])
+  @@index([organizationId, expiryDate])
+}
+
+/// Cached on-hand quantity per product and warehouse. Only the inventory service writes it,
+/// always together with a StockMovement row.
+model StockLevel {
+  id             String   @id @default(uuid()) @db.Uuid
+  organizationId String   @db.Uuid
+  productId      String   @db.Uuid
+  warehouseId    String   @db.Uuid
+  quantity       Decimal  @default(0) @db.Decimal(18, 4)
+  /// Weighted average unit cost (also kept up to date under FIFO for reporting).
+  avgCost        Decimal  @default(0) @db.Decimal(18, 4)
+  updatedAt      DateTime @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  product      Product      @relation(fields: [productId], references: [id], onDelete: Cascade)
+  warehouse    Warehouse    @relation(fields: [warehouseId], references: [id], onDelete: Cascade)
+
+  @@unique([productId, warehouseId])
+  @@index([organizationId, warehouseId])
+}
+
+model BatchBalance {
+  id             String  @id @default(uuid()) @db.Uuid
+  organizationId String  @db.Uuid
+  batchId        String  @db.Uuid
+  warehouseId    String  @db.Uuid
+  quantity       Decimal @default(0) @db.Decimal(18, 4)
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  batch        Batch        @relation(fields: [batchId], references: [id], onDelete: Cascade)
+  warehouse    Warehouse    @relation(fields: [warehouseId], references: [id], onDelete: Cascade)
+
+  @@unique([batchId, warehouseId])
+}
+
+/// FIFO cost layers: each receipt adds a layer, issues consume the oldest first.
+model CostLayer {
+  id             String   @id @default(uuid()) @db.Uuid
+  organizationId String   @db.Uuid
+  productId      String   @db.Uuid
+  warehouseId    String   @db.Uuid
+  unitCost       Decimal  @db.Decimal(18, 4)
+  originalQty    Decimal  @db.Decimal(18, 4)
+  remainingQty   Decimal  @db.Decimal(18, 4)
+  receivedAt     DateTime @default(now())
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  product      Product      @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId, warehouseId, receivedAt])
+}
+
+enum StockDocumentType {
+  opening
+  stock_in
+  stock_out
+  adjustment
+  count
+  transfer
+}
+
+enum StockDocumentStatus {
+  posted
+  in_transit
+  received
+}
+
+model StockDocument {
+  id             String              @id @default(uuid()) @db.Uuid
+  organizationId String              @db.Uuid
+  type           StockDocumentType
+  status         StockDocumentStatus @default(posted)
+  number         String
+  warehouseId    String              @db.Uuid
+  toWarehouseId  String?             @db.Uuid
+  partnerId      String?             @db.Uuid
+  reference      String?
+  reason         String?
+  note           String?
+  documentDate   DateTime            @db.Date
+  totalValue     Decimal             @default(0) @db.Decimal(18, 4)
+  createdById    String?             @db.Uuid
+  receivedById   String?             @db.Uuid
+  receivedAt     DateTime?
+  createdAt      DateTime            @default(now())
+
+  organization Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  warehouse    Warehouse           @relation("DocumentWarehouse", fields: [warehouseId], references: [id])
+  toWarehouse  Warehouse?          @relation("DocumentToWarehouse", fields: [toWarehouseId], references: [id])
+  partner      Partner?            @relation(fields: [partnerId], references: [id], onDelete: SetNull)
+  createdBy    User?               @relation("DocumentCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
+  lines        StockDocumentLine[]
+  movements    StockMovement[]
+
+  @@unique([organizationId, number])
+  @@index([organizationId, type, createdAt(sort: Desc)])
+}
+
+model StockDocumentLine {
+  id             String    @id @default(uuid()) @db.Uuid
+  documentId     String    @db.Uuid
+  lineNo         Int
+  productId      String    @db.Uuid
+  /// Quantity moved. For stock counts this is the counted quantity.
+  quantity       Decimal   @db.Decimal(18, 4)
+  /// For stock counts: on-hand quantity when the count was posted.
+  systemQuantity Decimal?  @db.Decimal(18, 4)
+  unitCost       Decimal?  @db.Decimal(18, 4)
+  batchNo        String?
+  expiryDate     DateTime? @db.Date
+  note           String?
+
+  document StockDocument @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  product  Product       @relation(fields: [productId], references: [id])
+
+  @@index([documentId])
+}
+
+enum StockMovementType {
+  opening
+  stock_in
+  stock_out
+  adjustment_in
+  adjustment_out
+  transfer_out
+  transfer_in
+}
+
+/// Immutable stock ledger. Rows are only ever inserted.
+model StockMovement {
+  id             String            @id @default(uuid()) @db.Uuid
+  organizationId String            @db.Uuid
+  productId      String            @db.Uuid
+  warehouseId    String            @db.Uuid
+  batchId        String?           @db.Uuid
+  documentId     String?           @db.Uuid
+  type           StockMovementType
+  /// Signed: positive increases stock, negative decreases it.
+  quantity       Decimal           @db.Decimal(18, 4)
+  unitCost       Decimal           @db.Decimal(18, 4)
+  /// Signed value of the movement (quantity × cost).
+  totalCost      Decimal           @db.Decimal(18, 4)
+  balanceAfter   Decimal           @db.Decimal(18, 4)
+  createdById    String?           @db.Uuid
+  createdAt      DateTime          @default(now())
+
+  organization Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  product      Product        @relation(fields: [productId], references: [id], onDelete: Cascade)
+  warehouse    Warehouse      @relation(fields: [warehouseId], references: [id], onDelete: Cascade)
+  batch        Batch?         @relation(fields: [batchId], references: [id], onDelete: SetNull)
+  document     StockDocument? @relation(fields: [documentId], references: [id], onDelete: SetNull)
+  createdBy    User?          @relation(fields: [createdById], references: [id], onDelete: SetNull)
+
+  @@index([organizationId, productId, createdAt(sort: Desc)])
+  @@index([organizationId, warehouseId, createdAt(sort: Desc)])
 }

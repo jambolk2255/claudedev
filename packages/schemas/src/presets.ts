@@ -95,7 +95,10 @@ export const DEFAULT_DOCUMENT_PREFIXES = {
   receipt: "RCT",
   returnInward: "RI",
   creditNote: "CN",
+  stockIn: "SIN",
+  stockOut: "SOUT",
   stockAdjustment: "ADJ",
+  stockCount: "CNT",
   stockTransfer: "TRF",
 } as const;
 export type DocumentType = keyof typeof DEFAULT_DOCUMENT_PREFIXES;

@@ -7,6 +7,7 @@ import { JwtAuthGuard, PermissionsGuard } from "./common/guards";
 import { AuditModule } from "./modules/audit/audit.module";
 import { AuthModule } from "./modules/auth/auth.module";
 import { HealthController } from "./modules/health/health.controller";
+import { InventoryModule } from "./modules/inventory/inventory.module";
 import { OnboardingModule } from "./modules/onboarding/onboarding.module";
 import { OrganizationsModule } from "./modules/organizations/organizations.module";
 import { RolesModule } from "./modules/roles/roles.module";
@@ -25,6 +26,7 @@ import { PrismaModule } from "./prisma/prisma.module";
     RolesModule,
     OrganizationsModule,
     OnboardingModule,
+    InventoryModule,
   ],
   controllers: [HealthController],
   providers: [

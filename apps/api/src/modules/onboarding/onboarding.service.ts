@@ -16,6 +16,8 @@ import { randomToken, sha256 } from "../../common/crypto";
 import type { RequestContext } from "../../common/request-user";
 import { PrismaService } from "../../prisma/prisma.service";
 import { AuditService } from "../audit/audit.service";
+import { StockLedgerService } from "../inventory/stock-ledger.service";
+import { demoItemsFor } from "./demo-data";
 
 /** Steps that must be saved before onboarding can be completed. The rest have defaults. */
 const REQUIRED_STEPS: OnboardingStep[] = ["company", "industry", "modules", "finance", "warehouses"];
@@ -31,6 +33,7 @@ export class OnboardingService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly audit: AuditService,
+    private readonly ledger: StockLedgerService,
   ) {}
 
   async getState(orgId: string): Promise<OnboardingState> {
@@ -93,6 +96,7 @@ export class OnboardingService {
           fiscalYearStartMonth: finance.fiscalYearStartMonth,
           valuationMethod: finance.valuationMethod,
           allowNegativeStock: finance.allowNegativeStock,
+          expiryAlertDays: preset.expiryAlertDays ?? 30,
           onboardingCompletedAt: new Date(),
         },
       });
@@ -176,6 +180,52 @@ export class OnboardingService {
       );
     });
 
+    if (data?.start === "demo") await this.seedDemo(ctx, industry.industry);
     return { completed: true, invites };
+  }
+
+  /** Sample products with opening stock in the default warehouse, posted through the real ledger. */
+  private async seedDemo(ctx: RequestContext, industry: Parameters<typeof demoItemsFor>[0]) {
+    const orgId = ctx.user.organizationId;
+    const db = this.prisma.tenant(orgId);
+    const [org, warehouse, categories, units] = await Promise.all([
+      this.prisma.organization.findUniqueOrThrow({ where: { id: orgId }, select: { modules: true } }),
+      db.warehouse.findFirst({ where: { isDefault: true } }),
+      db.category.findMany({ orderBy: { createdAt: "asc" } }),
+      db.unit.findMany(),
+    ]);
+    if (!warehouse) return;
+    const preset = INDUSTRY_PRESETS[industry];
+    const expiry = new Date(Date.now() + 400 * 86_400_000).toISOString().slice(0, 10);
+    const lines = [];
+    const batchesOn = org.modules.includes("batches");
+    for (const [i, [name, catIndex, unitCode, cost, sell, reorder, qty, batchedItem]] of demoItemsFor(industry).entries()) {
+      const batched = batchesOn && !!batchedItem;
+      const category = categories.find((c) => c.name === preset.categories[catIndex]) ?? categories[0];
+      const unit = units.find((u) => u.code === unitCode) ?? units[0];
+      const product = await db.product.create({
+        data: {
+          organizationId: orgId,
+          sku: `DEMO-${String(i + 1).padStart(3, "0")}`,
+          name,
+          categoryId: category?.id ?? null,
+          unitId: unit?.id ?? null,
+          costPrice: cost,
+          sellPrice: sell,
+          reorderLevel: reorder,
+          maxLevel: reorder * 20,
+          trackBatches: batched,
+        },
+      });
+      lines.push({
+        productId: product.id,
+        quantity: qty,
+        unitCost: cost,
+        batchNo: batched ? `B${new Date().getFullYear()}-${String(i + 1).padStart(3, "0")}` : null,
+        expiryDate: batched ? expiry : null,
+        note: null,
+      });
+    }
+    await this.ledger.post(ctx, { type: "stock_in", warehouseId: warehouse.id, reference: "Opening stock (sample data)", note: null, partnerId: null, lines });
   }
 }

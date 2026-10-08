@@ -1,8 +1,11 @@
 import { Injectable, OnModuleDestroy, OnModuleInit } from "@nestjs/common";
 import { Prisma, PrismaClient } from "@prisma/client";
 
-/** Models that belong to an organization and must always be filtered by it. */
-const TENANT_MODELS = new Set<string>(["User", "Role", "Invitation", "AuditLog", "Warehouse", "TaxRate", "DocumentSequence", "Category", "Unit"]);
+/**
+ * Models that belong to an organization and must always be filtered by it: every model with an
+ * `organizationId` column. Derived from the schema so new models can't be forgotten.
+ */
+export const TENANT_MODELS = new Set<string>(Prisma.dmmf.datamodel.models.filter((m) => m.fields.some((f) => f.name === "organizationId")).map((m) => m.name));
 
 const WHERE_OPERATIONS = new Set([
   "findUnique",

@@ -8,7 +8,7 @@ export async function bootTestApp() {
   execSync("npx prisma migrate deploy", { env: process.env, stdio: "ignore" });
   const prisma = new PrismaClient();
   await prisma.$executeRawUnsafe(
-    `TRUNCATE "AuditLog","Session","Invitation","User","Role","Warehouse","TaxRate","DocumentSequence","Category","Unit","Organization" CASCADE`,
+    `TRUNCATE "StockMovement","StockDocumentLine","StockDocument","CostLayer","BatchBalance","Batch","StockLevel","Product","Partner","AuditLog","Session","Invitation","User","Role","Warehouse","TaxRate","DocumentSequence","Category","Unit","Organization" CASCADE`,
   );
   const app = await createApp({ logger: false });
   await app.init();
