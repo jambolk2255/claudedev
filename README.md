@@ -61,6 +61,33 @@ Not yet in Phase 1 (planned for a later iteration): product variants and serial 
 | Data           | CSV import with dry run and row-level errors for products, customers, suppliers and opening stock; downloadable templates                                       |
 | Extras         | Barcode label printing, camera barcode scanning (BarcodeDetector), map of warehouses/customers/suppliers, dashboard sales trend, installable offline PWA        |
 
+## Phase 6 — Staff mobile app (Android / iOS)
+
+`apps/mobile` is an Expo (SDK 56, Expo Router) app for warehouse and sales staff, using the same API and logins:
+
+| Screen      | What staff can do                                                                                          |
+| ----------- | ---------------------------------------------------------------------------------------------------------- |
+| Home        | Stock value, alerts that need attention, quick actions (shown by role and enabled modules)                 |
+| Stock       | Search products, on-hand per warehouse, batches and expiry                                                 |
+| Scan        | Camera barcode scanning (EAN/UPC/Code128/QR…) or typed SKU to open a product                               |
+| Orders      | Open supplier orders to receive (GRN, with batch numbers) and customer orders to deliver, overdue flagged  |
+| Stock count | Walk the shelves scanning items (each scan adds one), then post the count                                  |
+| Quick sale  | Scan or pick products, VAT/SSCL totals, cash/card/bank, change due — invoice + stock + receipt in one step |
+| More        | English / සිංහල, server address, sign out                                                                  |
+
+Sessions use bearer tokens (`x-client: mobile`) with the refresh token in the device's secure storage (Keychain /
+Android Keystore); 2FA is supported. The server address is entered on the login screen (default from `app.json` →
+`extra.apiUrl`).
+
+```bash
+cd apps/mobile
+npm install              # standalone npm project (not part of the pnpm workspace)
+npx expo start           # development build / Expo Go
+npm run build:apk        # Android APK via EAS Build (needs a free Expo account: npx eas-cli login)
+```
+
+`eas.json` has `preview` (installable APK for internal sharing) and `production` (Play Store app bundle) profiles.
+
 ## Phase 7 — SaaS mode (optional)
 
 Set `SAAS_MODE=true` on the API to run StockFlow as a service for many companies:
@@ -177,7 +204,7 @@ Web clients authenticate with cookies (+ `x-csrf-token` header on mutations). Mo
 | **3 – Sales** ✅                   | Quotation → SO → delivery → invoice → receipt, return inward + credit note, customer order tracking, quick sale          |
 | **4 – Finance** ✅                 | Double‑entry journals, AR/AP, statements, aging, cheques, P&L, valuation                                                 |
 | **5 – Insights** ✅                | Dashboards, reports/exports, CSV import, barcodes, map views, offline PWA                                                |
-| 6 – Mobile                         | Expo app → APK (stock checks, GRN, counts with camera scanning, push alerts)                                             |
+| **6 – Mobile** ✅                  | Expo staff app → APK (stock checks, GRN, deliveries, counts and quick sale with camera scanning)                         |
 | **7 – SaaS** ✅                    | Self sign‑up, trials, plans and limits, PayHere/bank-transfer billing, platform admin console                            |
 
 Design principles: stock is never edited directly (every change is an immutable movement), every

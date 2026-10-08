@@ -1,6 +1,8 @@
 packages:
   - "apps/*"
   - "packages/*"
+  # The Expo app is a standalone npm project (simpler EAS builds).
+  - "!apps/mobile"
 onlyBuiltDependencies:
   - "@prisma/client"
   - "@prisma/engines"
