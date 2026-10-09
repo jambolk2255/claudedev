@@ -1,0 +1,1325 @@
+<!doctype html>
+<html lang="si">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Sahayaka UI Prototype</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Sinhala:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #eef0f6;
+        --surface: #ffffff;
+        --surface-2: #f5f6fb;
+        --text: #151826;
+        --muted: #6b7088;
+        --line: #e4e6ef;
+        --brand: #5b4bdb;
+        --brand-2: #8a7cff;
+        --brand-soft: #ece9ff;
+        --red: #e5484d;
+        --red-soft: #fdecec;
+        --amber: #d97706;
+        --amber-soft: #fff4e0;
+        --green: #16a34a;
+        --green-soft: #e7f7ec;
+        --a-agency: #5b4bdb;
+        --a-business: #0e9f8f;
+        --a-education: #d97706;
+        --a-personal: #db2777;
+        --a-finance: #2563eb;
+        --shadow: 0 10px 30px rgba(21, 24, 38, 0.1);
+        --font: "Noto Sans Sinhala", "Inter", system-ui, sans-serif;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]) {
+          --bg: #0b0c12;
+          --surface: #161824;
+          --surface-2: #1d2030;
+          --text: #eceef7;
+          --muted: #9499b3;
+          --line: #2a2e42;
+          --brand-soft: #2a2550;
+          --red-soft: #3a1c20;
+          --amber-soft: #3a2a12;
+          --green-soft: #15301f;
+          --shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+        }
+      }
+      :root[data-theme="dark"] {
+        --bg: #0b0c12;
+        --surface: #161824;
+        --surface-2: #1d2030;
+        --text: #eceef7;
+        --muted: #9499b3;
+        --line: #2a2e42;
+        --brand-soft: #2a2550;
+        --red-soft: #3a1c20;
+        --amber-soft: #3a2a12;
+        --green-soft: #15301f;
+        --shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+      }
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: var(--font);
+        -webkit-font-smoothing: antialiased;
+      }
+      button {
+        font: inherit;
+        color: inherit;
+        border: 0;
+        background: none;
+        cursor: pointer;
+      }
+
+      /* Desktop layout: notes | phone */
+      .page {
+        display: grid;
+        grid-template-columns: minmax(240px, 320px) auto;
+        gap: 40px;
+        justify-content: center;
+        align-items: start;
+        padding: 32px 16px;
+      }
+      .notes h1 {
+        font-size: 22px;
+        margin: 0 0 4px;
+      }
+      .notes p {
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.6;
+        margin: 0 0 16px;
+      }
+      .notes .list {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .notes .list button {
+        text-align: left;
+        padding: 10px 12px;
+        border-radius: 10px;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        font-size: 14px;
+      }
+      .notes .list button.on {
+        border-color: var(--brand);
+        background: var(--brand-soft);
+      }
+      .notes .tools {
+        display: flex;
+        gap: 8px;
+        margin-top: 16px;
+      }
+      .chip {
+        padding: 6px 12px;
+        border-radius: 999px;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        font-size: 13px;
+      }
+
+      .phone {
+        width: 390px;
+        height: 820px;
+        border-radius: 44px;
+        background: var(--surface-2);
+        box-shadow:
+          var(--shadow),
+          0 0 0 10px #1b1d29;
+        overflow: hidden;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+      }
+      .status {
+        height: 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 26px;
+        font-size: 13px;
+        font-weight: 600;
+        font-family: Inter, sans-serif;
+        flex: none;
+      }
+      .screen {
+        flex: 1;
+        overflow-y: auto;
+        padding: 4px 18px 120px;
+        scrollbar-width: none;
+      }
+      .screen::-webkit-scrollbar {
+        display: none;
+      }
+
+      @media (max-width: 760px) {
+        .page {
+          display: block;
+          padding: 0;
+        }
+        .notes {
+          display: none;
+        }
+        .phone {
+          width: 100%;
+          height: 100dvh;
+          border-radius: 0;
+          box-shadow: none;
+        }
+      }
+
+      /* Common */
+      .hdr {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 6px 0 14px;
+      }
+      .hdr h2 {
+        margin: 0;
+        font-size: 24px;
+      }
+      .hdr .sub {
+        color: var(--muted);
+        font-size: 13px;
+      }
+      .icon-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        background: var(--surface);
+        display: grid;
+        place-items: center;
+        border: 1px solid var(--line);
+      }
+      .sec {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin: 18px 2px 8px;
+      }
+      .sec h3 {
+        margin: 0;
+        font-size: 15px;
+      }
+      .sec span {
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .card {
+        background: var(--surface);
+        border-radius: 18px;
+        padding: 14px;
+        border: 1px solid var(--line);
+      }
+      .task {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        padding: 12px 14px;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        margin-bottom: 8px;
+        min-height: 64px;
+      }
+      .task .chk {
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        border: 2px solid var(--line);
+        flex: none;
+        display: grid;
+        place-items: center;
+      }
+      .task.done .chk {
+        background: var(--green);
+        border-color: var(--green);
+        color: #fff;
+      }
+      .task.done .t {
+        text-decoration: line-through;
+        color: var(--muted);
+      }
+      .task .body {
+        flex: 1;
+        min-width: 0;
+      }
+      .task .t {
+        font-size: 15px;
+        font-weight: 500;
+        line-height: 1.35;
+      }
+      .task .m {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 3px;
+        flex-wrap: wrap;
+      }
+      .task.overdue {
+        border-color: color-mix(in srgb, var(--red) 40%, var(--line));
+        background: var(--red-soft);
+      }
+      .task.overdue .when {
+        color: var(--red);
+        font-weight: 600;
+      }
+      .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        display: inline-block;
+      }
+      .tag {
+        padding: 2px 8px;
+        border-radius: 999px;
+        font-size: 11px;
+        font-weight: 600;
+      }
+      .avatar {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: var(--brand-soft);
+        color: var(--brand);
+        display: grid;
+        place-items: center;
+        font-size: 12px;
+        font-weight: 700;
+        flex: none;
+        font-family: Inter, sans-serif;
+      }
+
+      /* Briefing hero */
+      .hero {
+        background: linear-gradient(135deg, var(--brand), var(--brand-2));
+        color: #fff;
+        border-radius: 22px;
+        padding: 18px;
+        display: flex;
+        gap: 14px;
+        align-items: center;
+      }
+      .hero .ring {
+        width: 66px;
+        height: 66px;
+        flex: none;
+      }
+      .hero h4 {
+        margin: 0 0 4px;
+        font-size: 16px;
+      }
+      .hero p {
+        margin: 0;
+        font-size: 13px;
+        opacity: 0.9;
+        line-height: 1.5;
+      }
+      .hero .play {
+        margin-top: 10px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 12px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.2);
+        font-size: 13px;
+        font-weight: 600;
+        color: #fff;
+      }
+
+      /* Tab bar */
+      .tabbar {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 88px;
+        background: var(--surface);
+        border-top: 1px solid var(--line);
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        align-items: center;
+        padding-bottom: 14px;
+      }
+      .tab {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 3px;
+        font-size: 11px;
+        color: var(--muted);
+      }
+      .tab.on {
+        color: var(--brand);
+        font-weight: 600;
+      }
+      .mic {
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--brand), var(--brand-2));
+        color: #fff;
+        display: grid;
+        place-items: center;
+        margin: -38px auto 0;
+        box-shadow: 0 10px 24px rgba(91, 75, 219, 0.45);
+        border: 5px solid var(--surface);
+      }
+
+      /* Upcoming day strip */
+      .days {
+        display: flex;
+        gap: 8px;
+        overflow-x: auto;
+        padding-bottom: 4px;
+        scrollbar-width: none;
+      }
+      .day {
+        flex: none;
+        width: 52px;
+        padding: 10px 0;
+        border-radius: 14px;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        text-align: center;
+      }
+      .day b {
+        display: block;
+        font-size: 18px;
+        font-family: Inter, sans-serif;
+      }
+      .day small {
+        font-size: 11px;
+        color: var(--muted);
+      }
+      .day.on {
+        background: var(--brand);
+        color: #fff;
+        border-color: var(--brand);
+      }
+      .day.on small {
+        color: #fff;
+      }
+      .day i {
+        display: block;
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: var(--red);
+        margin: 4px auto 0;
+      }
+
+      /* Areas */
+      .areas {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+      .area {
+        border-radius: 18px;
+        padding: 14px;
+        color: #fff;
+        min-height: 110px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        text-align: left;
+      }
+      .area h4 {
+        margin: 0;
+        font-size: 15px;
+      }
+      .area p {
+        margin: 0;
+        font-size: 12px;
+        opacity: 0.9;
+      }
+      .area b {
+        font-size: 26px;
+        font-family: Inter, sans-serif;
+      }
+
+      /* Voice overlay */
+      .voice {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, #17133a, #0b0c12);
+        color: #fff;
+        display: none;
+        flex-direction: column;
+        padding: 50px 20px 28px;
+        z-index: 5;
+      }
+      .voice.open {
+        display: flex;
+      }
+      .voice .top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 13px;
+        opacity: 0.8;
+      }
+      .convo {
+        flex: 1;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 18px 0;
+        scrollbar-width: none;
+      }
+      .bubble {
+        max-width: 85%;
+        padding: 11px 14px;
+        border-radius: 18px;
+        font-size: 15px;
+        line-height: 1.5;
+      }
+      .bubble.me {
+        align-self: flex-end;
+        background: rgba(255, 255, 255, 0.12);
+        border-bottom-right-radius: 6px;
+      }
+      .bubble.ai {
+        align-self: flex-start;
+        background: var(--brand);
+        border-bottom-left-radius: 6px;
+      }
+      .action-card {
+        align-self: flex-start;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 14px;
+        padding: 10px 12px;
+        font-size: 13px;
+        width: 85%;
+      }
+      .action-card b {
+        display: block;
+        font-size: 14px;
+        margin-bottom: 2px;
+      }
+      .chips {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-bottom: 14px;
+      }
+      .chips button {
+        padding: 9px 16px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.12);
+        color: #fff;
+        font-size: 14px;
+      }
+      .wave {
+        display: flex;
+        gap: 4px;
+        align-items: center;
+        justify-content: center;
+        height: 44px;
+        margin-bottom: 14px;
+      }
+      .wave span {
+        width: 5px;
+        border-radius: 3px;
+        background: var(--brand-2);
+        animation: w 1s ease-in-out infinite;
+      }
+      .wave.idle span {
+        animation: none;
+        height: 6px !important;
+        opacity: 0.5;
+      }
+      @keyframes w {
+        0%,
+        100% {
+          height: 8px;
+        }
+        50% {
+          height: 40px;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .wave span {
+          animation: none;
+          height: 16px;
+        }
+      }
+      .voice .bigmic {
+        width: 84px;
+        height: 84px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--brand), var(--brand-2));
+        margin: 0 auto;
+        display: grid;
+        place-items: center;
+        color: #fff;
+        box-shadow:
+          0 0 0 10px rgba(138, 124, 255, 0.18),
+          0 0 0 22px rgba(138, 124, 255, 0.08);
+      }
+      .voice .hint {
+        text-align: center;
+        font-size: 12px;
+        opacity: 0.6;
+        margin-top: 12px;
+      }
+
+      /* Detail / settings rows */
+      .row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 13px 14px;
+        border-bottom: 1px solid var(--line);
+        font-size: 14px;
+      }
+      .row:last-child {
+        border-bottom: 0;
+      }
+      .row .k {
+        color: var(--muted);
+        width: 96px;
+        flex: none;
+        font-size: 13px;
+      }
+      .row .v {
+        flex: 1;
+      }
+      .group {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        overflow: hidden;
+      }
+      .toggle {
+        width: 44px;
+        height: 26px;
+        border-radius: 999px;
+        background: var(--brand);
+        position: relative;
+        flex: none;
+      }
+      .toggle::after {
+        content: "";
+        position: absolute;
+        top: 3px;
+        right: 3px;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #fff;
+      }
+      .toggle.off {
+        background: var(--line);
+      }
+      .toggle.off::after {
+        right: auto;
+        left: 3px;
+      }
+      .btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        height: 52px;
+        border-radius: 16px;
+        font-weight: 600;
+        font-size: 15px;
+        width: 100%;
+      }
+      .btn.primary {
+        background: var(--brand);
+        color: #fff;
+      }
+      .btn.ghost {
+        background: var(--surface);
+        border: 1px solid var(--line);
+      }
+
+      /* Bars */
+      .bars {
+        display: flex;
+        align-items: flex-end;
+        gap: 10px;
+        height: 130px;
+        padding-top: 8px;
+      }
+      .bars div {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        font-size: 11px;
+        color: var(--muted);
+        height: 100%;
+        justify-content: flex-end;
+      }
+      .bars i {
+        width: 100%;
+        border-radius: 6px 6px 3px 3px;
+        background: var(--brand);
+        display: block;
+      }
+      .bars i.miss {
+        background: var(--red);
+        opacity: 0.8;
+      }
+      .stat-row {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+      }
+      .stat {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 12px;
+      }
+      .stat b {
+        font-size: 22px;
+        font-family: Inter, sans-serif;
+        display: block;
+      }
+      .stat small {
+        color: var(--muted);
+        font-size: 12px;
+      }
+      .meter {
+        height: 8px;
+        border-radius: 999px;
+        background: var(--surface-2);
+        overflow: hidden;
+        margin-top: 6px;
+      }
+      .meter i {
+        display: block;
+        height: 100%;
+        border-radius: 999px;
+      }
+
+      /* WhatsApp */
+      .wa {
+        background: #0b141a;
+        margin: 0 -18px;
+        min-height: 100%;
+        padding: 12px 14px 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .wa .h {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #e9edef;
+        padding: 4px 4px 10px;
+        border-bottom: 1px solid #222d34;
+        margin-bottom: 6px;
+      }
+      .wa .m {
+        max-width: 82%;
+        padding: 8px 10px;
+        border-radius: 10px;
+        font-size: 14px;
+        line-height: 1.45;
+        color: #e9edef;
+      }
+      .wa .in {
+        background: #202c33;
+        align-self: flex-start;
+      }
+      .wa .out {
+        background: #005c4b;
+        align-self: flex-end;
+      }
+      .wa .vn {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-width: 200px;
+      }
+      .wa .vn i {
+        flex: 1;
+        height: 3px;
+        background: #8696a0;
+        border-radius: 2px;
+      }
+      .wa time {
+        display: block;
+        text-align: right;
+        font-size: 10px;
+        color: #8696a0;
+        margin-top: 2px;
+      }
+
+      /* Notification */
+      .notif {
+        background: var(--surface);
+        border-radius: 20px;
+        padding: 12px 14px;
+        border: 1px solid var(--line);
+        box-shadow: var(--shadow);
+      }
+      .notif .app {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .notif .app span {
+        width: 18px;
+        height: 18px;
+        border-radius: 5px;
+        background: var(--brand);
+        display: inline-block;
+      }
+      .notif h5 {
+        margin: 6px 0 2px;
+        font-size: 14px;
+      }
+      .notif p {
+        margin: 0;
+        font-size: 13px;
+        color: var(--muted);
+      }
+      .notif .acts {
+        display: flex;
+        gap: 18px;
+        margin-top: 10px;
+        font-size: 13px;
+        color: var(--brand);
+        font-weight: 600;
+      }
+      .lock {
+        background: linear-gradient(160deg, #2b2470, #0e0f1a);
+        margin: 0 -18px;
+        min-height: 100%;
+        padding: 30px 14px;
+        color: #fff;
+      }
+      .lock .time {
+        text-align: center;
+        font-size: 64px;
+        font-weight: 300;
+        font-family: Inter, sans-serif;
+      }
+      .lock .date {
+        text-align: center;
+        opacity: 0.8;
+        margin-bottom: 30px;
+      }
+      .lock .notif {
+        margin-bottom: 10px;
+        color: var(--text);
+      }
+      svg {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <aside class="notes">
+        <h1>Sahayaka — UI prototype</h1>
+        <p>
+          Voice-first task & life manager. Screens click කරලා බලන්න — මැද තියෙන 🎤 button එක press කරාම voice assistant demo එක play වෙනවා (සිංහල voice එක
+          browser එකේ තියෙනවා නම් කියවනවා).
+        </p>
+        <div class="list" id="screenList"></div>
+        <div class="tools">
+          <button class="chip" id="themeBtn">🌓 Theme</button>
+          <button class="chip" id="voiceBtn">🎤 Voice demo</button>
+        </div>
+      </aside>
+
+      <div class="phone" id="phone">
+        <div class="status"><span>9:41</span><span>●●● ▮</span></div>
+        <div class="screen" id="screen"></div>
+
+        <nav class="tabbar" id="tabbar">
+          <button class="tab" data-go="today">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 10.5 12 3l9 7.5V21h-6v-6H9v6H3z" /></svg
+            >අද
+          </button>
+          <button class="tab" data-go="upcoming">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="4" width="18" height="17" rx="3" />
+              <path d="M3 9h18M8 2v4M16 2v4" /></svg
+            >ඉදිරියට
+          </button>
+          <button aria-label="Talk to assistant" class="mic" id="micBtn">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <rect x="9" y="2" width="6" height="12" rx="3" />
+              <path d="M5 11a7 7 0 0 0 14 0M12 18v4" />
+            </svg>
+          </button>
+          <button class="tab" data-go="team">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="9" cy="8" r="3.5" />
+              <path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14a6 6 0 0 1 3.5 6" /></svg
+            >Team
+          </button>
+          <button class="tab" data-go="more">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="5" cy="12" r="1.6" />
+              <circle cx="12" cy="12" r="1.6" />
+              <circle cx="19" cy="12" r="1.6" /></svg
+            >තව
+          </button>
+        </nav>
+
+        <section class="voice" id="voice" aria-live="polite">
+          <div class="top"><span>Sahayaka · සිංහල</span><button id="closeVoice" aria-label="Close">✕</button></div>
+          <div class="convo" id="convo"></div>
+          <div class="chips" id="chips"></div>
+          <div class="wave" id="wave"></div>
+          <div class="bigmic">
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <rect x="9" y="2" width="6" height="12" rx="3" />
+              <path d="M5 11a7 7 0 0 0 14 0M12 18v4" />
+            </svg>
+          </div>
+          <div class="hint">ඔබා ගෙන කතා කරන්න · press &amp; hold to talk</div>
+        </section>
+      </div>
+    </div>
+
+    <script>
+      const AREAS = {
+        agency: { si: "Agency", color: "var(--a-agency)" },
+        business: { si: "Business", color: "var(--a-business)" },
+        education: { si: "අධ්‍යාපන", color: "var(--a-education)" },
+        personal: { si: "පෞද්ගලික", color: "var(--a-personal)" },
+        finance: { si: "මූල්‍ය", color: "var(--a-finance)" },
+      };
+
+      const TASKS = [
+        { id: 1, t: "Perera Holdings invoice එක යවන්න", area: "agency", when: "ඊයේ 5:00 PM", overdue: true, who: "ම" },
+        { id: 2, t: "Assignment 3 submit කරන්න", area: "education", when: "ඊයේ 11:59 PM", overdue: true, who: "ම" },
+        { id: 3, t: "Team stand-up meeting", area: "agency", when: "9:00 AM · හැම දිනම", recur: true, done: true, who: "ම" },
+        { id: 4, t: "ABC client එක්ක meeting", area: "agency", when: "10:00 AM · 9ට මතක් කරනවා", who: "ම", meeting: true },
+        { id: 5, t: "Facebook posts 3ක් design කරන්න", area: "agency", when: "5:00 PM", who: "K" },
+        { id: 6, t: "Credit card bill — රු. 45,000", area: "finance", when: "අද", who: "ම" },
+        { id: 7, t: "Gym", area: "personal", when: "7:00 PM · සති 3 වතාවක්", recur: true, who: "ම" },
+      ];
+
+      const UPCOMING = [
+        {
+          day: "හෙට",
+          items: [
+            { t: "Shop එකේ stock order එක", area: "business", when: "11:00 AM" },
+            { t: "Ad accounts check කරන්න", area: "agency", when: "8:00 PM · daily", recur: true },
+          ],
+        },
+        { day: "ඉරිදා", items: [{ t: "Lecture notes review", area: "education", when: "3:00 PM" }] },
+        {
+          day: "සඳුදා",
+          items: [
+            { t: "Team meeting", area: "agency", when: "9:00 AM · weekly", recur: true },
+            { t: "Kasun — new client proposal", area: "agency", when: "5:00 PM", who: "K" },
+            { t: "Electricity bill", area: "finance", when: "අද දවස තුළ" },
+          ],
+        },
+      ];
+
+      const SCREENS = [
+        ["today", "අද (Today)"],
+        ["upcoming", "ඉදිරියට (Upcoming)"],
+        ["voice", "🎤 Voice assistant"],
+        ["areas", "Areas"],
+        ["detail", "Task detail"],
+        ["team", "Team"],
+        ["reports", "Reports"],
+        ["notify", "Reminders & notifications"],
+        ["whatsapp", "WhatsApp bot"],
+        ["more", "Settings / Integrations"],
+      ];
+
+      const $ = (s) => document.querySelector(s);
+      const screenEl = $("#screen");
+      let current = "today";
+
+      function areaTag(a) {
+        const A = AREAS[a];
+        return `<span class="tag" style="background:color-mix(in srgb, ${A.color} 14%, transparent);color:${A.color}">${A.si}</span>`;
+      }
+
+      function taskRow(x) {
+        const cls = ["task", x.overdue ? "overdue" : "", x.done ? "done" : ""].join(" ");
+        return `<button class="${cls}" data-go="detail" style="width:100%;text-align:left">
+    <span class="chk">${x.done ? "✓" : ""}</span>
+    <span class="body"><span class="t">${x.meeting ? "📅 " : ""}${x.t}</span>
+      <span class="m">${areaTag(x.area)}<span class="when">${x.recur ? "🔁 " : ""}${x.when}</span></span></span>
+    ${x.who ? `<span class="avatar">${x.who}</span>` : ""}
+  </button>`;
+      }
+
+      function ring(pct) {
+        const r = 28,
+          c = 2 * Math.PI * r;
+        return `<svg class="ring" viewBox="0 0 66 66"><circle cx="33" cy="33" r="${r}" stroke="rgba(255,255,255,.25)" stroke-width="7" fill="none"/>
+    <circle cx="33" cy="33" r="${r}" stroke="#fff" stroke-width="7" fill="none" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${c * (1 - pct)}" transform="rotate(-90 33 33)"/>
+    <text x="33" y="38" text-anchor="middle" fill="#fff" font-size="15" font-weight="700" font-family="Inter">${Math.round(pct * 100)}%</text></svg>`;
+      }
+
+      const VIEWS = {
+        today: () => {
+          const overdue = TASKS.filter((t) => t.overdue);
+          const today = TASKS.filter((t) => !t.overdue);
+          return `
+    <div class="hdr"><div><div class="sub">සිකුරාදා, ඔක්තෝබර් 9</div><h2>සුබ උදෑසනක් 👋</h2></div>
+      <button class="icon-btn" data-go="notify" aria-label="Notifications">🔔</button></div>
+    <div class="hero">${ring(0.2)}
+      <div><h4>අද කරන්න 5ක් · ඉවර නොකළ 2ක්</h4>
+      <p>10ට ABC meeting එක. Invoice එක ඊයේ යවන්න තිබ්බා.</p>
+      <button class="play" id="briefBtn">▶ Briefing අහන්න</button></div></div>
+    <div class="sec"><h3 style="color:var(--red)">⚠ ඉවර නොකළ (Overdue)</h3><span>${overdue.length}</span></div>
+    ${overdue.map(taskRow).join("")}
+    <div class="sec"><h3>අද</h3><span>${today.length} tasks</span></div>
+    ${today.map(taskRow).join("")}`;
+        },
+
+        upcoming: () => `
+    <div class="hdr"><h2>ඉදිරියට</h2><button class="icon-btn" aria-label="Calendar">📆</button></div>
+    <div class="days">${["සි 9", "සෙ 10", "ඉ 11", "ස 12", "අ 13", "බ 14", "බ්‍ර 15"]
+      .map((d, i) => {
+        const [w, n] = d.split(" ");
+        return `<div class="day ${i === 0 ? "on" : ""}"><small>${w}</small><b>${n}</b>${i === 3 ? "<i></i>" : ""}</div>`;
+      })
+      .join("")}</div>
+    ${UPCOMING.map((g) => `<div class="sec"><h3>${g.day}</h3><span>${g.items.length}</span></div>${g.items.map(taskRow).join("")}`).join("")}`,
+
+        areas: () => `
+    <div class="hdr"><h2>Areas</h2><button class="icon-btn" aria-label="Add area">＋</button></div>
+    <div class="areas">
+      ${[
+        ["agency", 12, 2],
+        ["business", 4, 0],
+        ["education", 3, 1],
+        ["personal", 5, 0],
+        ["finance", 4, 1],
+      ]
+        .map(
+          ([a, n, o]) => `
+        <button class="area" style="background:${AREAS[a].color}"><h4>${AREAS[a].si}</h4>
+          <div><b>${n}</b><p>open tasks${o ? ` · ${o} overdue` : ""}</p></div></button>`,
+        )
+        .join("")}
+      <button class="area" style="background:var(--surface);color:var(--muted);border:1.5px dashed var(--line);align-items:center;justify-content:center">＋ අලුත් area</button>
+    </div>
+    <div class="sec"><h3>Agency — projects</h3><span>3</span></div>
+    <div class="group">
+      <div class="row"><span class="dot" style="background:var(--a-agency)"></span><span class="v">ABC Rebrand</span><span class="sub">5</span></div>
+      <div class="row"><span class="dot" style="background:var(--a-agency)"></span><span class="v">Perera Holdings — Social media</span><span class="sub">4</span></div>
+      <div class="row"><span class="dot" style="background:var(--a-agency)"></span><span class="v">Internal / Admin</span><span class="sub">3</span></div>
+    </div>`,
+
+        detail: () => `
+    <div class="hdr"><button class="icon-btn" data-go="today" aria-label="Back">←</button><h2 style="font-size:18px">Task</h2><button class="icon-btn" aria-label="Edit">✎</button></div>
+    <div class="card" style="margin-bottom:12px">
+      <div style="display:flex;gap:8px;margin-bottom:8px">${areaTag("agency")}<span class="tag" style="background:var(--red-soft);color:var(--red)">High</span></div>
+      <h3 style="margin:0 0 6px;font-size:20px">ABC client එක්ක meeting</h3>
+      <p style="margin:0;color:var(--muted);font-size:14px;line-height:1.5">Rebrand proposal එක present කරන්න. Logo options 3ක් අරන් යන්න.</p>
+    </div>
+    <div class="group">
+      <div class="row"><span class="k">කවදාද</span><span class="v">අද · 10:00 AM – 11:00 AM</span></div>
+      <div class="row"><span class="k">මතක් කිරීම</span><span class="v">9:00 AM · 9:45 AM</span></div>
+      <div class="row"><span class="k">Channels</span><span class="v">📱 Push · 💬 WhatsApp</span></div>
+      <div class="row"><span class="k">Project</span><span class="v">ABC Rebrand</span></div>
+      <div class="row"><span class="k">Assignee</span><span class="v" style="display:flex;gap:8px;align-items:center"><span class="avatar">ම</span>මම</span></div>
+      <div class="row"><span class="k">Source</span><span class="v">🎤 Voice · "හෙට උදේ 10ට ABC client එක්ක meeting…"</span></div>
+    </div>
+    <div class="sec"><h3>Voice notes</h3><span>1</span></div>
+    <div class="card" style="display:flex;align-items:center;gap:10px"><button class="avatar" aria-label="Play">▶</button><div class="meter" style="flex:1"><i style="width:35%;background:var(--brand)"></i></div><span class="sub">0:18</span></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px">
+      <button class="btn ghost">⏰ Snooze</button><button class="btn primary">✓ Complete</button>
+    </div>`,
+
+        team: () => `
+    <div class="hdr"><h2>Team</h2><button class="icon-btn" aria-label="Invite">＋</button></div>
+    ${[
+      ["K", "Kasun", "Designer", 6, 1, "App"],
+      ["N", "Nimal", "Ads specialist", 4, 0, "WhatsApp"],
+      ["S", "Sanduni", "Content writer", 5, 2, "App"],
+      ["R", "Ravi (intern)", "Video editor", 2, 0, "WhatsApp"],
+    ]
+      .map(
+        ([i, n, r, p, o, ch]) => `
+      <div class="task"><span class="avatar" style="width:40px;height:40px;font-size:15px">${i}</span>
+        <span class="body"><span class="t">${n}</span><span class="m">${r} · ${ch === "WhatsApp" ? "💬 WhatsApp only" : "📱 App"}</span>
+          <div class="meter"><i style="width:${Math.min(100, p * 12)}%;background:${o ? "var(--red)" : "var(--green)"}"></i></div></span>
+        <span style="text-align:right;font-size:12px"><b style="font-size:16px;font-family:Inter">${p}</b><br><span style="color:${o ? "var(--red)" : "var(--muted)"}">${o ? o + " overdue" : "on track"}</span></span></div>`,
+      )
+      .join("")}
+    <div class="sec"><h3>අද assign කළ</h3><span>2</span></div>
+    ${taskRow({ t: "Facebook posts 3ක් design කරන්න", area: "agency", when: "අද 5:00 PM", who: "K" })}
+    ${taskRow({ t: "ABC ad campaign budget update", area: "agency", when: "හෙට 12:00 PM", who: "N" })}
+    <button class="btn ghost" style="margin-top:8px">🎤 "කසුන්ට task එකක් දෙන්න…" කියලා voice එකෙන් assign කරන්න</button>`,
+
+        reports: () => `
+    <div class="hdr"><button class="icon-btn" data-go="more" aria-label="Back">←</button><h2 style="font-size:18px">මේ සතිය</h2><button class="icon-btn" aria-label="Share">⤴</button></div>
+    <div class="stat-row">
+      <div class="stat"><b>31</b><small>ඉවරයි</small></div>
+      <div class="stat"><b style="color:var(--red)">4</b><small>Overdue</small></div>
+      <div class="stat"><b>86%</b><small>On time</small></div>
+    </div>
+    <div class="card" style="margin-top:12px"><div class="sec" style="margin-top:0"><h3>දිනපතා</h3><span><b style="color:var(--brand)">■</b> ඉවරයි <b style="color:var(--red)">■</b> miss</span></div>
+      <div class="bars">${[
+        [5, 1],
+        [6, 0],
+        [4, 1],
+        [7, 0],
+        [5, 2],
+        [3, 0],
+        [1, 0],
+      ]
+        .map(
+          ([d, m], i) => `
+        <div><i style="height:${d * 13}px"></i>${m ? `<i class="miss" style="height:${m * 13}px"></i>` : ""}${["ස", "අ", "බ", "බ්‍ර", "සි", "සෙ", "ඉ"][i]}</div>`,
+        )
+        .join("")}</div></div>
+    <div class="sec"><h3>Area අනුව</h3></div>
+    <div class="group">${[
+      ["agency", 18, 21],
+      ["business", 4, 5],
+      ["education", 3, 4],
+      ["personal", 4, 6],
+      ["finance", 2, 3],
+    ]
+      .map(
+        ([a, d, t]) => `
+      <div class="row"><span class="k">${AREAS[a].si}</span><span class="v"><div class="meter"><i style="width:${(d / t) * 100}%;background:${AREAS[a].color}"></i></div></span><span class="sub" style="width:44px;text-align:right">${d}/${t}</span></div>`,
+      )
+      .join("")}</div>
+    <button class="btn ghost" style="margin-top:12px">💬 WhatsApp එකට report එක යවන්න</button>`,
+
+        notify: () => `
+    <div class="lock">
+      <div class="time">9:00</div><div class="date">සිකුරාදා, ඔක්තෝබර් 9</div>
+      <div class="notif"><div class="app"><span></span>Sahayaka · දැන්</div>
+        <h5>⏰ පැයකින් ABC meeting එක</h5><p>10:00 AM · Rebrand proposal එක present කරන්න</p>
+        <div class="acts"><span>✓ OK</span><span>⏰ 15 min</span><span>🎤 Reply</span></div></div>
+      <div class="notif"><div class="app"><span></span>Sahayaka · 8:30</div>
+        <h5 style="color:var(--red)">⚠ Invoice එක තාම යවලා නෑ (ඊයේ)</h5><p>Perera Holdings invoice — දැන් කරන්නද, හෙටට දාන්නද?</p>
+        <div class="acts"><span>✓ Done</span><span>අදට</span><span>හෙටට</span></div></div>
+      <div class="notif"><div class="app"><span></span>Sahayaka · 7:00</div>
+        <h5>☀ Morning briefing</h5><p>අද tasks 5ක්, meeting 1ක්, overdue 2ක්. Tap කරලා අහන්න.</p></div>
+      <div class="notif"><div class="app"><span></span>Sahayaka · ඊයේ 8:00 PM</div>
+        <h5>🌙 Evening review</h5><p>අද ඉවර නොවුණ 2ක් තියෙනවා. හෙටට දාන්නද?</p>
+        <div class="acts"><span>ඔක්කොම හෙටට</span><span>🎤 කතා කරන්න</span></div></div>
+    </div>`,
+
+        whatsapp: () => `
+    <div class="wa">
+      <div class="h"><span class="avatar" style="background:#5b4bdb;color:#fff">S</span><div><b>Sahayaka Bot</b><div style="font-size:12px;color:#8696a0">business account</div></div></div>
+      <div class="m in">☀ <b>සුබ උදෑසනක්!</b><br>අද: 5 tasks · 1 meeting · ⚠ 2 overdue<br>1. ABC meeting — 10:00 AM<br>2. Facebook posts (Kasun) — 5:00 PM<br>3. Credit card bill — රු. 45,000<time>7:00</time></div>
+      <div class="m out"><div class="vn">▶<i></i>0:06</div><div style="font-size:12px;color:#c5e8df;margin-top:4px">🎤 "invoice එක යැව්වා, ඒක complete කරන්න. ඊට පස්සේ හෙට 3ට dentist appointment එකක් දාන්න"</div><time>8:12 ✓✓</time></div>
+      <div class="m in">✅ Perera Holdings invoice — complete.<br>📅 Dentist appointment — හෙට 3:00 PM (පෞද්ගලික). 2:00ට මතක් කරනවා.<time>8:12</time></div>
+      <div class="m in">📌 <b>Kasun</b> task එකක් ඉවර කළා: "Facebook posts 3ක් design කරන්න" ✅<time>4:40</time></div>
+      <div class="m out">අද මොනවද ඉතුරු?<time>4:41 ✓✓</time></div>
+      <div class="m in">ඉතුරු 2යි:<br>1. Credit card bill — රු. 45,000<br>2. Gym — 7:00 PM<time>4:41</time></div>
+    </div>`,
+
+        more: () => `
+    <div class="hdr"><h2>තව</h2></div>
+    <div class="group" style="margin-bottom:12px">
+      <button class="row" data-go="areas" style="width:100%">🗂 <span class="v" style="text-align:left">Areas & projects</span>›</button>
+      <button class="row" data-go="reports" style="width:100%">📊 <span class="v" style="text-align:left">Reports</span>›</button>
+      <button class="row" data-go="whatsapp" style="width:100%">💬 <span class="v" style="text-align:left">WhatsApp</span><span class="tag" style="background:var(--green-soft);color:var(--green)">Connected</span></button>
+    </div>
+    <div class="sec"><h3>Voice</h3></div>
+    <div class="group" style="margin-bottom:12px">
+      <div class="row"><span class="v">භාෂාව</span><span class="sub">සිංහල + English</span></div>
+      <div class="row"><span class="v">Replies කියවන්න</span><span class="toggle"></span></div>
+      <div class="row"><span class="v">කතා කරන වේගය</span><span class="sub">1.0×</span></div>
+      <div class="row"><span class="v">Quick tile / widget</span><span class="toggle"></span></div>
+    </div>
+    <div class="sec"><h3>Reminders</h3></div>
+    <div class="group" style="margin-bottom:12px">
+      <div class="row"><span class="v">Morning briefing</span><span class="sub">7:00 AM</span></div>
+      <div class="row"><span class="v">Evening review</span><span class="sub">8:00 PM</span></div>
+      <div class="row"><span class="v">Overdue මතක් කිරීම</span><span class="sub">හැම පැය 2කට</span></div>
+      <div class="row"><span class="v">Quiet hours</span><span class="sub">10 PM – 6 AM</span></div>
+    </div>
+    <div class="sec"><h3>Integrations (n8n)</h3><span>3 actions</span></div>
+    <div class="group" style="margin-bottom:12px">
+      <div class="row">⚡<span class="v">Client onboarding<div class="sub" style="font-size:12px">"onboarding start කරන්න"</div></span><span class="toggle"></span></div>
+      <div class="row">⚡<span class="v">Monthly client report<div class="sub" style="font-size:12px">"report එක generate කරන්න"</div></span><span class="toggle"></span></div>
+      <div class="row">⚡<span class="v">New lead → task<div class="sub" style="font-size:12px">inbound webhook</div></span><span class="toggle"></span></div>
+      <div class="row">🔑<span class="v">API keys & webhooks</span>›</div>
+    </div>
+    <div class="group"><div class="row">👥<span class="v">Team & invites</span>›</div><div class="row">💳<span class="v">Plan & billing</span><span class="sub">later</span></div></div>`,
+      };
+
+      /* ---------- Voice demo ---------- */
+      const SCRIPT = [
+        { me: "හෙට උදේ 10ට ABC client එක්ක meeting එකක් තියෙනවා" },
+        { ai: "හරි. කීයට මතක් කරන්නද?", ask: ["පැයකට කලින්", "30 min කලින්", "එපා"] },
+        { me: "පැයකට කලින්" },
+        { card: ["📅 ABC client meeting", "හෙට 10:00 AM · Agency · 9:00ට මතක් කරනවා"] },
+        { ai: "දැම්මා. හෙට 9ට මතක් කරනවා. තව මොනවා හරි?" },
+        { me: "අද කරන්න ඉතුරු මොනවද?" },
+        { ai: "ඉවර නොකළ 2ක් තියෙනවා — Perera Holdings invoice එක, සහ Assignment 3. අදට තව 3ක් තියෙනවා." },
+        { me: "Invoice එක යැව්වා, complete කරන්න" },
+        { card: ["✅ Perera Holdings invoice", "Complete · Undo"] },
+        { ai: "හරි, invoice එක complete. අදට තව 3ක් ඉතුරුයි. 👍", ask: ["ස්තූතියි", "Briefing එක කියවන්න"] },
+      ];
+
+      let timers = [];
+      function speak(text) {
+        try {
+          if (!("speechSynthesis" in window)) return;
+          const u = new SpeechSynthesisUtterance(text);
+          const voices = speechSynthesis.getVoices();
+          const si = voices.find((v) => v.lang && v.lang.toLowerCase().startsWith("si"));
+          if (si) {
+            u.voice = si;
+            u.lang = si.lang;
+          } else {
+            u.lang = "si-LK";
+          }
+          speechSynthesis.cancel();
+          speechSynthesis.speak(u);
+        } catch (e) {
+          /* speech is optional in the prototype */
+        }
+      }
+
+      function setWave(active) {
+        const w = $("#wave");
+        w.classList.toggle("idle", !active);
+      }
+
+      function openVoice() {
+        timers.forEach(clearTimeout);
+        timers = [];
+        const convo = $("#convo"),
+          chips = $("#chips");
+        convo.innerHTML = "";
+        chips.innerHTML = "";
+        $("#voice").classList.add("open");
+        let t = 300;
+        SCRIPT.forEach((s) => {
+          timers.push(
+            setTimeout(() => {
+              chips.innerHTML = "";
+              let el;
+              if (s.me) {
+                el = Object.assign(document.createElement("div"), { className: "bubble me", textContent: s.me });
+                setWave(true);
+              }
+              if (s.ai) {
+                el = Object.assign(document.createElement("div"), { className: "bubble ai", textContent: s.ai });
+                setWave(false);
+                speak(s.ai);
+              }
+              if (s.card) {
+                el = document.createElement("div");
+                el.className = "action-card";
+                el.innerHTML = `<b>${s.card[0]}</b>${s.card[1]}`;
+              }
+              convo.appendChild(el);
+              if (s.ask) chips.innerHTML = s.ask.map((a) => `<button>${a}</button>`).join("");
+              convo.scrollTop = convo.scrollHeight;
+            }, t),
+          );
+          t += s.ai ? 2600 : s.card ? 900 : 1500;
+        });
+        timers.push(setTimeout(() => setWave(false), t));
+      }
+
+      function closeVoice() {
+        timers.forEach(clearTimeout);
+        timers = [];
+        try {
+          speechSynthesis.cancel();
+        } catch (e) {}
+        $("#voice").classList.remove("open");
+      }
+
+      /* ---------- Navigation ---------- */
+      function go(name) {
+        if (name === "voice") {
+          openVoice();
+          return;
+        }
+        closeVoice();
+        current = name;
+        screenEl.innerHTML = VIEWS[name]();
+        screenEl.scrollTop = 0;
+        document.querySelectorAll(".tab").forEach((b) => b.classList.toggle("on", b.dataset.go === name));
+        document.querySelectorAll("#screenList button").forEach((b) => b.classList.toggle("on", b.dataset.s === name));
+        const bb = $("#briefBtn");
+        if (bb)
+          bb.onclick = () =>
+            speak(
+              "සුබ උදෑසනක්! අද කරන්න tasks පහක් තියෙනවා. උදේ දහයට ABC client meeting එක. ඊයේ ඉවර නොකළ දෙකක් තියෙනවා: Perera Holdings invoice එක සහ Assignment තුන.",
+            );
+        try {
+          localStorage.setItem("sahayaka-screen", name);
+        } catch (e) {}
+      }
+
+      $("#screenList").innerHTML = SCREENS.map(([k, l]) => `<button data-s="${k}">${l}</button>`).join("");
+      $("#screenList").addEventListener("click", (e) => {
+        const b = e.target.closest("button");
+        if (b) go(b.dataset.s);
+      });
+      document.addEventListener("click", (e) => {
+        const b = e.target.closest("[data-go]");
+        if (b) go(b.dataset.go);
+      });
+      $("#micBtn").onclick = openVoice;
+      $("#voiceBtn").onclick = openVoice;
+      $("#closeVoice").onclick = closeVoice;
+      $("#wave").innerHTML = Array.from({ length: 18 }, (_, i) => `<span style="animation-delay:${(i % 6) * 0.12}s"></span>`).join("");
+      setWave(false);
+      $("#themeBtn").onclick = () => {
+        const r = document.documentElement;
+        const dark = r.dataset.theme ? r.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+        r.dataset.theme = dark ? "light" : "dark";
+      };
+
+      let start = location.hash.slice(1);
+      if (!VIEWS[start] && start !== "voice") {
+        try {
+          start = localStorage.getItem("sahayaka-screen") || "today";
+        } catch (e) {
+          start = "today";
+        }
+      }
+      go(VIEWS[start] ? start : "today");
+      if (start === "voice") openVoice();
+      addEventListener("hashchange", () => {
+        const h = location.hash.slice(1);
+        if (VIEWS[h] || h === "voice") go(h);
+      });
+    </script>
+  </body>
+</html>
