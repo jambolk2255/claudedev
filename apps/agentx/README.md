@@ -12,7 +12,8 @@ npx expo start       # needs a development build (native modules: sqlite, audio,
 ```
 
 **APK:** every push that touches `apps/agentx` runs the **Agent X APK** GitHub Action, which typechecks, tests and builds a release APK
-(artifact `agent-x-apk`, arm64).
+(artifact `agent-x-apk`, arm64) and publishes it to the `agentx-latest` release:
+https://github.com/jambolk2255/claudedev/releases/download/agentx-latest/agent-x.apk
 
 | Folder              | What                                                                                  |
 | ------------------- | ------------------------------------------------------------------------------------- |

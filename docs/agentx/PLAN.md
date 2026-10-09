@@ -127,7 +127,10 @@ Sample n8n workflows and a step-by-step setup guide: [`n8n/README.md`](./n8n/REA
 
 ## Install the APK
 
-1. GitHub → repo → **Actions** → **Agent X APK** → latest run on `claude/task-management-app-1rk6n9` → download **agent-x-apk** (zip) → unzip.
-2. Phone එකට `.apk` file එක දාලා open කරන්න (Chrome/Files app එකට "Install unknown apps" allow කරන්න).
+1. Phone එකේ browser එකෙන් මේ link එක open කරන්න (හැම push එකකටම අලුත් build එකකින් update වෙනවා):
+   **https://github.com/jambolk2255/claudedev/releases/download/agentx-latest/agent-x.apk**
+2. Download වුණාම `agent-x.apk` open කරන්න → Chrome / Files app එකට "Install unknown apps" allow කරන්න → **Install**.
 3. Agent X → **තව → AI API keys** → Gemini key (aistudio.google.com) සහ Claude key (console.anthropic.com) paste කරන්න.
 4. Notifications සහ microphone permission දෙන්න.
+
+(GitHub → Actions → **Agent X APK** run එකේ `agent-x-apk` artifact එකෙනුත් ගන්න පුළුවන් — ඒකට GitHub login එකක් ඕන.)
