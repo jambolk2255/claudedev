@@ -1,0 +1,69 @@
+{
+  "name": "Agent X · inbox (sample)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "GET",
+        "path": "agentx-inbox",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "b1",
+      "name": "Agent X webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 0],
+      "webhookId": "b1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Agent X calls GET <inbox URL>?since=<ISO time>. Return new items only.\n// Replace the sample with a lookup in your CRM / sheet / database.\nconst since = $input.first().json.query?.since ?? null;\nconst items = [\n  { type: 'task', id: 'lead-1001', title: 'Call Silva Motors (new lead)', due: new Date(Date.now() + 3 * 3600e3).toISOString(), area: 'Agency', priority: 'high' },\n  { type: 'notify', title: 'Ad spend alert', body: 'ABC campaign spent 80% of today\\'s budget' },\n];\nreturn [{ json: { since, items } }];"
+      },
+      "id": "b2",
+      "name": "New items",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [240, 0]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "id": "b3",
+      "name": "Respond",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [480, 0]
+    }
+  ],
+  "connections": {
+    "Agent X webhook": {
+      "main": [
+        [
+          {
+            "node": "New items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "New items": {
+      "main": [
+        [
+          {
+            "node": "Respond",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {}
+}

@@ -1,4 +1,4 @@
-# Sahayaka — Voice command catalogue
+# Agent X — Voice command catalogue
 
 මේ ලිස්ට් එකේ තියෙන්නේ app එක (සහ WhatsApp bot එක) තේරුම් ගන්න ඕන command වර්ග, ඒ හැම එකක්ම AI
 එක call කරන **tool** එක, සහ assistant එක දෙන **reply** එක. M1 development වලදී මේවාම **test fixtures**
@@ -8,9 +8,9 @@
 
 1. **Record** — mic button (app) හෝ WhatsApp voice note → audio (m4a / ogg).
 2. **Speech-to-text** — Gemini Flash audio (සිංහල + Singlish + English) → transcript.
-3. **Understand** — Claude with tool calling. Context: today's date, timezone `Asia/Colombo`, user's areas,
-   team members, open tasks (titles + ids), conversation history (multi-turn).
-4. **Act** — API runs the tool(s) inside a DB transaction. Destructive / bulk actions return
+3. **Understand** — Claude with tool calling (Gemini function calling if only a Gemini key is set). Context: now,
+   timezone `Asia/Colombo`, areas, open tasks (titles + ids), enabled n8n actions, conversation history (multi-turn).
+4. **Act** — the app runs the tool(s) against the on-phone SQLite database. Destructive / bulk actions return
    `needsConfirmation` first.
 5. **Reply** — short reply in the user's language → shown + spoken by device TTS (`si-LK` / `en-US`).
    If `needsReply`, the mic opens again automatically.
@@ -40,7 +40,7 @@ Rules for the assistant:
 | `snooze_reminder`   | `taskId`, `until`                                                                                                   | no                                        |
 | `get_briefing`      | `day` (today / tomorrow)                                                                                            | no                                        |
 | `get_report`        | `period` (today / week / month), `groupBy?` (area / member)                                                         | no                                        |
-| `run_action`        | `actionKey`, `params` (n8n workflow registered in Settings)                                                         | **yes** if the action is marked "confirm" |
+| `run_action`        | `actionKey`, `params` (n8n action registered in Systems)                                                            | **yes** if the action is marked "confirm" |
 | `ask_clarification` | `question`, `expecting` (time / date / person / choice / yes_no)                                                    | —                                         |
 
 ## Command catalogue (examples → expected tool)

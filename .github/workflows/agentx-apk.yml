@@ -1,0 +1,52 @@
+name: Agent X APK
+
+on:
+  push:
+    branches: [main, "claude/**"]
+    paths:
+      - "apps/agentx/**"
+      - ".github/workflows/agentx-apk.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: agentx-apk-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    defaults:
+      run:
+        working-directory: apps/agentx
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: apps/agentx/package-lock.json
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: gradle/actions/setup-gradle@v4
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      - name: Generate the Android project
+        run: npx expo prebuild --platform android --no-install
+      - name: Build release APK
+        working-directory: apps/agentx/android
+        # arm64 only keeps the build fast and covers current Android phones.
+        run: ./gradlew assembleRelease --no-daemon -PreactNativeArchitectures=arm64-v8a
+      - name: Name the APK
+        run: |
+          mkdir -p dist
+          cp android/app/build/outputs/apk/release/app-release.apk "dist/agent-x-${GITHUB_SHA::7}.apk"
+          ls -la dist
+      - uses: actions/upload-artifact@v4
+        with:
+          name: agent-x-apk
+          path: apps/agentx/dist/*.apk
+          retention-days: 30

@@ -1,0 +1,52 @@
+{
+  "name": "@agentx/mobile",
+  "version": "0.1.0",
+  "main": "expo-router/entry",
+  "private": true,
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "build:apk": "npx eas-cli@latest build --platform android --profile preview"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.132.1",
+    "@expo/vector-icons": "^15.1.1",
+    "@react-native-community/datetimepicker": "9.1.0",
+    "expo": "~56.0.23",
+    "expo-asset": "~56.0.25",
+    "expo-audio": "~56.0.13",
+    "expo-background-task": "~56.0.27",
+    "expo-constants": "~56.0.27",
+    "expo-crypto": "~56.0.5",
+    "expo-device": "~56.0.4",
+    "expo-document-picker": "~56.0.4",
+    "expo-file-system": "~56.0.11",
+    "expo-font": "~56.0.7",
+    "expo-haptics": "~56.0.3",
+    "expo-linking": "~56.0.18",
+    "expo-localization": "~56.0.6",
+    "expo-notifications": "~56.0.26",
+    "expo-router": "~56.2.21",
+    "expo-secure-store": "~56.0.4",
+    "expo-sharing": "~56.0.26",
+    "expo-speech": "~56.0.3",
+    "expo-sqlite": "~56.0.6",
+    "expo-status-bar": "~56.0.4",
+    "expo-system-ui": "~56.0.5",
+    "expo-task-manager": "~56.0.27",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "react-native": "0.85.3",
+    "react-native-safe-area-context": "~5.7.0",
+    "react-native-screens": "~4.26.0",
+    "react-native-svg": "15.15.4",
+    "react-native-web": "~0.21.0"
+  },
+  "devDependencies": {
+    "@types/react": "~19.2.2",
+    "typescript": "~6.0.3",
+    "vitest": "^3.2.4"
+  }
+}

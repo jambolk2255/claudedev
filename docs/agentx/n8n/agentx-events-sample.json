@@ -1,0 +1,69 @@
+{
+  "name": "Agent X · events receiver (sample)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "agentx-events",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "c1",
+      "name": "Agent X webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 0],
+      "webhookId": "c1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Agent X sends: { app, event: 'task.created' | 'task.completed' | 'task.overdue', task, sentAt }\n// Route it: e.g. post to Slack/WhatsApp, update a CRM record, log to Google Sheets.\nconst { event, task } = $input.first().json.body ?? {};\nreturn [{ json: { ok: true, event, title: task?.title } }];"
+      },
+      "id": "c2",
+      "name": "Handle event",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [240, 0]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { ok: true } }}",
+        "options": {}
+      },
+      "id": "c3",
+      "name": "Respond",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [480, 0]
+    }
+  ],
+  "connections": {
+    "Agent X webhook": {
+      "main": [
+        [
+          {
+            "node": "Handle event",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Handle event": {
+      "main": [
+        [
+          {
+            "node": "Respond",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {}
+}

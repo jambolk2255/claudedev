@@ -1,0 +1,69 @@
+{
+  "name": "Agent X · voice action (sample)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "agentx-onboarding",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "a1",
+      "name": "Agent X webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 0],
+      "webhookId": "a1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Agent X sends: { app, action, params, sentAt }\n// Do the real work here (or replace this node with CRM / Google Drive / Gmail nodes),\n// then return { say: \"...\" } — Agent X reads it aloud.\nconst body = $input.first().json.body ?? {};\nconst client = body.params?.clientName ?? 'client';\nreturn [{ json: { say: `${client} onboarding started. Folder and welcome email are ready.` } }];"
+      },
+      "id": "a2",
+      "name": "Build reply",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [240, 0]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "id": "a3",
+      "name": "Respond",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [480, 0]
+    }
+  ],
+  "connections": {
+    "Agent X webhook": {
+      "main": [
+        [
+          {
+            "node": "Build reply",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build reply": {
+      "main": [
+        [
+          {
+            "node": "Respond",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {}
+}

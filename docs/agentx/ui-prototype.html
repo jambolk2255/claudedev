@@ -3,65 +3,44 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <title>Sahayaka UI Prototype</title>
+    <title>Agent X Prototype</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Sinhala:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Sinhala:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
     <style>
+      /* Agent X palette: royal blue + near-black + white. Dark is the default. */
       :root {
-        --bg: #eef0f6;
-        --surface: #ffffff;
-        --surface-2: #f5f6fb;
-        --text: #151826;
-        --muted: #6b7088;
-        --line: #e4e6ef;
-        --brand: #5b4bdb;
-        --brand-2: #8a7cff;
-        --brand-soft: #ece9ff;
-        --red: #e5484d;
-        --red-soft: #fdecec;
-        --amber: #d97706;
-        --amber-soft: #fff4e0;
-        --green: #16a34a;
-        --green-soft: #e7f7ec;
-        --a-agency: #5b4bdb;
-        --a-business: #0e9f8f;
-        --a-education: #d97706;
-        --a-personal: #db2777;
-        --a-finance: #2563eb;
-        --shadow: 0 10px 30px rgba(21, 24, 38, 0.1);
+        --bg: #0b0d12;
+        --surface: #141821;
+        --surface-2: #1b2030;
+        --line: #262c3b;
+        --text: #ffffff;
+        --muted: #9aa3b5;
+        --brand: #2d5bff;
+        --brand-2: #5b7cff;
+        --brand-soft: rgba(45, 91, 255, 0.16);
+        --on-brand: #ffffff;
+        --red: #ff4d4f;
+        --red-soft: rgba(255, 77, 79, 0.12);
+        --shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+        --frame: #000000;
         --font: "Noto Sans Sinhala", "Inter", system-ui, sans-serif;
       }
-      @media (prefers-color-scheme: dark) {
-        :root:not([data-theme="light"]) {
-          --bg: #0b0c12;
-          --surface: #161824;
-          --surface-2: #1d2030;
-          --text: #eceef7;
-          --muted: #9499b3;
-          --line: #2a2e42;
-          --brand-soft: #2a2550;
-          --red-soft: #3a1c20;
-          --amber-soft: #3a2a12;
-          --green-soft: #15301f;
-          --shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
-        }
-      }
-      :root[data-theme="dark"] {
-        --bg: #0b0c12;
-        --surface: #161824;
-        --surface-2: #1d2030;
-        --text: #eceef7;
-        --muted: #9499b3;
-        --line: #2a2e42;
-        --brand-soft: #2a2550;
-        --red-soft: #3a1c20;
-        --amber-soft: #3a2a12;
-        --green-soft: #15301f;
-        --shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+      :root[data-theme="light"] {
+        --bg: #ffffff;
+        --surface: #f4f6fa;
+        --surface-2: #e9edf5;
+        --line: #dde2ec;
+        --text: #0b0d12;
+        --muted: #5b6475;
+        --brand-soft: rgba(45, 91, 255, 0.1);
+        --red: #e5383b;
+        --red-soft: rgba(229, 56, 59, 0.08);
+        --shadow: 0 10px 30px rgba(11, 13, 18, 0.12);
+        --frame: #0b0d12;
       }
       * {
         box-sizing: border-box;
@@ -76,15 +55,17 @@
         font-family: var(--font);
         -webkit-font-smoothing: antialiased;
       }
-      button {
+      button,
+      input {
         font: inherit;
         color: inherit;
         border: 0;
         background: none;
+      }
+      button {
         cursor: pointer;
       }
 
-      /* Desktop layout: notes | phone */
       .page {
         display: grid;
         grid-template-columns: minmax(240px, 320px) auto;
@@ -94,8 +75,14 @@
         padding: 32px 16px;
       }
       .notes h1 {
-        font-size: 22px;
+        font-size: 24px;
         margin: 0 0 4px;
+        font-family: Inter, sans-serif;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+      }
+      .notes h1 b {
+        color: var(--brand);
       }
       .notes p {
         color: var(--muted);
@@ -124,6 +111,7 @@
         display: flex;
         gap: 8px;
         margin-top: 16px;
+        flex-wrap: wrap;
       }
       .chip {
         padding: 6px 12px;
@@ -132,15 +120,32 @@
         border: 1px solid var(--line);
         font-size: 13px;
       }
+      .swatches {
+        display: flex;
+        gap: 6px;
+        margin: 4px 0 16px;
+      }
+      .swatches span {
+        flex: 1;
+        height: 34px;
+        border-radius: 8px;
+        border: 1px solid var(--line);
+        font:
+          600 10px Inter,
+          sans-serif;
+        display: grid;
+        place-items: center;
+      }
 
       .phone {
         width: 390px;
         height: 820px;
         border-radius: 44px;
-        background: var(--surface-2);
+        background: var(--bg);
         box-shadow:
           var(--shadow),
-          0 0 0 10px #1b1d29;
+          0 0 0 10px var(--frame),
+          0 0 0 11px var(--line);
         overflow: hidden;
         position: relative;
         display: flex;
@@ -166,7 +171,6 @@
       .screen::-webkit-scrollbar {
         display: none;
       }
-
       @media (max-width: 760px) {
         .page {
           display: block;
@@ -183,12 +187,12 @@
         }
       }
 
-      /* Common */
       .hdr {
         display: flex;
         justify-content: space-between;
         align-items: center;
         margin: 6px 0 14px;
+        gap: 10px;
       }
       .hdr h2 {
         margin: 0;
@@ -198,6 +202,13 @@
         color: var(--muted);
         font-size: 13px;
       }
+      .brandmark {
+        font:
+          800 13px Inter,
+          sans-serif;
+        letter-spacing: 1.5px;
+        color: var(--brand);
+      }
       .icon-btn {
         width: 40px;
         height: 40px;
@@ -206,6 +217,7 @@
         display: grid;
         place-items: center;
         border: 1px solid var(--line);
+        flex: none;
       }
       .sec {
         display: flex;
@@ -237,6 +249,8 @@
         border-radius: 16px;
         margin-bottom: 8px;
         min-height: 64px;
+        width: 100%;
+        text-align: left;
       }
       .task .chk {
         width: 26px;
@@ -246,11 +260,12 @@
         flex: none;
         display: grid;
         place-items: center;
+        font-size: 14px;
       }
       .task.done .chk {
-        background: var(--green);
-        border-color: var(--green);
-        color: #fff;
+        background: var(--brand);
+        border-color: var(--brand);
+        color: var(--on-brand);
       }
       .task.done .t {
         text-decoration: line-through;
@@ -264,6 +279,7 @@
         font-size: 15px;
         font-weight: 500;
         line-height: 1.35;
+        display: block;
       }
       .task .m {
         display: flex;
@@ -271,52 +287,69 @@
         align-items: center;
         font-size: 12px;
         color: var(--muted);
-        margin-top: 3px;
+        margin-top: 4px;
         flex-wrap: wrap;
       }
       .task.overdue {
-        border-color: color-mix(in srgb, var(--red) 40%, var(--line));
+        border-color: color-mix(in srgb, var(--red) 55%, var(--line));
         background: var(--red-soft);
+      }
+      .task.overdue .chk {
+        border-color: var(--red);
       }
       .task.overdue .when {
         color: var(--red);
         font-weight: 600;
-      }
-      .dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        display: inline-block;
       }
       .tag {
         padding: 2px 8px;
         border-radius: 999px;
         font-size: 11px;
         font-weight: 600;
+        background: var(--brand-soft);
+        color: var(--brand-2);
+        display: inline-flex;
+        gap: 4px;
+        align-items: center;
+      }
+      :root[data-theme="light"] .tag {
+        color: var(--brand);
       }
       .avatar {
         width: 28px;
         height: 28px;
         border-radius: 50%;
-        background: var(--brand-soft);
-        color: var(--brand);
+        background: var(--surface-2);
+        color: var(--text);
         display: grid;
         place-items: center;
         font-size: 12px;
         font-weight: 700;
         flex: none;
         font-family: Inter, sans-serif;
+        border: 1px solid var(--line);
       }
 
-      /* Briefing hero */
       .hero {
-        background: linear-gradient(135deg, var(--brand), var(--brand-2));
-        color: #fff;
+        background: var(--brand);
+        color: var(--on-brand);
         border-radius: 22px;
         padding: 18px;
         display: flex;
         gap: 14px;
         align-items: center;
+        position: relative;
+        overflow: hidden;
+      }
+      .hero::after {
+        content: "";
+        position: absolute;
+        right: -40px;
+        top: -40px;
+        width: 140px;
+        height: 140px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.08);
       }
       .hero .ring {
         width: 66px;
@@ -330,7 +363,7 @@
       .hero p {
         margin: 0;
         font-size: 13px;
-        opacity: 0.9;
+        opacity: 0.92;
         line-height: 1.5;
       }
       .hero .play {
@@ -340,13 +373,14 @@
         gap: 6px;
         padding: 7px 12px;
         border-radius: 999px;
-        background: rgba(255, 255, 255, 0.2);
+        background: #0b0d12;
         font-size: 13px;
         font-weight: 600;
         color: #fff;
+        position: relative;
+        z-index: 1;
       }
 
-      /* Tab bar */
       .tabbar {
         position: absolute;
         left: 0;
@@ -369,23 +403,25 @@
         color: var(--muted);
       }
       .tab.on {
-        color: var(--brand);
+        color: var(--brand-2);
         font-weight: 600;
+      }
+      :root[data-theme="light"] .tab.on {
+        color: var(--brand);
       }
       .mic {
         width: 72px;
         height: 72px;
         border-radius: 50%;
-        background: linear-gradient(135deg, var(--brand), var(--brand-2));
-        color: #fff;
+        background: var(--brand);
+        color: var(--on-brand);
         display: grid;
         place-items: center;
         margin: -38px auto 0;
-        box-shadow: 0 10px 24px rgba(91, 75, 219, 0.45);
-        border: 5px solid var(--surface);
+        box-shadow: 0 10px 24px rgba(45, 91, 255, 0.45);
+        border: 5px solid var(--bg);
       }
 
-      /* Upcoming day strip */
       .days {
         display: flex;
         gap: 8px;
@@ -413,11 +449,11 @@
       }
       .day.on {
         background: var(--brand);
-        color: #fff;
+        color: var(--on-brand);
         border-color: var(--brand);
       }
       .day.on small {
-        color: #fff;
+        color: var(--on-brand);
       }
       .day i {
         display: block;
@@ -428,7 +464,6 @@
         margin: 4px auto 0;
       }
 
-      /* Areas */
       .areas {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -437,37 +472,60 @@
       .area {
         border-radius: 18px;
         padding: 14px;
-        color: #fff;
-        min-height: 110px;
+        min-height: 112px;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         text-align: left;
+        background: var(--surface);
+        border: 1px solid var(--line);
+      }
+      .area .ic {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        display: grid;
+        place-items: center;
+        background: var(--brand-soft);
+        font-size: 18px;
       }
       .area h4 {
-        margin: 0;
+        margin: 8px 0 0;
         font-size: 15px;
       }
       .area p {
         margin: 0;
         font-size: 12px;
-        opacity: 0.9;
+        color: var(--muted);
       }
       .area b {
-        font-size: 26px;
+        font-size: 24px;
         font-family: Inter, sans-serif;
       }
+      .area .od {
+        color: var(--red);
+      }
 
-      /* Voice overlay */
       .voice {
         position: absolute;
         inset: 0;
-        background: linear-gradient(180deg, #17133a, #0b0c12);
+        background: #0b0d12;
         color: #fff;
         display: none;
         flex-direction: column;
         padding: 50px 20px 28px;
         z-index: 5;
+      }
+      .voice::before {
+        content: "";
+        position: absolute;
+        left: 50%;
+        bottom: -160px;
+        width: 520px;
+        height: 420px;
+        transform: translateX(-50%);
+        background: radial-gradient(closest-side, rgba(45, 91, 255, 0.35), transparent);
+        pointer-events: none;
       }
       .voice.open {
         display: flex;
@@ -477,7 +535,8 @@
         justify-content: space-between;
         align-items: center;
         font-size: 13px;
-        opacity: 0.8;
+        color: #9aa3b5;
+        position: relative;
       }
       .convo {
         flex: 1;
@@ -487,6 +546,7 @@
         gap: 10px;
         padding: 18px 0;
         scrollbar-width: none;
+        position: relative;
       }
       .bubble {
         max-width: 85%;
@@ -497,7 +557,7 @@
       }
       .bubble.me {
         align-self: flex-end;
-        background: rgba(255, 255, 255, 0.12);
+        background: #1b2030;
         border-bottom-right-radius: 6px;
       }
       .bubble.ai {
@@ -507,17 +567,19 @@
       }
       .action-card {
         align-self: flex-start;
-        background: rgba(255, 255, 255, 0.08);
-        border: 1px solid rgba(255, 255, 255, 0.15);
+        background: #141821;
+        border: 1px solid #262c3b;
         border-radius: 14px;
         padding: 10px 12px;
         font-size: 13px;
         width: 85%;
+        color: #9aa3b5;
       }
       .action-card b {
         display: block;
         font-size: 14px;
         margin-bottom: 2px;
+        color: #fff;
       }
       .chips {
         display: flex;
@@ -525,11 +587,13 @@
         flex-wrap: wrap;
         justify-content: center;
         margin-bottom: 14px;
+        position: relative;
       }
       .chips button {
         padding: 9px 16px;
         border-radius: 999px;
-        background: rgba(255, 255, 255, 0.12);
+        background: #1b2030;
+        border: 1px solid #262c3b;
         color: #fff;
         font-size: 14px;
       }
@@ -540,11 +604,12 @@
         justify-content: center;
         height: 44px;
         margin-bottom: 14px;
+        position: relative;
       }
       .wave span {
         width: 5px;
         border-radius: 3px;
-        background: var(--brand-2);
+        background: #5b7cff;
         animation: w 1s ease-in-out infinite;
       }
       .wave.idle span {
@@ -571,23 +636,40 @@
         width: 84px;
         height: 84px;
         border-radius: 50%;
-        background: linear-gradient(135deg, var(--brand), var(--brand-2));
+        background: var(--brand);
         margin: 0 auto;
         display: grid;
         place-items: center;
         color: #fff;
         box-shadow:
-          0 0 0 10px rgba(138, 124, 255, 0.18),
-          0 0 0 22px rgba(138, 124, 255, 0.08);
+          0 0 0 10px rgba(45, 91, 255, 0.2),
+          0 0 0 22px rgba(45, 91, 255, 0.08);
+        position: relative;
       }
       .voice .hint {
         text-align: center;
         font-size: 12px;
-        opacity: 0.6;
+        color: #9aa3b5;
         margin-top: 12px;
+        position: relative;
+      }
+      .voice .type {
+        margin-top: 12px;
+        display: flex;
+        gap: 8px;
+        position: relative;
+      }
+      .voice .type input {
+        flex: 1;
+        height: 42px;
+        border-radius: 12px;
+        background: #141821;
+        border: 1px solid #262c3b;
+        padding: 0 12px;
+        color: #fff;
+        font-size: 14px;
       }
 
-      /* Detail / settings rows */
       .row {
         display: flex;
         align-items: center;
@@ -595,6 +677,8 @@
         padding: 13px 14px;
         border-bottom: 1px solid var(--line);
         font-size: 14px;
+        width: 100%;
+        text-align: left;
       }
       .row:last-child {
         border-bottom: 0;
@@ -607,6 +691,13 @@
       }
       .row .v {
         flex: 1;
+        min-width: 0;
+      }
+      .row .v small {
+        display: block;
+        color: var(--muted);
+        font-size: 12px;
+        margin-top: 1px;
       }
       .group {
         background: var(--surface);
@@ -652,14 +743,35 @@
       }
       .btn.primary {
         background: var(--brand);
-        color: #fff;
+        color: var(--on-brand);
       }
       .btn.ghost {
         background: var(--surface);
         border: 1px solid var(--line);
       }
+      .field {
+        background: var(--surface-2);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 8px 10px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font:
+          500 13px Inter,
+          sans-serif;
+        color: var(--muted);
+        margin-top: 6px;
+      }
+      .ok {
+        color: var(--brand-2);
+        font-weight: 600;
+        font-size: 12px;
+      }
+      :root[data-theme="light"] .ok {
+        color: var(--brand);
+      }
 
-      /* Bars */
       .bars {
         display: flex;
         align-items: flex-end;
@@ -672,7 +784,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 6px;
+        gap: 3px;
         font-size: 11px;
         color: var(--muted);
         height: 100%;
@@ -680,13 +792,12 @@
       }
       .bars i {
         width: 100%;
-        border-radius: 6px 6px 3px 3px;
+        border-radius: 6px;
         background: var(--brand);
         display: block;
       }
       .bars i.miss {
         background: var(--red);
-        opacity: 0.8;
       }
       .stat-row {
         display: grid;
@@ -719,70 +830,83 @@
         display: block;
         height: 100%;
         border-radius: 999px;
+        background: var(--brand);
       }
 
-      /* WhatsApp */
-      .wa {
-        background: #0b141a;
-        margin: 0 -18px;
-        min-height: 100%;
-        padding: 12px 14px 20px;
+      .sys {
         display: flex;
-        flex-direction: column;
-        gap: 8px;
-      }
-      .wa .h {
-        display: flex;
+        gap: 12px;
         align-items: center;
-        gap: 10px;
-        color: #e9edef;
-        padding: 4px 4px 10px;
-        border-bottom: 1px solid #222d34;
-        margin-bottom: 6px;
+        padding: 14px;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        margin-bottom: 8px;
+        width: 100%;
+        text-align: left;
       }
-      .wa .m {
-        max-width: 82%;
-        padding: 8px 10px;
-        border-radius: 10px;
-        font-size: 14px;
-        line-height: 1.45;
-        color: #e9edef;
+      .sys .logo {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        background: var(--brand-soft);
+        display: grid;
+        place-items: center;
+        font-size: 20px;
+        flex: none;
       }
-      .wa .in {
-        background: #202c33;
-        align-self: flex-start;
-      }
-      .wa .out {
-        background: #005c4b;
-        align-self: flex-end;
-      }
-      .wa .vn {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        min-width: 200px;
-      }
-      .wa .vn i {
+      .sys .body {
         flex: 1;
-        height: 3px;
-        background: #8696a0;
-        border-radius: 2px;
+        min-width: 0;
       }
-      .wa time {
+      .sys .body b {
         display: block;
-        text-align: right;
-        font-size: 10px;
-        color: #8696a0;
-        margin-top: 2px;
+        font-size: 15px;
+      }
+      .sys .body small {
+        color: var(--muted);
+        font-size: 12px;
+      }
+      .dotok {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--brand-2);
+        display: inline-block;
+        margin-right: 4px;
+      }
+      .flow {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 6px;
+        font-size: 12px;
+        text-align: center;
+      }
+      .flow div {
+        flex: 1;
+        padding: 10px 4px;
+        border-radius: 12px;
+        background: var(--surface-2);
+        border: 1px solid var(--line);
+      }
+      .flow div.hub {
+        background: var(--brand);
+        color: var(--on-brand);
+        border-color: var(--brand);
+        font-weight: 700;
+      }
+      .flow span {
+        color: var(--muted);
       }
 
-      /* Notification */
       .notif {
         background: var(--surface);
         border-radius: 20px;
         padding: 12px 14px;
         border: 1px solid var(--line);
         box-shadow: var(--shadow);
+        margin-bottom: 10px;
       }
       .notif .app {
         display: flex;
@@ -796,7 +920,12 @@
         height: 18px;
         border-radius: 5px;
         background: var(--brand);
-        display: inline-block;
+        display: inline-grid;
+        place-items: center;
+        color: #fff;
+        font:
+          800 9px Inter,
+          sans-serif;
       }
       .notif h5 {
         margin: 6px 0 2px;
@@ -812,15 +941,17 @@
         gap: 18px;
         margin-top: 10px;
         font-size: 13px;
-        color: var(--brand);
+        color: var(--brand-2);
         font-weight: 600;
       }
+      :root[data-theme="light"] .notif .acts {
+        color: var(--brand);
+      }
       .lock {
-        background: linear-gradient(160deg, #2b2470, #0e0f1a);
         margin: 0 -18px;
         min-height: 100%;
         padding: 30px 14px;
-        color: #fff;
+        background: radial-gradient(120% 70% at 50% 0%, rgba(45, 91, 255, 0.35), transparent 70%), var(--bg);
       }
       .lock .time {
         text-align: center;
@@ -830,12 +961,8 @@
       }
       .lock .date {
         text-align: center;
-        opacity: 0.8;
+        color: var(--muted);
         margin-bottom: 30px;
-      }
-      .lock .notif {
-        margin-bottom: 10px;
-        color: var(--text);
       }
       svg {
         display: block;
@@ -845,14 +972,16 @@
   <body>
     <div class="page">
       <aside class="notes">
-        <h1>Sahayaka — UI prototype</h1>
-        <p>
-          Voice-first task & life manager. Screens click කරලා බලන්න — මැද තියෙන 🎤 button එක press කරාම voice assistant demo එක play වෙනවා (සිංහල voice එක
-          browser එකේ තියෙනවා නම් කියවනවා).
-        </p>
+        <h1>Agent <b>X</b></h1>
+        <p>Voice-first task & life manager. Screens click කරලා බලන්න — මැද තියෙන 🎤 button එක press කරාම voice assistant demo එක play වෙනවා.</p>
+        <div class="swatches">
+          <span style="background: #2d5bff; color: #fff">#2D5BFF</span>
+          <span style="background: #0b0d12; color: #fff">#0B0D12</span>
+          <span style="background: #ffffff; color: #0b0d12">#FFFFFF</span>
+        </div>
         <div class="list" id="screenList"></div>
         <div class="tools">
-          <button class="chip" id="themeBtn">🌓 Theme</button>
+          <button class="chip" id="themeBtn">🌓 Dark / Light</button>
           <button class="chip" id="voiceBtn">🎤 Voice demo</button>
         </div>
       </aside>
@@ -873,17 +1002,19 @@
               <path d="M3 9h18M8 2v4M16 2v4" /></svg
             >ඉදිරියට
           </button>
-          <button aria-label="Talk to assistant" class="mic" id="micBtn">
+          <button aria-label="Talk to Agent X" class="mic" id="micBtn">
             <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
               <rect x="9" y="2" width="6" height="12" rx="3" />
               <path d="M5 11a7 7 0 0 0 14 0M12 18v4" />
             </svg>
           </button>
-          <button class="tab" data-go="team">
+          <button class="tab" data-go="systems">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="9" cy="8" r="3.5" />
-              <path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14a6 6 0 0 1 3.5 6" /></svg
-            >Team
+              <rect x="3" y="3" width="7" height="7" rx="2" />
+              <rect x="14" y="3" width="7" height="7" rx="2" />
+              <rect x="3" y="14" width="7" height="7" rx="2" />
+              <path d="M17.5 14v7M14 17.5h7" /></svg
+            >Systems
           </button>
           <button class="tab" data-go="more">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -895,7 +1026,9 @@
         </nav>
 
         <section class="voice" id="voice" aria-live="polite">
-          <div class="top"><span>Sahayaka · සිංහල</span><button id="closeVoice" aria-label="Close">✕</button></div>
+          <div class="top">
+            <span><b style="color: #fff; font-family: Inter">AGENT X</b> · සිංහල</span><button id="closeVoice" aria-label="Close" style="color: #fff">✕</button>
+          </div>
           <div class="convo" id="convo"></div>
           <div class="chips" id="chips"></div>
           <div class="wave" id="wave"></div>
@@ -906,27 +1039,28 @@
             </svg>
           </div>
           <div class="hint">ඔබා ගෙන කතා කරන්න · press &amp; hold to talk</div>
+          <div class="type"><input placeholder="නැත්නම් type කරන්න…" aria-label="Type a command" /></div>
         </section>
       </div>
     </div>
 
     <script>
       const AREAS = {
-        agency: { si: "Agency", color: "var(--a-agency)" },
-        business: { si: "Business", color: "var(--a-business)" },
-        education: { si: "අධ්‍යාපන", color: "var(--a-education)" },
-        personal: { si: "පෞද්ගලික", color: "var(--a-personal)" },
-        finance: { si: "මූල්‍ය", color: "var(--a-finance)" },
+        agency: { name: "Agency", icon: "💼" },
+        business: { name: "Business", icon: "🏪" },
+        education: { name: "අධ්‍යාපන", icon: "🎓" },
+        personal: { name: "පෞද්ගලික", icon: "🏠" },
+        finance: { name: "මූල්‍ය", icon: "💳" },
       };
 
       const TASKS = [
-        { id: 1, t: "Perera Holdings invoice එක යවන්න", area: "agency", when: "ඊයේ 5:00 PM", overdue: true, who: "ම" },
-        { id: 2, t: "Assignment 3 submit කරන්න", area: "education", when: "ඊයේ 11:59 PM", overdue: true, who: "ම" },
-        { id: 3, t: "Team stand-up meeting", area: "agency", when: "9:00 AM · හැම දිනම", recur: true, done: true, who: "ම" },
-        { id: 4, t: "ABC client එක්ක meeting", area: "agency", when: "10:00 AM · 9ට මතක් කරනවා", who: "ම", meeting: true },
-        { id: 5, t: "Facebook posts 3ක් design කරන්න", area: "agency", when: "5:00 PM", who: "K" },
-        { id: 6, t: "Credit card bill — රු. 45,000", area: "finance", when: "අද", who: "ම" },
-        { id: 7, t: "Gym", area: "personal", when: "7:00 PM · සති 3 වතාවක්", recur: true, who: "ම" },
+        { t: "Perera Holdings invoice එක යවන්න", area: "agency", when: "ඊයේ 5:00 PM", overdue: true },
+        { t: "Assignment 3 submit කරන්න", area: "education", when: "ඊයේ 11:59 PM", overdue: true },
+        { t: "Team stand-up meeting", area: "agency", when: "9:00 AM · හැම දිනම", recur: true, done: true },
+        { t: "ABC client එක්ක meeting", area: "agency", when: "10:00 AM · 9ට මතක් කරනවා", meeting: true },
+        { t: "Facebook posts 3ක් design කරන්න", area: "agency", when: "5:00 PM", who: "K" },
+        { t: "Credit card bill — රු. 45,000", area: "finance", when: "අද" },
+        { t: "Gym", area: "personal", when: "7:00 PM · සති 3 වතාවක්", recur: true },
       ];
 
       const UPCOMING = [
@@ -942,8 +1076,8 @@
           day: "සඳුදා",
           items: [
             { t: "Team meeting", area: "agency", when: "9:00 AM · weekly", recur: true },
-            { t: "Kasun — new client proposal", area: "agency", when: "5:00 PM", who: "K" },
-            { t: "Electricity bill", area: "finance", when: "අද දවස තුළ" },
+            { t: "New client proposal", area: "agency", when: "5:00 PM", who: "K" },
+            { t: "Electricity bill", area: "finance", when: "දවස තුළ" },
           ],
         },
       ];
@@ -952,27 +1086,23 @@
         ["today", "අද (Today)"],
         ["upcoming", "ඉදිරියට (Upcoming)"],
         ["voice", "🎤 Voice assistant"],
-        ["areas", "Areas"],
+        ["areas", "Areas (customize)"],
         ["detail", "Task detail"],
-        ["team", "Team"],
-        ["reports", "Reports"],
+        ["systems", "Systems (n8n linkage)"],
+        ["system", "System detail + actions"],
         ["notify", "Reminders & notifications"],
-        ["whatsapp", "WhatsApp bot"],
-        ["more", "Settings / Integrations"],
+        ["reports", "Reports"],
+        ["more", "Settings · API keys · Backup"],
       ];
 
       const $ = (s) => document.querySelector(s);
       const screenEl = $("#screen");
-      let current = "today";
 
-      function areaTag(a) {
-        const A = AREAS[a];
-        return `<span class="tag" style="background:color-mix(in srgb, ${A.color} 14%, transparent);color:${A.color}">${A.si}</span>`;
-      }
+      const areaTag = (a) => `<span class="tag">${AREAS[a].icon} ${AREAS[a].name}</span>`;
 
       function taskRow(x) {
         const cls = ["task", x.overdue ? "overdue" : "", x.done ? "done" : ""].join(" ");
-        return `<button class="${cls}" data-go="detail" style="width:100%;text-align:left">
+        return `<button class="${cls}" data-go="detail">
     <span class="chk">${x.done ? "✓" : ""}</span>
     <span class="body"><span class="t">${x.meeting ? "📅 " : ""}${x.t}</span>
       <span class="m">${areaTag(x.area)}<span class="when">${x.recur ? "🔁 " : ""}${x.when}</span></span></span>
@@ -988,12 +1118,14 @@
     <text x="33" y="38" text-anchor="middle" fill="#fff" font-size="15" font-weight="700" font-family="Inter">${Math.round(pct * 100)}%</text></svg>`;
       }
 
+      const back = (to) => `<button class="icon-btn" data-go="${to}" aria-label="Back">←</button>`;
+
       const VIEWS = {
         today: () => {
           const overdue = TASKS.filter((t) => t.overdue);
           const today = TASKS.filter((t) => !t.overdue);
           return `
-    <div class="hdr"><div><div class="sub">සිකුරාදා, ඔක්තෝබර් 9</div><h2>සුබ උදෑසනක් 👋</h2></div>
+    <div class="hdr"><div><div class="brandmark">AGENT X</div><h2>සුබ උදෑසනක් 👋</h2><div class="sub">සිකුරාදා, ඔක්තෝබර් 9</div></div>
       <button class="icon-btn" data-go="notify" aria-label="Notifications">🔔</button></div>
     <div class="hero">${ring(0.2)}
       <div><h4>අද කරන්න 5ක් · ඉවර නොකළ 2ක්</h4>
@@ -1016,7 +1148,8 @@
     ${UPCOMING.map((g) => `<div class="sec"><h3>${g.day}</h3><span>${g.items.length}</span></div>${g.items.map(taskRow).join("")}`).join("")}`,
 
         areas: () => `
-    <div class="hdr"><h2>Areas</h2><button class="icon-btn" aria-label="Add area">＋</button></div>
+    <div class="hdr">${back("more")}<h2 style="font-size:18px">Areas</h2><button class="icon-btn" aria-label="Add area">＋</button></div>
+    <p class="sub" style="color:var(--muted);font-size:13px;margin:0 2px 12px">ඔයාට ඕන විදිහට areas එකතු කරන්න, නම/icon වෙනස් කරන්න, අනුපිළිවෙළ මාරු කරන්න.</p>
     <div class="areas">
       ${[
         ["agency", 12, 2],
@@ -1027,63 +1160,100 @@
       ]
         .map(
           ([a, n, o]) => `
-        <button class="area" style="background:${AREAS[a].color}"><h4>${AREAS[a].si}</h4>
-          <div><b>${n}</b><p>open tasks${o ? ` · ${o} overdue` : ""}</p></div></button>`,
+        <button class="area"><span class="ic">${AREAS[a].icon}</span><h4>${AREAS[a].name}</h4>
+          <div><b>${n}</b><p>open tasks${o ? ` · <span class="od">${o} overdue</span>` : ""}</p></div></button>`,
         )
         .join("")}
-      <button class="area" style="background:var(--surface);color:var(--muted);border:1.5px dashed var(--line);align-items:center;justify-content:center">＋ අලුත් area</button>
+      <button class="area" style="border-style:dashed;align-items:center;justify-content:center;color:var(--muted)">＋ අලුත් area</button>
     </div>
-    <div class="sec"><h3>Agency — projects</h3><span>3</span></div>
+    <div class="sec"><h3>Edit: Agency</h3></div>
     <div class="group">
-      <div class="row"><span class="dot" style="background:var(--a-agency)"></span><span class="v">ABC Rebrand</span><span class="sub">5</span></div>
-      <div class="row"><span class="dot" style="background:var(--a-agency)"></span><span class="v">Perera Holdings — Social media</span><span class="sub">4</span></div>
-      <div class="row"><span class="dot" style="background:var(--a-agency)"></span><span class="v">Internal / Admin</span><span class="sub">3</span></div>
+      <div class="row"><span class="k">නම</span><span class="v">Agency</span>✎</div>
+      <div class="row"><span class="k">Icon</span><span class="v">💼 🏪 🎓 🏠 💳 📈 🛠 ❤️</span></div>
+      <div class="row"><span class="k">Default reminder</span><span class="v">පැයකට කලින්</span></div>
+      <div class="row"><span class="k">System link</span><span class="v">⚡ Agency CRM (n8n)</span>›</div>
     </div>`,
 
         detail: () => `
-    <div class="hdr"><button class="icon-btn" data-go="today" aria-label="Back">←</button><h2 style="font-size:18px">Task</h2><button class="icon-btn" aria-label="Edit">✎</button></div>
+    <div class="hdr">${back("today")}<h2 style="font-size:18px">Task</h2><button class="icon-btn" aria-label="Edit">✎</button></div>
     <div class="card" style="margin-bottom:12px">
       <div style="display:flex;gap:8px;margin-bottom:8px">${areaTag("agency")}<span class="tag" style="background:var(--red-soft);color:var(--red)">High</span></div>
       <h3 style="margin:0 0 6px;font-size:20px">ABC client එක්ක meeting</h3>
       <p style="margin:0;color:var(--muted);font-size:14px;line-height:1.5">Rebrand proposal එක present කරන්න. Logo options 3ක් අරන් යන්න.</p>
     </div>
     <div class="group">
-      <div class="row"><span class="k">කවදාද</span><span class="v">අද · 10:00 AM – 11:00 AM</span></div>
+      <div class="row"><span class="k">කවදාද</span><span class="v">අද · 10:00 AM</span></div>
       <div class="row"><span class="k">මතක් කිරීම</span><span class="v">9:00 AM · 9:45 AM</span></div>
-      <div class="row"><span class="k">Channels</span><span class="v">📱 Push · 💬 WhatsApp</span></div>
-      <div class="row"><span class="k">Project</span><span class="v">ABC Rebrand</span></div>
-      <div class="row"><span class="k">Assignee</span><span class="v" style="display:flex;gap:8px;align-items:center"><span class="avatar">ම</span>මම</span></div>
-      <div class="row"><span class="k">Source</span><span class="v">🎤 Voice · "හෙට උදේ 10ට ABC client එක්ක meeting…"</span></div>
+      <div class="row"><span class="k">Repeat</span><span class="v">නෑ</span></div>
+      <div class="row"><span class="k">Linked</span><span class="v">⚡ Agency CRM → task.completed</span></div>
+      <div class="row"><span class="k">Source</span><span class="v">🎤 "හෙට උදේ 10ට ABC client එක්ක meeting…"</span></div>
     </div>
-    <div class="sec"><h3>Voice notes</h3><span>1</span></div>
-    <div class="card" style="display:flex;align-items:center;gap:10px"><button class="avatar" aria-label="Play">▶</button><div class="meter" style="flex:1"><i style="width:35%;background:var(--brand)"></i></div><span class="sub">0:18</span></div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px">
       <button class="btn ghost">⏰ Snooze</button><button class="btn primary">✓ Complete</button>
     </div>`,
 
-        team: () => `
-    <div class="hdr"><h2>Team</h2><button class="icon-btn" aria-label="Invite">＋</button></div>
+        systems: () => `
+    <div class="hdr"><div><div class="brandmark">AGENT X</div><h2>Systems</h2></div><button class="icon-btn" aria-label="Add system">＋</button></div>
+    <div class="card" style="margin-bottom:12px">
+      <div style="font-size:13px;color:var(--muted);margin-bottom:10px">ඔයාගේ systems Agent X එක්ක link වෙන්නේ n8n හරහා</div>
+      <div class="flow"><div>🎤<br>Agent X</div><span>⇄</span><div class="hub">n8n</div><span>⇄</span><div>💼<br>CRM · HR · Ads</div></div>
+    </div>
     ${[
-      ["K", "Kasun", "Designer", 6, 1, "App"],
-      ["N", "Nimal", "Ads specialist", 4, 0, "WhatsApp"],
-      ["S", "Sanduni", "Content writer", 5, 2, "App"],
-      ["R", "Ravi (intern)", "Video editor", 2, 0, "WhatsApp"],
+      ["💼", "Agency CRM", "3 actions · events on", true],
+      ["👥", "HR / Recruitment", "2 actions · inbox on", true],
+      ["📈", "Ads reporting", "1 action", true],
+      ["🏪", "Shop POS", "inbox · every 15 min", true],
+      ["💬", "WhatsApp", "ඉක්මනින් (later)", false],
     ]
       .map(
-        ([i, n, r, p, o, ch]) => `
-      <div class="task"><span class="avatar" style="width:40px;height:40px;font-size:15px">${i}</span>
-        <span class="body"><span class="t">${n}</span><span class="m">${r} · ${ch === "WhatsApp" ? "💬 WhatsApp only" : "📱 App"}</span>
-          <div class="meter"><i style="width:${Math.min(100, p * 12)}%;background:${o ? "var(--red)" : "var(--green)"}"></i></div></span>
-        <span style="text-align:right;font-size:12px"><b style="font-size:16px;font-family:Inter">${p}</b><br><span style="color:${o ? "var(--red)" : "var(--muted)"}">${o ? o + " overdue" : "on track"}</span></span></div>`,
+        ([i, n, d, on]) => `
+      <button class="sys" data-go="system"><span class="logo">${i}</span><span class="body"><b>${n}</b><small>${on ? '<span class="dotok"></span>' : ""}${d}</small></span>›</button>`,
       )
       .join("")}
-    <div class="sec"><h3>අද assign කළ</h3><span>2</span></div>
-    ${taskRow({ t: "Facebook posts 3ක් design කරන්න", area: "agency", when: "අද 5:00 PM", who: "K" })}
-    ${taskRow({ t: "ABC ad campaign budget update", area: "agency", when: "හෙට 12:00 PM", who: "N" })}
-    <button class="btn ghost" style="margin-top:8px">🎤 "කසුන්ට task එකක් දෙන්න…" කියලා voice එකෙන් assign කරන්න</button>`,
+    <button class="btn ghost" style="margin-top:6px">＋ අලුත් system එකක් එකතු කරන්න</button>`,
+
+        system: () => `
+    <div class="hdr">${back("systems")}<h2 style="font-size:18px">💼 Agency CRM</h2><button class="icon-btn" aria-label="Edit">✎</button></div>
+    <div class="group" style="margin-bottom:12px">
+      <div class="row"><span class="k">n8n URL</span><span class="v"><div class="field">https://n8n.myagency.lk/webhook</div></span></div>
+      <div class="row"><span class="k">Secret</span><span class="v"><div class="field">••••••••••••</div></span></div>
+      <div class="row"><span class="k">Status</span><span class="v ok">● Connected · 2 min ago</span></div>
+    </div>
+    <div class="sec"><h3>⚡ Voice actions</h3><span>"කියන්න…"</span></div>
+    <div class="group" style="margin-bottom:12px">
+      <div class="row">⚡<span class="v">Client onboarding<small>"Perera Holdings onboarding start කරන්න" · confirm first</small></span><span class="toggle"></span></div>
+      <div class="row">⚡<span class="v">New lead add<small>"අලුත් lead එකක් දාන්න, නම…"</small></span><span class="toggle"></span></div>
+      <div class="row">⚡<span class="v">Client status<small>"ABC project එක කොහොමද?" → n8n reply කියවනවා</small></span><span class="toggle"></span></div>
+      <button class="row" style="color:var(--brand-2)">＋ Action එකක් එකතු කරන්න</button>
+    </div>
+    <div class="sec"><h3>📤 Events (Agent X → system)</h3></div>
+    <div class="group" style="margin-bottom:12px">
+      <div class="row"><span class="v">task.created</span><span class="toggle off"></span></div>
+      <div class="row"><span class="v">task.completed</span><span class="toggle"></span></div>
+      <div class="row"><span class="v">task.overdue</span><span class="toggle"></span></div>
+    </div>
+    <div class="sec"><h3>📥 Inbox (system → Agent X)</h3></div>
+    <div class="group">
+      <div class="row"><span class="v">New CRM tasks & alerts<small>හැම මිනිත්තු 15කට check කරනවා</small></span><span class="toggle"></span></div>
+    </div>`,
+
+        notify: () => `
+    <div class="lock">
+      <div class="time">9:00</div><div class="date">සිකුරාදා, ඔක්තෝබර් 9</div>
+      <div class="notif"><div class="app"><span>X</span>Agent X · දැන්</div>
+        <h5>⏰ පැයකින් ABC meeting එක</h5><p>10:00 AM · Rebrand proposal එක present කරන්න</p>
+        <div class="acts"><span>✓ OK</span><span>⏰ 15 min</span><span>🎤 Reply</span></div></div>
+      <div class="notif"><div class="app"><span>X</span>Agent X · 8:30</div>
+        <h5 style="color:var(--red)">⚠ Invoice එක තාම යවලා නෑ (ඊයේ)</h5><p>Perera Holdings invoice — දැන් කරන්නද, හෙටට දාන්නද?</p>
+        <div class="acts"><span>✓ Done</span><span>අදට</span><span>හෙටට</span></div></div>
+      <div class="notif"><div class="app"><span>X</span>Agent X · 7:00</div>
+        <h5>☀ Morning briefing</h5><p>අද tasks 5ක්, meeting 1ක්, overdue 2ක්. Tap කරලා අහන්න.</p></div>
+      <div class="notif"><div class="app"><span>X</span>Agent X · ⚡ Agency CRM</div>
+        <h5>📥 අලුත් lead: Silva Motors</h5><p>CRM එකෙන් task එකක් ආවා — "Silva Motors call කරන්න" (අද 3 PM)</p></div>
+    </div>`,
 
         reports: () => `
-    <div class="hdr"><button class="icon-btn" data-go="more" aria-label="Back">←</button><h2 style="font-size:18px">මේ සතිය</h2><button class="icon-btn" aria-label="Share">⤴</button></div>
+    <div class="hdr">${back("more")}<h2 style="font-size:18px">මේ සතිය</h2><button class="icon-btn" aria-label="Share">⤴</button></div>
     <div class="stat-row">
       <div class="stat"><b>31</b><small>ඉවරයි</small></div>
       <div class="stat"><b style="color:var(--red)">4</b><small>Overdue</small></div>
@@ -1101,7 +1271,7 @@
       ]
         .map(
           ([d, m], i) => `
-        <div><i style="height:${d * 13}px"></i>${m ? `<i class="miss" style="height:${m * 13}px"></i>` : ""}${["ස", "අ", "බ", "බ්‍ර", "සි", "සෙ", "ඉ"][i]}</div>`,
+        <div>${m ? `<i class="miss" style="height:${m * 12}px"></i>` : ""}<i style="height:${d * 12}px"></i>${["ස", "අ", "බ", "බ්‍ර", "සි", "සෙ", "ඉ"][i]}</div>`,
         )
         .join("")}</div></div>
     <div class="sec"><h3>Area අනුව</h3></div>
@@ -1114,51 +1284,27 @@
     ]
       .map(
         ([a, d, t]) => `
-      <div class="row"><span class="k">${AREAS[a].si}</span><span class="v"><div class="meter"><i style="width:${(d / t) * 100}%;background:${AREAS[a].color}"></i></div></span><span class="sub" style="width:44px;text-align:right">${d}/${t}</span></div>`,
+      <div class="row"><span class="k">${AREAS[a].icon} ${AREAS[a].name}</span><span class="v"><div class="meter"><i style="width:${(d / t) * 100}%"></i></div></span><span class="sub" style="width:44px;text-align:right">${d}/${t}</span></div>`,
       )
-      .join("")}</div>
-    <button class="btn ghost" style="margin-top:12px">💬 WhatsApp එකට report එක යවන්න</button>`,
-
-        notify: () => `
-    <div class="lock">
-      <div class="time">9:00</div><div class="date">සිකුරාදා, ඔක්තෝබර් 9</div>
-      <div class="notif"><div class="app"><span></span>Sahayaka · දැන්</div>
-        <h5>⏰ පැයකින් ABC meeting එක</h5><p>10:00 AM · Rebrand proposal එක present කරන්න</p>
-        <div class="acts"><span>✓ OK</span><span>⏰ 15 min</span><span>🎤 Reply</span></div></div>
-      <div class="notif"><div class="app"><span></span>Sahayaka · 8:30</div>
-        <h5 style="color:var(--red)">⚠ Invoice එක තාම යවලා නෑ (ඊයේ)</h5><p>Perera Holdings invoice — දැන් කරන්නද, හෙටට දාන්නද?</p>
-        <div class="acts"><span>✓ Done</span><span>අදට</span><span>හෙටට</span></div></div>
-      <div class="notif"><div class="app"><span></span>Sahayaka · 7:00</div>
-        <h5>☀ Morning briefing</h5><p>අද tasks 5ක්, meeting 1ක්, overdue 2ක්. Tap කරලා අහන්න.</p></div>
-      <div class="notif"><div class="app"><span></span>Sahayaka · ඊයේ 8:00 PM</div>
-        <h5>🌙 Evening review</h5><p>අද ඉවර නොවුණ 2ක් තියෙනවා. හෙටට දාන්නද?</p>
-        <div class="acts"><span>ඔක්කොම හෙටට</span><span>🎤 කතා කරන්න</span></div></div>
-    </div>`,
-
-        whatsapp: () => `
-    <div class="wa">
-      <div class="h"><span class="avatar" style="background:#5b4bdb;color:#fff">S</span><div><b>Sahayaka Bot</b><div style="font-size:12px;color:#8696a0">business account</div></div></div>
-      <div class="m in">☀ <b>සුබ උදෑසනක්!</b><br>අද: 5 tasks · 1 meeting · ⚠ 2 overdue<br>1. ABC meeting — 10:00 AM<br>2. Facebook posts (Kasun) — 5:00 PM<br>3. Credit card bill — රු. 45,000<time>7:00</time></div>
-      <div class="m out"><div class="vn">▶<i></i>0:06</div><div style="font-size:12px;color:#c5e8df;margin-top:4px">🎤 "invoice එක යැව්වා, ඒක complete කරන්න. ඊට පස්සේ හෙට 3ට dentist appointment එකක් දාන්න"</div><time>8:12 ✓✓</time></div>
-      <div class="m in">✅ Perera Holdings invoice — complete.<br>📅 Dentist appointment — හෙට 3:00 PM (පෞද්ගලික). 2:00ට මතක් කරනවා.<time>8:12</time></div>
-      <div class="m in">📌 <b>Kasun</b> task එකක් ඉවර කළා: "Facebook posts 3ක් design කරන්න" ✅<time>4:40</time></div>
-      <div class="m out">අද මොනවද ඉතුරු?<time>4:41 ✓✓</time></div>
-      <div class="m in">ඉතුරු 2යි:<br>1. Credit card bill — රු. 45,000<br>2. Gym — 7:00 PM<time>4:41</time></div>
-    </div>`,
+      .join("")}</div>`,
 
         more: () => `
     <div class="hdr"><h2>තව</h2></div>
     <div class="group" style="margin-bottom:12px">
-      <button class="row" data-go="areas" style="width:100%">🗂 <span class="v" style="text-align:left">Areas & projects</span>›</button>
-      <button class="row" data-go="reports" style="width:100%">📊 <span class="v" style="text-align:left">Reports</span>›</button>
-      <button class="row" data-go="whatsapp" style="width:100%">💬 <span class="v" style="text-align:left">WhatsApp</span><span class="tag" style="background:var(--green-soft);color:var(--green)">Connected</span></button>
+      <button class="row" data-go="areas">🗂 <span class="v">Areas</span>›</button>
+      <button class="row" data-go="reports">📊 <span class="v">Reports</span>›</button>
+      <div class="row">👥 <span class="v">Team<small>v0.3 — sync server එක්ක</small></span></div>
+    </div>
+    <div class="sec"><h3>🔑 AI API keys</h3><span>phone එකේ secure storage</span></div>
+    <div class="group" style="margin-bottom:12px">
+      <div class="row"><span class="v">Gemini (voice → text)<div class="field">AIza••••••••••••3kQ</div></span><span class="ok">✓</span></div>
+      <div class="row"><span class="v">Claude (තේරුම් ගැනීම)<div class="field">sk-ant-••••••••••</div></span><span class="ok">✓</span></div>
     </div>
     <div class="sec"><h3>Voice</h3></div>
     <div class="group" style="margin-bottom:12px">
       <div class="row"><span class="v">භාෂාව</span><span class="sub">සිංහල + English</span></div>
       <div class="row"><span class="v">Replies කියවන්න</span><span class="toggle"></span></div>
-      <div class="row"><span class="v">කතා කරන වේගය</span><span class="sub">1.0×</span></div>
-      <div class="row"><span class="v">Quick tile / widget</span><span class="toggle"></span></div>
+      <div class="row"><span class="v">Theme</span><span class="sub">Dark</span></div>
     </div>
     <div class="sec"><h3>Reminders</h3></div>
     <div class="group" style="margin-bottom:12px">
@@ -1167,28 +1313,25 @@
       <div class="row"><span class="v">Overdue මතක් කිරීම</span><span class="sub">හැම පැය 2කට</span></div>
       <div class="row"><span class="v">Quiet hours</span><span class="sub">10 PM – 6 AM</span></div>
     </div>
-    <div class="sec"><h3>Integrations (n8n)</h3><span>3 actions</span></div>
-    <div class="group" style="margin-bottom:12px">
-      <div class="row">⚡<span class="v">Client onboarding<div class="sub" style="font-size:12px">"onboarding start කරන්න"</div></span><span class="toggle"></span></div>
-      <div class="row">⚡<span class="v">Monthly client report<div class="sub" style="font-size:12px">"report එක generate කරන්න"</div></span><span class="toggle"></span></div>
-      <div class="row">⚡<span class="v">New lead → task<div class="sub" style="font-size:12px">inbound webhook</div></span><span class="toggle"></span></div>
-      <div class="row">🔑<span class="v">API keys & webhooks</span>›</div>
-    </div>
-    <div class="group"><div class="row">👥<span class="v">Team & invites</span>›</div><div class="row">💳<span class="v">Plan & billing</span><span class="sub">later</span></div></div>`,
+    <div class="sec"><h3>💾 Backup</h3><span>අන්තිම: අද 2:00 AM</span></div>
+    <div class="group">
+      <div class="row"><span class="v">Auto backup → n8n (Google Drive)<small>දිනපතා</small></span><span class="toggle"></span></div>
+      <button class="row">⬇ <span class="v">Backup file එකක් save කරන්න</span></button>
+      <button class="row">⬆ <span class="v">Backup එකෙන් restore කරන්න</span></button>
+    </div>`,
       };
 
-      /* ---------- Voice demo ---------- */
       const SCRIPT = [
         { me: "හෙට උදේ 10ට ABC client එක්ක meeting එකක් තියෙනවා" },
         { ai: "හරි. කීයට මතක් කරන්නද?", ask: ["පැයකට කලින්", "30 min කලින්", "එපා"] },
         { me: "පැයකට කලින්" },
         { card: ["📅 ABC client meeting", "හෙට 10:00 AM · Agency · 9:00ට මතක් කරනවා"] },
         { ai: "දැම්මා. හෙට 9ට මතක් කරනවා. තව මොනවා හරි?" },
-        { me: "අද කරන්න ඉතුරු මොනවද?" },
-        { ai: "ඉවර නොකළ 2ක් තියෙනවා — Perera Holdings invoice එක, සහ Assignment 3. අදට තව 3ක් තියෙනවා." },
-        { me: "Invoice එක යැව්වා, complete කරන්න" },
-        { card: ["✅ Perera Holdings invoice", "Complete · Undo"] },
-        { ai: "හරි, invoice එක complete. අදට තව 3ක් ඉතුරුයි. 👍", ask: ["ස්තූතියි", "Briefing එක කියවන්න"] },
+        { me: "Perera Holdings onboarding එක start කරන්න" },
+        { ai: "Agency CRM එකේ client onboarding workflow එක run කරන්නද?", ask: ["ඔව්", "නෑ"] },
+        { me: "ඔව්" },
+        { card: ["⚡ Agency CRM · Client onboarding", "n8n: Perera Holdings — folder, invoice & welcome email හැදුවා"] },
+        { ai: "හරි, onboarding එක start කළා. Welcome email එක යැව්වා. 👍", ask: ["ස්තූතියි", "අද ඉතුරු මොනවද?"] },
       ];
 
       let timers = [];
@@ -1196,8 +1339,7 @@
         try {
           if (!("speechSynthesis" in window)) return;
           const u = new SpeechSynthesisUtterance(text);
-          const voices = speechSynthesis.getVoices();
-          const si = voices.find((v) => v.lang && v.lang.toLowerCase().startsWith("si"));
+          const si = speechSynthesis.getVoices().find((v) => v.lang && v.lang.toLowerCase().startsWith("si"));
           if (si) {
             u.voice = si;
             u.lang = si.lang;
@@ -1210,11 +1352,7 @@
           /* speech is optional in the prototype */
         }
       }
-
-      function setWave(active) {
-        const w = $("#wave");
-        w.classList.toggle("idle", !active);
-      }
+      const setWave = (active) => $("#wave").classList.toggle("idle", !active);
 
       function openVoice() {
         timers.forEach(clearTimeout);
@@ -1253,7 +1391,6 @@
         });
         timers.push(setTimeout(() => setWave(false), t));
       }
-
       function closeVoice() {
         timers.forEach(clearTimeout);
         timers = [];
@@ -1263,26 +1400,31 @@
         $("#voice").classList.remove("open");
       }
 
-      /* ---------- Navigation ---------- */
+      const TAB_FOR = {
+        today: "today",
+        detail: "today",
+        notify: "today",
+        upcoming: "upcoming",
+        systems: "systems",
+        system: "systems",
+        more: "more",
+        areas: "more",
+        reports: "more",
+      };
       function go(name) {
         if (name === "voice") {
           openVoice();
           return;
         }
         closeVoice();
-        current = name;
         screenEl.innerHTML = VIEWS[name]();
         screenEl.scrollTop = 0;
-        document.querySelectorAll(".tab").forEach((b) => b.classList.toggle("on", b.dataset.go === name));
+        document.querySelectorAll(".tab").forEach((b) => b.classList.toggle("on", b.dataset.go === TAB_FOR[name]));
         document.querySelectorAll("#screenList button").forEach((b) => b.classList.toggle("on", b.dataset.s === name));
         const bb = $("#briefBtn");
-        if (bb)
-          bb.onclick = () =>
-            speak(
-              "සුබ උදෑසනක්! අද කරන්න tasks පහක් තියෙනවා. උදේ දහයට ABC client meeting එක. ඊයේ ඉවර නොකළ දෙකක් තියෙනවා: Perera Holdings invoice එක සහ Assignment තුන.",
-            );
+        if (bb) bb.onclick = () => speak("සුබ උදෑසනක්! අද කරන්න tasks පහක් තියෙනවා. උදේ දහයට ABC client meeting එක. ඊයේ ඉවර නොකළ දෙකක් තියෙනවා.");
         try {
-          localStorage.setItem("sahayaka-screen", name);
+          localStorage.setItem("agentx-screen", name);
         } catch (e) {}
       }
 
@@ -1302,14 +1444,15 @@
       setWave(false);
       $("#themeBtn").onclick = () => {
         const r = document.documentElement;
-        const dark = r.dataset.theme ? r.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
-        r.dataset.theme = dark ? "light" : "dark";
+        r.dataset.theme = r.dataset.theme === "light" ? "dark" : "light";
       };
 
+      const params = new URLSearchParams(location.search);
+      if (params.get("theme") === "light") document.documentElement.dataset.theme = "light";
       let start = location.hash.slice(1);
       if (!VIEWS[start] && start !== "voice") {
         try {
-          start = localStorage.getItem("sahayaka-screen") || "today";
+          start = localStorage.getItem("agentx-screen") || "today";
         } catch (e) {
           start = "today";
         }
