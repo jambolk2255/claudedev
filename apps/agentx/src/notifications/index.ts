@@ -6,6 +6,10 @@ import { clearAllNotifIds, notifIds, repo, setNotifIds } from "@/db";
 import { translate } from "@/lib/i18n";
 
 const CHANNEL = "reminders";
+/** Same as CHANNEL but Android shows "contents hidden" on a secure lock screen. Channel visibility
+ *  can't change after creation, so the "hide on lock screen" setting switches between two channels. */
+const PRIVATE_CHANNEL = "reminders-private";
+const channelFor = (s: Settings) => (s.hideOnLockScreen ? PRIVATE_CHANNEL : CHANNEL);
 const CATEGORY = "task";
 const MAX_NAGS = 3;
 const HORIZON_DAYS = 45;
@@ -18,12 +22,18 @@ export async function setupNotifications(lang: "si" | "en"): Promise<boolean> {
     handleNotification: async () => ({ shouldShowBanner: true, shouldShowList: true, shouldPlaySound: true, shouldSetBadge: false }),
   });
   if (Platform.OS === "android") {
-    await Notifications.setNotificationChannelAsync(CHANNEL, {
-      name: translate(lang, "notif.channel"),
-      importance: Notifications.AndroidImportance.HIGH,
-      vibrationPattern: [0, 250, 150, 250],
-      lightColor: "#2D5BFF",
-    });
+    for (const [id, visibility] of [
+      [CHANNEL, Notifications.AndroidNotificationVisibility.PUBLIC],
+      [PRIVATE_CHANNEL, Notifications.AndroidNotificationVisibility.PRIVATE],
+    ] as const) {
+      await Notifications.setNotificationChannelAsync(id, {
+        name: `${translate(lang, "notif.channel")}${id === PRIVATE_CHANNEL ? " 🔒" : ""}`,
+        importance: Notifications.AndroidImportance.HIGH,
+        vibrationPattern: [0, 250, 150, 250],
+        lightColor: "#2D5BFF",
+        lockscreenVisibility: visibility,
+      });
+    }
   }
   await Notifications.setNotificationCategoryAsync(CATEGORY, [
     { identifier: "done", buttonTitle: translate(lang, "notif.done"), options: { opensAppToForeground: true } },
@@ -35,7 +45,11 @@ export async function setupNotifications(lang: "si" | "en"): Promise<boolean> {
   return asked.granted;
 }
 
-const at = (date: Date): Notifications.NotificationTriggerInput => ({ type: Notifications.SchedulableTriggerInputTypes.DATE, date, channelId: CHANNEL });
+const at = (date: Date, s: Settings): Notifications.NotificationTriggerInput => ({
+  type: Notifications.SchedulableTriggerInputTypes.DATE,
+  date,
+  channelId: channelFor(s),
+});
 
 /** Times to nag about an overdue task: every `nagMinutes` after the due time, skipping quiet hours. */
 export function nagTimes(due: Date, now: Date, s: Settings): Date[] {
@@ -85,7 +99,7 @@ export async function scheduleTask(task: Task, s: Settings): Promise<void> {
           data,
           categoryIdentifier: CATEGORY,
         },
-        trigger: at(fire),
+        trigger: at(fire, s),
       }),
     );
   }
@@ -93,7 +107,7 @@ export async function scheduleTask(task: Task, s: Settings): Promise<void> {
     ids.push(
       await Notifications.scheduleNotificationAsync({
         content: { title: `⚠ ${translate(s.lang, "notif.overdueTitle")}: ${task.title}`, body: when, data, categoryIdentifier: CATEGORY },
-        trigger: at(fire),
+        trigger: at(fire, s),
       }),
     );
   }
@@ -115,7 +129,7 @@ async function scheduleDaily(s: Settings) {
         body: translate(s.lang, body),
         data: { kind: identifier === "agentx.briefing" ? "briefing" : "review" },
       },
-      trigger: { type: Notifications.SchedulableTriggerInputTypes.DAILY, hour: Math.floor(m / 60), minute: m % 60, channelId: CHANNEL },
+      trigger: { type: Notifications.SchedulableTriggerInputTypes.DAILY, hour: Math.floor(m / 60), minute: m % 60, channelId: channelFor(s) },
     });
   }
 }
@@ -132,7 +146,7 @@ export async function rescheduleAll(s: Settings): Promise<void> {
   await scheduleDaily(s);
 }
 
-export async function showNow(title: string, body: string, data: Record<string, unknown> = {}): Promise<void> {
+export async function showNow(s: Settings, title: string, body: string, data: Record<string, unknown> = {}): Promise<void> {
   if (WEB) return;
-  await Notifications.scheduleNotificationAsync({ content: { title, body, data }, trigger: null });
+  await Notifications.scheduleNotificationAsync({ content: { title, body, data }, trigger: { channelId: channelFor(s) } });
 }

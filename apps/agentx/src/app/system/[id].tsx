@@ -3,6 +3,7 @@ import { router, Stack, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { Alert, Text, View } from "react-native";
 import { Button, Card, Chip, ChipRow, Field, Group, Row, Screen, SectionTitle, Small, Toggle } from "@/components/ui";
+import { checkUrl } from "@/core/integration";
 import type { Action, ActionParam, System, TaskEvent } from "@/core/types";
 import { repo } from "@/db";
 import { pollInbox, runAction } from "@/integrations";
@@ -23,6 +24,19 @@ const parseParams = (s: string): ActionParam[] =>
     .map((p) => ({ name: p.replace(/\*$/, "").trim(), description: "", required: p.endsWith("*") }));
 const formatParams = (ps: ActionParam[]) => ps.map((p) => `${p.name}${p.required ? "*" : ""}`).join(", ");
 
+/** Shows an alert and returns false when a filled-in URL is not https (or a local-network http) URL. */
+function urlsOk(t: (k: "url.invalid" | "url.insecure") => string, ...urls: string[]): boolean {
+  for (const u of urls) {
+    if (!u.trim()) continue;
+    const res = checkUrl(u);
+    if (!res.ok) {
+      Alert.alert("⚠", `${t(res.reason === "insecure" ? "url.insecure" : "url.invalid")}\n\n${u.trim()}`);
+      return false;
+    }
+  }
+  return true;
+}
+
 function ActionEditor({ systemId, action, onDone }: { systemId: string; action: Action | null; onDone: () => void }) {
   const { t } = useT();
   const { settings } = useSettings();
@@ -35,6 +49,7 @@ function ActionEditor({ systemId, action, onDone }: { systemId: string; action: 
   const [testing, setTesting] = useState(false);
 
   const save = async () => {
+    if (!urlsOk(t, url)) return;
     await repo.saveAction({
       id: action?.id,
       key: action?.key,
@@ -49,6 +64,7 @@ function ActionEditor({ systemId, action, onDone }: { systemId: string; action: 
     onDone();
   };
   const test = async () => {
+    if (!urlsOk(t, url)) return;
     setTesting(true);
     try {
       const saved = await repo.saveAction({
@@ -130,7 +146,7 @@ export default function SystemScreen() {
   }, [id, isNew]);
 
   const save = async (): Promise<System | null> => {
-    if (!name.trim()) return null;
+    if (!name.trim() || !urlsOk(t, eventsUrl, inboxUrl)) return null;
     const saved = await repo.saveSystem({
       ...(system ?? {}),
       id: system?.id,

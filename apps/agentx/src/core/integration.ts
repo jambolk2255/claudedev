@@ -4,6 +4,35 @@ import type { Action, Area, NewTask, Settings, System, Task, TaskEvent } from ".
 
 export const APP_ID = "agentx";
 
+/**
+ * Webhook URLs must use HTTPS so task data and signatures are encrypted in transit. Plain http is only
+ * accepted for addresses on the local network (e.g. n8n on the office LAN), never over the internet.
+ * Parsed by hand because React Native's URL class doesn't reject malformed input.
+ */
+export function checkUrl(raw: string): { ok: true; url: string } | { ok: false; reason: "invalid" | "insecure" } {
+  const url = raw.trim();
+  const m = /^(https?):\/\/([a-z0-9.-]+)(:\d{1,5})?([/?#][^\s]*)?$/i.exec(url);
+  if (!m || m[2]!.startsWith(".") || m[2]!.endsWith(".") || m[2]!.includes("..")) return { ok: false, reason: "invalid" };
+  if (m[1]!.toLowerCase() === "https") return { ok: true, url };
+  const h = m[2]!.toLowerCase();
+  const local =
+    h === "localhost" ||
+    h.endsWith(".local") ||
+    /^127\.\d+\.\d+\.\d+$/.test(h) ||
+    /^10\.\d+\.\d+\.\d+$/.test(h) ||
+    /^192\.168\.\d+\.\d+$/.test(h) ||
+    /^172\.(1[6-9]|2\d|3[01])\.\d+\.\d+$/.test(h);
+  return local ? { ok: true, url } : { ok: false, reason: "insecure" };
+}
+
+/** Appends `key=value` to a URL's query string (keeps any existing query and drops a #fragment). */
+export function withQuery(url: string, key: string, value: string): { url: string; query: string } {
+  const base = url.split("#")[0]!;
+  const pair = `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
+  const full = base.includes("?") ? `${base}&${pair}` : `${base}?${pair}`;
+  return { url: full, query: full.slice(full.indexOf("?")) };
+}
+
 export function taskPayload(t: Task, areas: Area[]) {
   return {
     id: t.id,

@@ -125,6 +125,8 @@ Sample n8n workflows and a step-by-step setup guide: [`n8n/README.md`](./n8n/REA
 | `.github/workflows/agentx-apk.yml` | Typecheck + tests + Android release APK artifact                           |
 | `docs/agentx/n8n/`                 | Sample n8n workflows                                                       |
 
+Security & privacy details, and the one-time signing key setup: [`SECURITY.md`](./SECURITY.md).
+
 ## Install the APK
 
 1. Phone එකේ browser එකෙන් මේ link එක open කරන්න (හැම push එකකටම අලුත් build එකකින් update වෙනවා):

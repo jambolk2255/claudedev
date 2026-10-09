@@ -147,6 +147,16 @@ const en = {
   "notif.reviewTitle": "Evening review",
   "notif.reviewBody": "Tap to see what's left for today.",
   "notif.inbox": "From",
+  "url.invalid": "This doesn't look like a valid URL.",
+  "url.insecure": "For security, use an https:// URL. Plain http:// is only allowed on your local network.",
+  "security.title": "Security & privacy",
+  "security.appLock": "App lock (fingerprint / phone PIN)",
+  "security.appLockHint": "Asks to unlock when you open Agent X or come back to it after a minute.",
+  "security.noLock": "Set up a fingerprint or screen lock on your phone first.",
+  "security.hideLock": "Hide reminder details on the lock screen",
+  "security.geminiNote": "Free Gemini keys: Google may use your voice clips to improve its products. Turn on billing in Google AI Studio to keep them private.",
+  "security.unlock": "Unlock Agent X",
+  "security.locked": "Agent X is locked",
 };
 
 export type MessageKey = keyof typeof en;
@@ -298,6 +308,17 @@ const si: Record<MessageKey, string> = {
   "notif.reviewTitle": "රෑ review",
   "notif.reviewBody": "අදට ඉතුරු දේවල් බලන්න tap කරන්න.",
   "notif.inbox": "එව්වේ",
+  "url.invalid": "මේක හරි URL එකක් නෙමෙයි වගේ.",
+  "url.insecure": "ආරක්ෂාවට https:// URL එකක් දාන්න. http:// පුළුවන් ඔයාගේ local network එකේ විතරයි.",
+  "security.title": "🔒 ආරක්ෂාව සහ privacy",
+  "security.appLock": "App lock (fingerprint / phone PIN)",
+  "security.appLockHint": "Agent X open කරද්දී හෝ විනාඩියකට වඩා වෙලාවකින් ආපහු එද්දී unlock කරන්න අහනවා.",
+  "security.noLock": "මුලින්ම phone එකට fingerprint එකක් හෝ screen lock එකක් දාන්න.",
+  "security.hideLock": "Lock screen එකේ reminder විස්තර හංගන්න",
+  "security.geminiNote":
+    "නොමිලේ Gemini key: Google එකට ඔයාගේ voice clips ඔවුන්ගේ products දියුණු කරන්න පාවිච්චි කරන්න පුළුවන්. Private තියාගන්න Google AI Studio එකේ billing on කරන්න.",
+  "security.unlock": "Agent X unlock කරන්න",
+  "security.locked": "Agent X lock කරලා",
 };
 
 export const DICTS = { en, si };

@@ -53,7 +53,7 @@ Production URL එක: `https://<your-n8n-host>/webhook/<path>` (n8n webhook nod
 හැම POST request එකකටම `X-AgentX-Signature: sha256=<hex>` header එකක් එනවා: system එකේ **Secret** එකෙන් body එකේ HMAC-SHA256.
 Inbox GET request එකට signature එක හදන්නේ query string එකෙන් (`?since=…`). Verify කරන්න n8n එකේ webhook node → Options →
 **Raw Body** on කරලා, **Crypto** node එකෙන් (HMAC, SHA256, secret) raw body එකේ hash එක හදලා header එකට සමානද බලන්න. Webhook
-URLs රහසිගතව තියාගන්න; n8n එකේ Header Auth වගේ authentication එකකුත් දාන්න පුළුවන්.
+URLs `https://` වෙන්න ඕන (http:// පුළුවන් local network එකේ විතරයි). URLs රහසිගතව තියාගන්න; n8n එකේ Header Auth වගේ authentication එකකුත් දාන්න පුළුවන්.
 
 ## 5. Ideas
 

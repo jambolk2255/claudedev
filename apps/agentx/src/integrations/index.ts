@@ -1,5 +1,5 @@
 /** n8n linkage: voice actions, outbound events (with an offline outbox), inbox polling and auto backup. */
-import { actionBody, eventBody, makeBackup, parseInbox, readActionReply } from "@/core/integration";
+import { actionBody, checkUrl, eventBody, makeBackup, parseInbox, readActionReply, withQuery } from "@/core/integration";
 import { signBody } from "@/core/hmac";
 import { toLocalISO } from "@/core/time";
 import type { Action, Settings, System, Task, TaskEvent } from "@/core/types";
@@ -10,7 +10,15 @@ import { translate } from "@/lib/i18n";
 
 const TIMEOUT_MS = 20_000;
 
-async function post(url: string, body: string, secret: string): Promise<{ status: number; text: string }> {
+/** Refuses anything but HTTPS (or plain http on the local network). */
+function safeUrl(raw: string): string {
+  const res = checkUrl(raw);
+  if (!res.ok) throw new Error(res.reason === "insecure" ? "Only https:// URLs are allowed" : "Invalid URL");
+  return res.url;
+}
+
+async function post(rawUrl: string, body: string, secret: string): Promise<{ status: number; text: string }> {
+  const url = safeUrl(rawUrl);
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), TIMEOUT_MS);
   try {
@@ -85,19 +93,19 @@ export async function flushOutbox(): Promise<void> {
 /** Pulls new items from one system's inbox URL. Returns how many tasks/notifications were added. */
 export async function pollInbox(system: System, settings: Settings): Promise<number> {
   if (!system.inboxUrl) return 0;
-  const url = new URL(system.inboxUrl);
-  if (system.inboxSince) url.searchParams.set("since", system.inboxSince);
   const startedAt = toLocalISO(new Date());
   try {
+    const base = safeUrl(system.inboxUrl);
+    const { url, query } = system.inboxSince ? withQuery(base, "since", system.inboxSince) : { url: base, query: "" };
     const headers: Record<string, string> = { accept: "application/json" };
-    if (system.secret) headers["x-agentx-signature"] = signBody(system.secret, url.search);
-    const res = await fetch(url.toString(), { headers });
+    if (system.secret) headers["x-agentx-signature"] = signBody(system.secret, query);
+    const res = await fetch(url, { headers });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const items = parseInbox(await res.json(), await repo.listAreas());
     let added = 0;
     for (const item of items) {
       if (item.type === "notify") {
-        await showNow(`${system.icon} ${item.title}`, item.body || `${translate(settings.lang, "notif.inbox")} ${system.name}`);
+        await showNow(settings, `${system.icon} ${item.title}`, item.body || `${translate(settings.lang, "notif.inbox")} ${system.name}`);
         added++;
         continue;
       }
@@ -105,7 +113,7 @@ export async function pollInbox(system: System, settings: Settings): Promise<num
       const task = await repo.createTask({ ...item.task, systemId: system.id });
       if (item.externalId) await repo.setExternalId(task.id, system.id, item.externalId);
       await scheduleTask(task, settings);
-      await showNow(`${system.icon} ${task.title}`, `${translate(settings.lang, "notif.inbox")} ${system.name}`, { taskId: task.id });
+      await showNow(settings, `${system.icon} ${task.title}`, `${translate(settings.lang, "notif.inbox")} ${system.name}`, { taskId: task.id });
       added++;
     }
     await repo.saveSystem({ ...system, inboxSince: startedAt, lastOkAt: startedAt, lastError: null });

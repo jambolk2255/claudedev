@@ -26,6 +26,7 @@
     "expo-font": "~56.0.7",
     "expo-haptics": "~56.0.3",
     "expo-linking": "~56.0.18",
+    "expo-local-authentication": "~56.0.5",
     "expo-localization": "~56.0.6",
     "expo-notifications": "~56.0.26",
     "expo-router": "~56.2.21",

@@ -4,7 +4,7 @@ import { File } from "expo-file-system";
 import * as Haptics from "expo-haptics";
 import { router, useLocalSearchParams } from "expo-router";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ActivityIndicator, Animated, Easing, KeyboardAvoidingView, Platform, Pressable, ScrollView, Text, TextInput, View } from "react-native";
+import { ActivityIndicator, Alert, Animated, Easing, KeyboardAvoidingView, Platform, Pressable, ScrollView, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { createSession, describeError, type AgentSession } from "@/ai/agent";
 import { transcribe } from "@/ai/gemini";
@@ -128,6 +128,21 @@ export default function VoiceScreen() {
         settings,
         onTaskChange,
         runAction: (action, params) => runAction(action, params, lang),
+        // Deletes and confirm=true actions are approved by the user here, not by the AI.
+        confirm: (question) =>
+          new Promise<boolean>((resolve) => {
+            if (settings.speak) speak(question, lang, settings.speechRate);
+            void Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
+            Alert.alert(
+              "Agent X",
+              question,
+              [
+                { text: t("common.no"), style: "cancel", onPress: () => resolve(false) },
+                { text: t("common.yes"), style: "destructive", onPress: () => resolve(true) },
+              ],
+              { cancelable: true, onDismiss: () => resolve(false) },
+            );
+          }),
       });
     }
     return session.current;

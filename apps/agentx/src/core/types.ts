@@ -98,6 +98,10 @@ export interface Settings {
   autoBackup: boolean;
   lastBackupAt: string | null;
   userName: string;
+  /** Ask for fingerprint / phone PIN when opening the app. */
+  appLock: boolean;
+  /** Hide reminder details on the lock screen. */
+  hideOnLockScreen: boolean;
 }
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -116,6 +120,8 @@ export const DEFAULT_SETTINGS: Settings = {
   autoBackup: false,
   lastBackupAt: null,
   userName: "",
+  appLock: false,
+  hideOnLockScreen: false,
 };
 
 export const CLAUDE_MODELS = [

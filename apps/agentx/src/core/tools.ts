@@ -60,8 +60,8 @@ export const TOOLS: ToolDef[] = [
   },
   {
     name: "delete_task",
-    description: "Delete a task permanently. First ask the user to confirm with ask_user; call with confirmed=true only after they said yes.",
-    input_schema: obj({ task_id: str("Task id."), confirmed: { type: "boolean" } }, ["task_id", "confirmed"]),
+    description: "Delete a task permanently. The app itself asks the user to confirm before anything is deleted.",
+    input_schema: obj({ task_id: str("Task id.") }, ["task_id"]),
   },
   {
     name: "list_tasks",
@@ -82,12 +82,11 @@ export const TOOLS: ToolDef[] = [
   {
     name: "run_action",
     description:
-      "Run one of the user's connected system actions (n8n workflows) listed in the context under 'actions'. If that action is marked confirm=true, ask the user first and pass confirmed=true only after they agree.",
+      "Run one of the user's connected system actions (n8n workflows) listed in the context under 'actions'. For actions marked confirm=true the app itself asks the user before running it.",
     input_schema: obj(
       {
         action_key: str("The action key from the context."),
         params: { type: "object", description: "Values for the action's parameters.", additionalProperties: { type: "string" } },
-        confirmed: { type: "boolean" },
       },
       ["action_key"],
     ),
@@ -122,6 +121,11 @@ export interface ToolContext {
   /** Called after a task is created/changed so notifications and webhooks can follow. */
   onTaskChange?: (task: Task, kind: "created" | "updated" | "completed" | "deleted") => Promise<void> | void;
   runAction?: (action: Action & { systemName: string }, params: Record<string, string>) => Promise<{ say: string; ok: boolean }>;
+  /**
+   * Asks the user directly (outside the AI) before a destructive or confirm=true step. The model cannot
+   * answer this itself, so text injected through inbox items or system replies can't delete or run anything.
+   */
+  confirm?: (question: string) => Promise<boolean>;
 }
 
 type Input = Record<string, unknown>;
@@ -229,7 +233,8 @@ export async function executeTool(name: string, input: Input, ctx: ToolContext):
     case "delete_task": {
       const task = await needTask();
       if (!task) return fail("Task not found.");
-      if (input.confirmed !== true) return fail("Not confirmed. Ask the user with ask_user first, then call again with confirmed=true.");
+      const question = lang === "si" ? `"${task.title}" මකන්නද?` : `Delete "${task.title}"?`;
+      if (!ctx.confirm || !(await ctx.confirm(question))) return fail("The user did not confirm. Nothing was deleted.");
       await repo.deleteTask(task.id);
       await ctx.onTaskChange?.(task, "deleted");
       return ok({ deleted: task.title }, { icon: "trash", title: task.title, subtitle: lang === "si" ? "මැකුවා" : "Deleted" });
@@ -267,11 +272,13 @@ export async function executeTool(name: string, input: Input, ctx: ToolContext):
       const key = s(input.action_key) ?? "";
       const action = (await repo.listActions()).find((a) => a.key === key && a.enabled && !a.deletedAt);
       if (!action) return fail(`Unknown action "${key}".`);
-      if (action.confirm && input.confirmed !== true)
-        return fail("This action needs confirmation. Ask the user with ask_user, then call again with confirmed=true.");
       const params = Object.fromEntries(Object.entries((input.params as Record<string, unknown>) ?? {}).map(([k, v]) => [k, String(v)]));
       const missing = action.params.filter((p) => p.required && !params[p.name]);
       if (missing.length) return fail(`Missing parameters: ${missing.map((p) => p.name).join(", ")}. Ask the user.`);
+      if (action.confirm) {
+        const question = lang === "si" ? `${action.systemName}: "${action.name}" run කරන්නද?` : `Run "${action.name}" in ${action.systemName}?`;
+        if (!ctx.confirm || !(await ctx.confirm(question))) return fail("The user did not confirm. The action was not run.");
+      }
       if (!ctx.runAction) return fail("Actions are not available.");
       const res = await ctx.runAction(action, params);
       return res.ok

@@ -12,6 +12,7 @@ import { loadSettings, openDb } from "@/db";
 import { registerBackgroundSync } from "@/background";
 import { syncAll } from "@/integrations";
 import { useT } from "@/lib/i18n";
+import { AppLockGate } from "@/lib/lock";
 import { SettingsProvider, useSettings } from "@/lib/settings";
 import { useTheme } from "@/lib/theme";
 import { rescheduleAll, setupNotifications } from "@/notifications";
@@ -48,7 +49,7 @@ function Routes() {
   // Reminder texts depend on language and times.
   useEffect(() => {
     void rescheduleAll(settings).catch(() => {});
-  }, [settings.lang, settings.briefingTime, settings.reviewTime, settings.nagMinutes, settings.quietStart, settings.quietEnd]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [settings.lang, settings.briefingTime, settings.reviewTime, settings.nagMinutes, settings.quietStart, settings.quietEnd, settings.hideOnLockScreen]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const header = {
     headerStyle: { backgroundColor: c.bg },
@@ -88,7 +89,9 @@ export default function RootLayout() {
     <SafeAreaProvider>
       {settings ? (
         <SettingsProvider initial={settings}>
-          <Routes />
+          <AppLockGate>
+            <Routes />
+          </AppLockGate>
         </SettingsProvider>
       ) : (
         <Loading />

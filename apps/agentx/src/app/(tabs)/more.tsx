@@ -7,12 +7,13 @@ import { useEffect, useState } from "react";
 import { Alert, View } from "react-native";
 import { getKey, maskKey, setKey } from "@/ai/keys";
 import { BrandMark, Button, Chip, ChipRow, Field, Group, H1, Row, Screen, SectionTitle, Small, Toggle } from "@/components/ui";
-import { makeBackup, parseBackup } from "@/core/integration";
+import { checkUrl, makeBackup, parseBackup } from "@/core/integration";
 import { dayKey, relativeLabel } from "@/core/time";
 import { CLAUDE_MODELS, type Settings } from "@/core/types";
 import { loadSettings, repo, saveSettings } from "@/db";
 import { backupNow } from "@/integrations";
 import { useT } from "@/lib/i18n";
+import { authenticate, canLock } from "@/lib/lock";
 import { useSettings } from "@/lib/settings";
 import { space } from "@/lib/theme";
 import { rescheduleAll } from "@/notifications";
@@ -112,6 +113,11 @@ export default function MoreScreen() {
   };
 
   const runBackup = async () => {
+    const res = checkUrl(backupUrl);
+    if (!res.ok) {
+      Alert.alert("⚠", t(res.reason === "insecure" ? "url.insecure" : "url.invalid"));
+      return;
+    }
     setBusy("webhook");
     try {
       await update({ backupUrl: backupUrl.trim() });
@@ -150,7 +156,7 @@ export default function MoreScreen() {
         autoCapitalize="none"
         autoCorrect={false}
         secureTextEntry
-        hint="aistudio.google.com → Get API key"
+        hint={`aistudio.google.com → Get API key\n${t("security.geminiNote")}`}
       />
       <Field
         label={t("more.claude")}
@@ -181,6 +187,28 @@ export default function MoreScreen() {
         autoCorrect={false}
         onEndEditing={() => geminiModel.trim() && void update({ geminiModel: geminiModel.trim() })}
       />
+
+      <SectionTitle title={t("security.title")} />
+      <Group>
+        <Row
+          title={t("security.appLock")}
+          subtitle={t("security.appLockHint")}
+          right={
+            <Toggle
+              value={settings.appLock}
+              onChange={async (on) => {
+                if (on && !(await canLock())) {
+                  Alert.alert("🔒", t("security.noLock"));
+                  return;
+                }
+                // Prove the user can unlock before turning the lock on or off.
+                if (await authenticate(t("security.unlock"))) await update({ appLock: on });
+              }}
+            />
+          }
+        />
+        <Row title={t("security.hideLock")} right={<Toggle value={settings.hideOnLockScreen} onChange={(v) => void update({ hideOnLockScreen: v })} />} last />
+      </Group>
 
       <SectionTitle title={t("more.voice")} />
       <Small>{t("more.lang")}</Small>
@@ -233,7 +261,12 @@ export default function MoreScreen() {
         label={t("more.backupUrl")}
         value={backupUrl}
         onChangeText={setBackupUrl}
-        onEndEditing={() => void update({ backupUrl: backupUrl.trim() })}
+        onEndEditing={() => {
+          const v = backupUrl.trim();
+          const res = v ? checkUrl(v) : null;
+          if (res && !res.ok) Alert.alert("⚠", t(res.reason === "insecure" ? "url.insecure" : "url.invalid"));
+          else void update({ backupUrl: v });
+        }}
         placeholder="https://n8n.example.lk/webhook/agentx-backup"
         autoCapitalize="none"
         autoCorrect={false}
