@@ -148,7 +148,21 @@ account and starts the onboarding wizard. After that, registration closes and pe
 
 Generate secrets with `openssl rand -base64 48` (JWT) and `openssl rand -base64 32` (encryption key).
 
-### Full stack in Docker
+### Free hosting (Oracle Cloud Always Free) — production
+
+`deploy/` holds the production setup: Postgres + API + web behind **Caddy** with automatic Let's Encrypt HTTPS
+(`/api/*` goes straight to the API), plus `install.sh` (Docker, secrets, firewall, DuckDNS, daily backups),
+`update.sh`, `backup.sh` and `restore.sh`. On a fresh Ubuntu server:
+
+```bash
+git clone -b claude/youthful-gates-ew2t8r https://github.com/jambolk2255/claudedev.git
+cd claudedev && sudo bash deploy/install.sh
+```
+
+Step-by-step guide in Sinhala (Oracle account → server → free DuckDNS name → install → backups):
+[`docs/deploy-oracle-free.si.md`](docs/deploy-oracle-free.si.md).
+
+### Full stack in Docker (local)
 
 ```bash
 cd docker

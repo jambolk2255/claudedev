@@ -7,3 +7,5 @@
 **/test-results
 **/playwright-report
 .git
+# The mobile app is built with EAS, not Docker
+apps/mobile

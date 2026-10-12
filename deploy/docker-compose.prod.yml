@@ -1,0 +1,80 @@
+# Production stack: Postgres + API + web + Caddy (automatic HTTPS).
+# Usage (from the repository root):  docker compose -f deploy/docker-compose.prod.yml --env-file deploy/.env up -d --build
+# deploy/install.sh writes deploy/.env and runs this for you.
+name: stockflow
+
+x-logging: &logging
+  driver: json-file
+  options: { max-size: "10m", max-file: "3" }
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: stockflow
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in deploy/.env}
+      POSTGRES_DB: stockflow
+    volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U stockflow -d stockflow"]
+      interval: 5s
+      retries: 20
+    logging: *logging
+
+  api:
+    build:
+      context: ..
+      dockerfile: apps/api/Dockerfile
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgresql://stockflow:${POSTGRES_PASSWORD}@postgres:5432/stockflow?schema=public
+      WEB_URL: https://${DOMAIN:?set DOMAIN in deploy/.env}
+      CORS_ORIGINS: https://${DOMAIN}
+      COOKIE_SECURE: "true"
+      JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET:?set JWT_ACCESS_SECRET}
+      ENCRYPTION_KEY: ${ENCRYPTION_KEY:?set ENCRYPTION_KEY}
+      AUTH_RATE_LIMIT: ${AUTH_RATE_LIMIT:-10}
+      SAAS_MODE: ${SAAS_MODE:-true}
+      TRIAL_DAYS: ${TRIAL_DAYS:-14}
+      TRIAL_PLAN: ${TRIAL_PLAN:-business}
+      PLATFORM_ADMIN_EMAILS: ${PLATFORM_ADMIN_EMAILS:-}
+      PAYHERE_MERCHANT_ID: ${PAYHERE_MERCHANT_ID:-}
+      PAYHERE_MERCHANT_SECRET: ${PAYHERE_MERCHANT_SECRET:-}
+      PAYHERE_SANDBOX: ${PAYHERE_SANDBOX:-true}
+      BANK_TRANSFER_DETAILS: ${BANK_TRANSFER_DETAILS:-}
+    depends_on:
+      postgres: { condition: service_healthy }
+    logging: *logging
+
+  web:
+    build:
+      context: ..
+      dockerfile: apps/web/Dockerfile
+      args:
+        API_URL: http://api:4000
+        NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: ${NEXT_PUBLIC_GOOGLE_MAPS_API_KEY:-}
+    restart: unless-stopped
+    depends_on:
+      api: { condition: service_healthy }
+    logging: *logging
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports: ["80:80", "443:443", "443:443/udp"]
+    environment:
+      DOMAIN: ${DOMAIN}
+      ACME_EMAIL: ${ACME_EMAIL:?set ACME_EMAIL}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on: [api, web]
+    logging: *logging
+
+volumes:
+  pgdata:
+  caddy_data:
+  caddy_config:
